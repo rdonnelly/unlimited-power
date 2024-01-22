@@ -1,5 +1,11 @@
 import * as z from 'zod';
 
+import { ArenaAttributeSchema } from '@data/Arena';
+import { AspectAttributeSchema } from '@data/Aspect';
+import { RarityAttributeSchema } from '@data/Rarity';
+import { AttributeSchema } from '@data/Shared';
+import { TypeAttributeSchema } from '@data/Type';
+
 export const ExtSchema = z.enum(['.png']);
 export type Ext = z.infer<typeof ExtSchema>;
 
@@ -14,38 +20,6 @@ export type Character = z.infer<typeof CharacterSchema>;
 
 export const CodeSchema = z.enum(['SOR']);
 export type Code = z.infer<typeof CodeSchema>;
-
-export const ColorSchema = z.enum([
-  '#d1d1d1',
-  '#d30808',
-  '#eb9f1c',
-  '#f1c000',
-  '#ffffff',
-  '#000000',
-  '#00c8f3',
-  '#0b992d',
-  '#4073d4',
-  '#964d02',
-]);
-export type Color = z.infer<typeof ColorSchema>;
-
-export const EnglishNameSchema = z.enum([
-  'Aggression',
-  'Command',
-  'Common',
-  'Cunning',
-  'Heroism',
-  'Legendary',
-  'Rare',
-  'Starter',
-  'Uncommon',
-  'Vigilance',
-  'Villainy',
-]);
-export type EnglishName = z.infer<typeof EnglishNameSchema>;
-
-export const PurpleLocaleSchema = z.enum(['en']);
-export type PurpleLocale = z.infer<typeof PurpleLocaleSchema>;
 
 export const ValueSchema = z.enum([
   'Base',
@@ -165,24 +139,9 @@ export const LocalizationsSchema = z.object({
 });
 export type Localizations = z.infer<typeof LocalizationsSchema>;
 
-export const TentacledAttributesSchema = z.object({
-  name: z.string(),
-  description: z.union([z.null(), z.string()]).optional(),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
-  publishedAt: z.coerce.date(),
-  locale: PurpleLocaleSchema,
-  color: z.union([ColorSchema, z.null()]).optional(),
-  englishName: z.union([EnglishNameSchema, z.null()]).optional(),
-  code: z.union([CodeSchema, z.null()]).optional(),
-  character: z.union([CharacterSchema, z.null()]).optional(),
-  value: z.union([ValueSchema, z.null()]).optional(),
-});
-export type TentacledAttributes = z.infer<typeof TentacledAttributesSchema>;
-
 export const DatSchema = z.object({
   id: z.number(),
-  attributes: TentacledAttributesSchema,
+  attributes: AttributeSchema,
 });
 export type Dat = z.infer<typeof DatSchema>;
 
@@ -234,172 +193,54 @@ export const ArtThumbnailSchema = z.object({
 });
 export type ArtThumbnail = z.infer<typeof ArtThumbnailSchema>;
 
-// export const ArenasSchema = z.object({
-//   data: z.union([z.array(DataDatumSchema), DataDataSchema, z.null()]),
-// });
-// export type Arenas = z.infer<typeof ArenasSchema>;
-
-// export const DataDatumSchema = z.object({
-//   id: z.number(),
-//   attributes: FluffyAttributesSchema,
-// });
-// export type DataDatum = z.infer<typeof DataDatumSchema>;
-
-// export const FluffyAttributesSchema = z.object({
-//   name: z.union([NameSchema, z.null()]).optional(),
-//   description: z.null().optional(),
-//   createdAt: z.coerce.date(),
-//   updatedAt: z.coerce.date(),
-//   publishedAt: z.coerce.date(),
-//   locale: PurpleLocaleSchema,
-//   title: z.union([z.null(), z.string()]).optional(),
-//   subtitle: z.union([z.null(), z.string()]).optional(),
-//   cardNumber: z.union([z.number(), z.null()]).optional(),
-//   cardCount: z.union([z.number(), z.null()]).optional(),
-//   artist: z.union([z.null(), z.string()]).optional(),
-//   artFrontHorizontal: z.union([z.boolean(), z.null()]).optional(),
-//   artBackHorizontal: z.null().optional(),
-//   hasFoil: z.union([z.boolean(), z.null()]).optional(),
-//   cost: z.union([z.number(), z.null()]).optional(),
-//   hp: z.union([z.number(), z.null()]).optional(),
-//   power: z.union([z.number(), z.null()]).optional(),
-//   text: z.union([z.null(), z.string()]).optional(),
-//   textStyled: z.union([z.null(), z.string()]).optional(),
-//   deployBox: z.union([z.null(), z.string()]).optional(),
-//   deployBoxStyled: z.union([z.null(), z.string()]).optional(),
-//   epicAction: z.union([z.null(), z.string()]).optional(),
-//   epicActionStyled: z.union([z.null(), z.string()]).optional(),
-//   linkHtml: z.union([z.null(), z.string()]).optional(),
-//   cardId: z.union([z.null(), z.string()]).optional(),
-//   hyperspace: z.union([z.boolean(), z.null()]).optional(),
-//   unique: z.union([z.boolean(), z.null()]).optional(),
-//   showcase: z.union([z.boolean(), z.null()]).optional(),
-//   cardUid: z.union([z.null(), z.string()]).optional(),
-//   variantOf: z.union([ArenasSchema, z.null()]).optional(),
-//   variantTypes: z.union([ArenasSchema, z.null()]).optional(),
-//   expansion: z.union([ExpansionSchema, z.null()]).optional(),
-//   rarity: z.union([ExpansionSchema, z.null()]).optional(),
-//   keywords: z.union([AspectDuplicatesSchema, z.null()]).optional(),
-//   arenas: z.union([ArenasSchema, z.null()]).optional(),
-//   traits: z.union([AspectDuplicatesSchema, z.null()]).optional(),
-//   type2: z.union([ExpansionSchema, z.null()]).optional(),
-//   type: z.union([ExpansionSchema, z.null()]).optional(),
-//   aspectDuplicates: z.union([AspectDuplicatesSchema, z.null()]).optional(),
-//   aspects: z.union([AspectDuplicatesSchema, z.null()]).optional(),
-//   localizations: z.union([LocalizationsSchema, z.null()]).optional(),
-//   artThumbnail: z.union([ArenasSchema, z.null()]).optional(),
-//   artBack: z.union([ArenasSchema, z.null()]).optional(),
-//   artFront: z.union([ArenasSchema, z.null()]).optional(),
-// });
-// export type FluffyAttributes = z.infer<typeof FluffyAttributesSchema>;
-
-// export const IndigoAttributesSchema = z.object({
-//   name: z.union([z.null(), z.string()]).optional(),
-//   alternativeText: z.union([z.null(), z.string()]).optional(),
-//   caption: z.null().optional(),
-//   width: z.union([z.number(), z.null()]).optional(),
-//   height: z.union([z.number(), z.null()]).optional(),
-//   formats: z.union([FluffyFormatsSchema, z.null()]).optional(),
-//   hash: z.union([z.null(), z.string()]).optional(),
-//   ext: z.union([ExtSchema, z.null()]).optional(),
-//   mime: z.union([MimeSchema, z.null()]).optional(),
-//   size: z.union([z.number(), z.null()]).optional(),
-//   url: z.union([z.null(), z.string()]).optional(),
-//   previewUrl: z.null().optional(),
-//   provider: z.union([ProviderSchema, z.null()]).optional(),
-//   provider_metadata: z.null().optional(),
-//   createdAt: z.coerce.date(),
-//   updatedAt: z.coerce.date(),
-//   title: z.union([z.null(), z.string()]).optional(),
-//   subtitle: z.union([z.null(), z.string()]).optional(),
-//   cardNumber: z.union([z.number(), z.null()]).optional(),
-//   cardCount: z.union([z.number(), z.null()]).optional(),
-//   artist: z.union([z.null(), z.string()]).optional(),
-//   artFrontHorizontal: z.union([z.boolean(), z.null()]).optional(),
-//   artBackHorizontal: z.null().optional(),
-//   hasFoil: z.union([z.boolean(), z.null()]).optional(),
-//   cost: z.union([z.number(), z.null()]).optional(),
-//   hp: z.union([z.number(), z.null()]).optional(),
-//   power: z.union([z.number(), z.null()]).optional(),
-//   text: z.union([z.null(), z.string()]).optional(),
-//   textStyled: z.union([z.null(), z.string()]).optional(),
-//   deployBox: z.union([z.null(), z.string()]).optional(),
-//   deployBoxStyled: z.union([z.null(), z.string()]).optional(),
-//   epicAction: z.union([z.null(), z.string()]).optional(),
-//   epicActionStyled: z.union([z.null(), z.string()]).optional(),
-//   linkHtml: z.union([z.null(), z.string()]).optional(),
-//   cardId: z.union([z.null(), z.string()]).optional(),
-//   publishedAt: z.union([z.coerce.date(), z.null()]).optional(),
-//   locale: z.union([PurpleLocaleSchema, z.null()]).optional(),
-//   hyperspace: z.union([z.boolean(), z.null()]).optional(),
-//   unique: z.union([z.boolean(), z.null()]).optional(),
-//   showcase: z.union([z.boolean(), z.null()]).optional(),
-//   cardUid: z.union([z.null(), z.string()]).optional(),
-//   artFront: z.union([ArenasSchema, z.null()]).optional(),
-//   artBack: z.union([ArenasSchema, z.null()]).optional(),
-//   artThumbnail: z.union([ArtThumbnailSchema, z.null()]).optional(),
-//   localizations: z.union([LocalizationsSchema, z.null()]).optional(),
-//   aspects: z.union([AspectDuplicatesSchema, z.null()]).optional(),
-//   aspectDuplicates: z.union([AspectDuplicatesSchema, z.null()]).optional(),
-//   type: z.union([ExpansionSchema, z.null()]).optional(),
-//   type2: z.union([ExpansionSchema, z.null()]).optional(),
-//   traits: z.union([AspectDuplicatesSchema, z.null()]).optional(),
-//   arenas: z.union([ArenasSchema, z.null()]).optional(),
-//   keywords: z.union([AspectDuplicatesSchema, z.null()]).optional(),
-//   rarity: z.union([ExpansionSchema, z.null()]).optional(),
-//   expansion: z.union([ExpansionSchema, z.null()]).optional(),
-//   variantTypes: z.union([ArenasSchema, z.null()]).optional(),
-// });
-// export type IndigoAttributes = z.infer<typeof IndigoAttributesSchema>;
-
-// export const DataDataSchema = z.object({
-//   id: z.number(),
-//   attributes: IndigoAttributesSchema,
-// });
-// export type DataData = z.infer<typeof DataDataSchema>;
-
 export const CardAttributesSchema = z.object({
-  title: z.string(),
-  subtitle: z.union([z.null(), z.string()]),
   cardNumber: z.number(),
-  cardCount: z.number(),
+  title: z.string(),
+  subtitle: z.nullable(z.string()),
+  unique: z.boolean(),
+
+  cost: z.nullable(z.number()),
+  hp: z.nullable(z.number()),
+  power: z.nullable(z.number()),
+  text: z.nullable(z.string()),
+  textStyled: z.string(),
+  deployBox: z.nullable(z.string()),
+  deployBoxStyled: z.string(),
+  epicAction: z.nullable(z.string()),
+  epicActionStyled: z.string(),
+  linkHtml: z.string(),
   artist: z.string(),
+
   artFrontHorizontal: z.boolean(),
   artBackHorizontal: z.null(),
   hasFoil: z.boolean(),
-  cost: z.union([z.number(), z.null()]),
-  hp: z.union([z.number(), z.null()]),
-  power: z.union([z.number(), z.null()]),
-  text: z.union([z.null(), z.string()]),
-  textStyled: z.string(),
-  deployBox: z.union([z.null(), z.string()]),
-  deployBoxStyled: z.string(),
-  epicAction: z.union([z.null(), z.string()]),
-  epicActionStyled: z.string(),
-  linkHtml: z.string(),
-  cardId: z.union([z.null(), z.string()]),
-  createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date(),
-  publishedAt: z.coerce.date(),
   hyperspace: z.boolean(),
-  unique: z.boolean(),
   showcase: z.boolean(),
-  cardUid: z.string(),
 
-  // arenas: ArenasSchema,
+  arenas: ArenaAttributeSchema,
+  aspects: AspectAttributeSchema,
+  aspectDuplicates: AspectAttributeSchema,
+  type: TypeAttributeSchema,
+  type2: TypeAttributeSchema,
+  rarity: RarityAttributeSchema,
+
+  // expansion: ExpansionSchema,
+  // keywords: AspectDuplicatesSchema,
+  // traits: AspectDuplicatesSchema,
+
+  // probably don't need these for now
+  // cardUid: z.string(),
+  // cardId: z.nullable(z.string()),
+  // cardCount: z.number(),
+  // createdAt: z.coerce.date(),
+  // updatedAt: z.coerce.date(),
+  // publishedAt: z.coerce.date(),
+
   // artBack: ArtSchema,
   // artFront: ArtSchema,
   // artThumbnail: ArtThumbnailSchema,
-  // aspectDuplicates: AspectDuplicatesSchema,
-  // aspects: AspectDuplicatesSchema,
-  // expansion: ExpansionSchema,
-  // keywords: AspectDuplicatesSchema,
-  // locale: PurpleLocaleSchema,
+  // locale: LocaleSchema,
   // localizations: LocalizationsSchema,
-  // rarity: ExpansionSchema,
-  // traits: AspectDuplicatesSchema,
-  // type2: ExpansionSchema,
-  // type: ExpansionSchema,
   // variantOf: ArenasSchema,
   // variantTypes: ArenasSchema,
   // variants: ArenasSchema,
