@@ -1,11 +1,18 @@
 import { useEffect } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
+import { CardDetailImage } from '@components/CardDetailImage';
 import { useCard } from '@data/hooks/useCard';
 import type { CardDetailScreenProps } from '@navigation/types';
 
 export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
-  const { data, error, isFetching, isError } = useCard(route.params.id);
+  const { data, error, isError } = useCard(route.params.id);
 
   useEffect(() => {
     navigation.setOptions({
@@ -17,9 +24,14 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
   if (data) {
     return (
       <>
-        <View style={styles.container}>
-          <Text>{data.data.attributes.title}</Text>
-        </View>
+        <ScrollView style={styles.scrollContainer}>
+          <View style={styles.container}>
+            <View style={styles.imageContainer}>
+              <CardDetailImage art={data.data.attributes.artFront} />
+              <CardDetailImage art={data.data.attributes.artBack} />
+            </View>
+          </View>
+        </ScrollView>
       </>
     );
   }
@@ -40,10 +52,17 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    backgroundColor: '#ffffff',
+    flex: 1,
+  },
   container: {
     alignItems: 'center',
     backgroundColor: '#ffffff',
     flex: 1,
     justifyContent: 'center',
+  },
+  imageContainer: {
+    gap: 16,
   },
 });

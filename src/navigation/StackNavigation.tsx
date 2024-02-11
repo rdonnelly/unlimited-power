@@ -14,15 +14,12 @@ export const StackNavigator = () => {
           name="StackCardListScreen"
           component={CardListScreen}
           options={{
-            title: 'SWU',
+            title: 'Spark of Rebellion',
           }}
         />
         <Stack.Screen
           name="StackCardDetailScreen"
           component={CardDetailScreen}
-          options={{
-            title: 'SWU',
-          }}
         />
       </Stack.Group>
     </Stack.Navigator>
