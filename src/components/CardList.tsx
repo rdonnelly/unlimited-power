@@ -1,30 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { useQuery } from 'react-query';
 
-import { CardResponseSchema } from '@data/CardResponse';
+import { type CardResponseData } from '@data/CardResponse';
 
-type CardListProps = object;
+type CardListProps = {
+  cards: CardResponseData;
+};
 
-export const CardList = ({}: CardListProps) => {
-  const query = useQuery(['user'], async () => {
-    const response = await (
-      await fetch(
-        'https://admin.starwarsunlimited.com/api/cards?filters[variantOf][id][$null]=true',
-      )
-    ).json();
-    console.log('fetched');
-    const parsed = CardResponseSchema.parse(response);
-    console.log('parsed');
-
-    // TODO catch errors, loading, etc.
-
-    return parsed;
-  });
-
+export const CardList = ({ cards }: CardListProps) => {
   return (
     <View style={styles.container}>
       <View>
-        <Text>Cards: {query.data?.data.length}</Text>
+        <Text>Cards: {cards.length}</Text>
       </View>
     </View>
   );
