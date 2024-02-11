@@ -12,11 +12,13 @@
   },
   "dependencies": {
     "@total-typescript/ts-reset": "^0.5.1",
+    "babel-plugin-module-resolver": "^5.0.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
-    "expo": "~50.0.2",
+    "expo": "~50.0.6",
     "expo-status-bar": "~1.11.1",
     "react": "18.2.0",
-    "react-native": "0.73.2",
+    "react-native": "0.73.4",
+    "react-query": "^3.39.3",
     "zod": "^3.22.4"
   },
   "devDependencies": {

@@ -19,7 +19,6 @@ export const AttributeSchema = z.object({
   // updatedAt: z.coerce.date(),
   // publishedAt: z.coerce.date(),
 });
-
 export type Attribute = z.infer<typeof AttributeSchema>;
 
 export const ColorSchema = z.enum([

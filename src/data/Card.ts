@@ -218,11 +218,11 @@ export const CardAttributesSchema = z.object({
   showcase: z.boolean(),
 
   arenas: ArenaAttributeSchema,
-  aspects: AspectAttributeSchema,
   aspectDuplicates: AspectAttributeSchema,
+  aspects: AspectAttributeSchema,
+  rarity: RarityAttributeSchema,
   type: TypeAttributeSchema,
   type2: TypeAttributeSchema,
-  rarity: RarityAttributeSchema,
 
   // expansion: ExpansionSchema,
   // keywords: AspectDuplicatesSchema,
