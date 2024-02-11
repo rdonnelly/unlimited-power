@@ -4,14 +4,20 @@ import { CardList } from '@components/CardList';
 import { useCards } from '@data/hooks/useCards';
 
 export function CardListScreen() {
-  const { data, error, isFetching, isError } = useCards();
+  const { data, error, isFetching, isError, hasNextPage, fetchNextPage } =
+    useCards();
 
   if (data) {
+    const cards = data.pages.flatMap((page) => page.data);
     return (
       <View style={styles.container}>
         <>
-          <CardList cards={data.data} />
-          <Text>{isFetching ? 'Fetching...' : ' '}</Text>
+          <CardList
+            cards={cards}
+            hasNextPage={!!hasNextPage}
+            fetchNextPage={fetchNextPage}
+          />
+          {isFetching ? <ActivityIndicator /> : null}
         </>
       </View>
     );
@@ -34,9 +40,9 @@ export function CardListScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
     alignItems: 'center',
+    backgroundColor: '#ffffff',
+    flex: 1,
     justifyContent: 'center',
   },
 });

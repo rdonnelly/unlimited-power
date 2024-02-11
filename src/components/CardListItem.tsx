@@ -12,7 +12,7 @@ export const CardListItem = ({ card }: CardListItemProps) => {
   return (
     <View style={styles.container}>
       <Text>
-        {card.id}: {card.attributes.title}
+        {card.attributes.cardNumber}: {card.attributes.title}
       </Text>
     </View>
   );
@@ -21,7 +21,7 @@ export const CardListItem = ({ card }: CardListItemProps) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#ffffff',
     borderBottomColor: '#000000',
     borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
