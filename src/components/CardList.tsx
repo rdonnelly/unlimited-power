@@ -1,21 +1,29 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
+import { StyleSheet, View } from 'react-native';
 
 import { type CardResponseData } from '@data/CardResponse';
 
-type CardListProps = {
+import { CardListItem, ITEM_HEIGHT } from './CardListItem';
+
+export type CardListProps = {
   cards: CardResponseData;
 };
 
 export const CardList = ({ cards }: CardListProps) => {
   return (
     <View style={styles.container}>
-      <View>
-        <Text>Cards: {cards.length}</Text>
-      </View>
+      <FlashList
+        data={cards}
+        renderItem={({ item: card }) => <CardListItem card={card} />}
+        estimatedItemSize={ITEM_HEIGHT}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+    width: '100%',
+  },
 });
