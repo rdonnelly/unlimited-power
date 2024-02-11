@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from 'react-query';
 
-import { type CardResponse, CardResponseSchema } from '@data/CardResponse';
+import { type CardsResponse, CardsResponseSchema } from '@data/CardsResponse';
 
 export const PAGE_SIZE = 50;
 
@@ -12,11 +12,11 @@ export function useCards() {
       )
     ).json();
 
-    const parsed = CardResponseSchema.parse(response);
+    const parsed = CardsResponseSchema.parse(response);
     return parsed;
   };
 
-  return useInfiniteQuery<CardResponse>({
+  return useInfiniteQuery<CardsResponse>({
     queryKey: ['cards'],
     queryFn: fetchCards,
     getNextPageParam: (lastPage) => {

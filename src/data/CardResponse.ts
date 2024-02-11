@@ -10,12 +10,10 @@ export const PaginationSchema = z.object({
 });
 export type Pagination = z.infer<typeof PaginationSchema>;
 
-export const CardResponseMetaSchema = z.object({
-  pagination: PaginationSchema,
-});
+export const CardResponseMetaSchema = z.object({});
 export type CardResponseMeta = z.infer<typeof CardResponseMetaSchema>;
 
-export const CardResponseDataSchema = z.array(CardSchema);
+export const CardResponseDataSchema = CardSchema;
 export type CardResponseData = z.infer<typeof CardResponseDataSchema>;
 
 export const CardResponseSchema = z.object({

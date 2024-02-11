@@ -1,9 +1,22 @@
+import { useCallback } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import { CardList } from '@components/CardList';
 import { useCards } from '@data/hooks/useCards';
+import type { CardListScreenProps } from '@navigation/types';
 
-export function CardListScreen() {
+export function CardListScreen({ navigation }: CardListScreenProps) {
+  const handlePressItem = useCallback(
+    (id: number) => {
+      if (navigation) {
+        navigation.push('StackCardDetailScreen', {
+          id,
+        });
+      }
+    },
+    [navigation],
+  );
+
   const { data, error, isFetching, isError, hasNextPage, fetchNextPage } =
     useCards();
 
@@ -16,6 +29,7 @@ export function CardListScreen() {
             cards={cards}
             hasNextPage={!!hasNextPage}
             fetchNextPage={fetchNextPage}
+            handlePressItem={handlePressItem}
           />
           {isFetching ? <ActivityIndicator /> : null}
         </>
