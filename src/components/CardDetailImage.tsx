@@ -17,9 +17,11 @@ export function CardDetailImage({ art }: CardDetailImageProps) {
     return null;
   }
 
-  const imageFrameWidth = windowWidth - 32;
+  // TODO: make cards the same size?
+
   const imageHeight = art.data.attributes.height;
   const imageWidth = art.data.attributes.width;
+  const imageFrameWidth = Math.min(windowWidth - 32, imageWidth);
   const imageFrameHeight = (imageFrameWidth / imageWidth) * imageHeight;
 
   return (

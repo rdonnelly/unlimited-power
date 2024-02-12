@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   imageContainer: {
+    alignItems: 'center',
     gap: 16,
   },
 });
