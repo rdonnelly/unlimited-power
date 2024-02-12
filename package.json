@@ -7,8 +7,10 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "dev": "npx expo start --dev-client",
     "lint": "eslint .",
-    "ts:check": "tsc"
+    "ts:check": "tsc",
+    "push:ios": "npx eas-cli@latest build --platform ios --auto-submit"
   },
   "dependencies": {
     "@react-navigation/native": "^6.1.10",

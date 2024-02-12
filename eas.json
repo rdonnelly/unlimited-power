@@ -1,4 +1,8 @@
 {
+  "cli": {
+    "appVersionSource": "remote",
+    "promptToConfigurePushNotifications": false
+  },
   "build": {
     "development": {
       "developmentClient": true,
@@ -14,6 +18,20 @@
     "preview": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {
+      "android": {
+        "track": "internal"
+      },
+      "ios": {
+        "appleId": "ryanjdonnelly@gmail.com",
+        "ascAppId": "6477787704",
+        "appleTeamId": "EZ4AQB6GC7"
+      }
+    }
   }
 }

@@ -2,7 +2,7 @@
   "expo": {
     "name": "unlimited-power",
     "slug": "unlimited-power",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -16,7 +16,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.rdonnelly.unlimitedpower"
+      "bundleIdentifier": "com.rdonnelly.unlimitedpower",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
