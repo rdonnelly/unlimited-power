@@ -1,3 +1,4 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { Card } from '@data/Card';
@@ -18,6 +19,7 @@ export const CardListItem = ({ card, handlePress }: CardListItemProps) => {
             <Text>
               {card.attributes.cardNumber}: {card.attributes.title}
             </Text>
+            <Ionicons name="chevron-forward" size={24} color="#000000" />
           </View>
         )}
       </Pressable>
@@ -30,6 +32,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderBottomColor: '#000000',
     borderBottomWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#ffffff',
+    borderTopWidth: StyleSheet.hairlineWidth,
     height: ITEM_HEIGHT,
     width: '100%',
   },
@@ -39,6 +43,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   inner: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
+    width: '100%',
   },
 });

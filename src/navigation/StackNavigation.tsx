@@ -14,7 +14,7 @@ export const StackNavigator = () => {
           name="StackCardListScreen"
           component={CardListScreen}
           options={{
-            title: 'Spark of Rebellion',
+            title: 'Unlimited Power',
           }}
         />
         <Stack.Screen
