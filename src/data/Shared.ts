@@ -1,35 +1,40 @@
 import * as z from 'zod';
 
-import { ColorSchema } from './Color';
-import { TypeEnum } from './Type';
+import { ArenaEnum } from '@data/Arena';
+import { AspectEnum } from '@data/Aspect';
+import { ColorSchema } from '@data/Color';
+import { ExpansionEnum } from '@data/Expansion';
+import { RarityEnum, RarityShortEnum } from '@data/Rarity';
+import { TypeEnum } from '@data/Type';
+import { VariantEnum } from '@data/Variant';
 
 export const LocaleSchema = z.enum(['en']);
 export type Locale = z.infer<typeof LocaleSchema>;
 
 export const AttributeSchema = z.object({
-  // name: z.string(),
-  // color: z.nullable(ColorSchema).optional(),
-
-  // description: z.union([z.null(), z.string()]).optional(),
-  // englishName: z.nullable(EnglishNameSchema).optional(),
-  // code: z.nullable(CodeSchema).optional(),
-  // character: z.nullable(CharacterSchema).optional(),
-  value: z.nullable(TypeEnum).optional(),
-
-  locale: LocaleSchema,
-
   // createdAt: z.coerce.date(),
   // updatedAt: z.coerce.date(),
   // publishedAt: z.coerce.date(),
+  locale: LocaleSchema,
 });
 export type Attribute = z.infer<typeof AttributeSchema>;
+
+export const GenericAttributeSchema = z.object({
+  data: z.array(
+    z.object({
+      id: z.number(),
+      attributes: AttributeSchema,
+    }),
+  ),
+});
+export type GenericAttribute = z.infer<typeof GenericAttributeSchema>;
 
 export const ArenaAttributeSchema = z.object({
   data: z.array(
     z.object({
       id: z.number(),
       attributes: AttributeSchema.extend({
-        name: z.string(),
+        name: ArenaEnum,
         color: z.nullable(ColorSchema).optional(),
       }),
     }),
@@ -42,7 +47,7 @@ export const AspectAttributeSchema = z.object({
     z.object({
       id: z.number(),
       attributes: AttributeSchema.extend({
-        name: z.string(),
+        name: AspectEnum,
         description: z.string(),
         color: z.nullable(ColorSchema),
       }),
@@ -51,11 +56,25 @@ export const AspectAttributeSchema = z.object({
 });
 export type AspectAttribute = z.infer<typeof AspectAttributeSchema>;
 
+export const ExpansionAttributeSchema = z.object({
+  data: z.nullable(
+    z.object({
+      id: z.number(),
+      attributes: AttributeSchema.extend({
+        code: ExpansionEnum,
+        name: z.string(),
+      }),
+    }),
+  ),
+});
+export type ExpansionAttribute = z.infer<typeof ExpansionAttributeSchema>;
+
 export const RarityAttributeSchema = z.object({
   data: z.object({
     id: z.number(),
     attributes: AttributeSchema.extend({
-      name: z.string(),
+      name: RarityEnum,
+      character: RarityShortEnum,
       color: z.nullable(ColorSchema),
     }),
   }),
@@ -63,13 +82,35 @@ export const RarityAttributeSchema = z.object({
 export type RarityAttribute = z.infer<typeof RarityAttributeSchema>;
 
 export const TypeAttributeSchema = z.object({
-  data: z
-    .object({
-      id: z.number(),
-      attributes: AttributeSchema.extend({
-        name: z.string(),
-      }),
-    })
-    .nullable(),
+  data: z.object({
+    id: z.number(),
+    attributes: AttributeSchema.extend({
+      name: TypeEnum,
+    }),
+  }),
 });
 export type TypeAttribute = z.infer<typeof TypeAttributeSchema>;
+
+export const Type2AttributeSchema = z.object({
+  data: z.nullable(
+    z.object({
+      id: z.number(),
+      attributes: AttributeSchema.extend({
+        name: TypeEnum,
+      }),
+    }),
+  ),
+});
+export type Type2Attribute = z.infer<typeof Type2AttributeSchema>;
+
+export const VariantAttributeSchema = z.object({
+  data: z.array(
+    z.object({
+      id: z.number(),
+      attributes: AttributeSchema.extend({
+        name: VariantEnum,
+      }),
+    }),
+  ),
+});
+export type VariantTypeAttribute = z.infer<typeof VariantAttributeSchema>;

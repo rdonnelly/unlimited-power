@@ -33,6 +33,7 @@ export const CardList = ({
         )}
         estimatedItemSize={ITEM_HEIGHT}
         onEndReached={loadNext}
+        onEndReachedThreshold={1.5}
       />
     </View>
   );

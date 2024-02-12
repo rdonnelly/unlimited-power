@@ -38,7 +38,8 @@ export function CardDetailImage({ art }: CardDetailImageProps) {
 
 const styles = StyleSheet.create({
   image: {
+    backgroundColor: '#000000',
+    borderRadius: 8,
     flex: 1,
-    backgroundColor: '#000',
   },
 });

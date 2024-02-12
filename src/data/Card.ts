@@ -4,17 +4,16 @@ import { ArtSchema, ArtThumbnailSchema } from '@data/CardArt';
 import {
   ArenaAttributeSchema,
   AspectAttributeSchema,
-  AttributeSchema,
+  ExpansionAttributeSchema,
+  GenericAttributeSchema,
+  LocaleSchema,
   RarityAttributeSchema,
+  Type2AttributeSchema,
   TypeAttributeSchema,
+  VariantAttributeSchema,
 } from '@data/Shared';
 
-export const CharacterSchema = z.enum(['C', 'L', 'R', 'S', 'U']);
-export type Character = z.infer<typeof CharacterSchema>;
-
-export const CodeSchema = z.enum(['SOR']);
-export type Code = z.infer<typeof CodeSchema>;
-
+// TODO: promo?
 export const NameSchema = z.enum([
   'Event Exclusive',
   'Ground',
@@ -63,26 +62,6 @@ export const LocalizationsSchema = z.object({
 });
 export type Localizations = z.infer<typeof LocalizationsSchema>;
 
-export const ExpansionSchema = z.object({
-  data: z.nullable(
-    z.object({
-      id: z.number(),
-      attributes: AttributeSchema,
-    }),
-  ),
-});
-export type Expansion = z.infer<typeof ExpansionSchema>;
-
-export const AspectDuplicatesSchema = z.object({
-  data: z.array(
-    z.object({
-      id: z.number(),
-      attributes: AttributeSchema,
-    }),
-  ),
-});
-export type AspectDuplicates = z.infer<typeof AspectDuplicatesSchema>;
-
 export const CardAttributesSchema = z.object({
   cardNumber: z.number(),
   title: z.string(),
@@ -112,11 +91,21 @@ export const CardAttributesSchema = z.object({
   aspects: AspectAttributeSchema,
   rarity: RarityAttributeSchema,
   type: TypeAttributeSchema,
-  type2: TypeAttributeSchema,
+  type2: Type2AttributeSchema,
 
-  expansion: ExpansionSchema,
-  keywords: AspectDuplicatesSchema,
-  traits: AspectDuplicatesSchema,
+  expansion: ExpansionAttributeSchema,
+  keywords: GenericAttributeSchema,
+  traits: GenericAttributeSchema,
+
+  artBack: ArtSchema,
+  artFront: ArtSchema,
+  artThumbnail: ArtThumbnailSchema,
+
+  variantTypes: VariantAttributeSchema,
+  locale: LocaleSchema,
+  // localizations: LocalizationsSchema,
+  // variantOf: ArenasSchema,
+  // variants: ArenasSchema,
 
   // probably don't need these for now
   // cardUid: z.string(),
@@ -125,15 +114,6 @@ export const CardAttributesSchema = z.object({
   // createdAt: z.coerce.date(),
   // updatedAt: z.coerce.date(),
   // publishedAt: z.coerce.date(),
-
-  artBack: ArtSchema,
-  artFront: ArtSchema,
-  artThumbnail: ArtThumbnailSchema,
-  // locale: LocaleSchema,
-  // localizations: LocalizationsSchema,
-  // variantOf: ArenasSchema,
-  // variantTypes: ArenasSchema,
-  // variants: ArenasSchema,
 });
 export type CardAttributes = z.infer<typeof CardAttributesSchema>;
 
