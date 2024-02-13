@@ -2,6 +2,7 @@ import { FlashList } from '@shopify/flash-list';
 import { StyleSheet, View } from 'react-native';
 
 import { type CardsResponseData } from '@data/CardsResponse';
+import { useTheme } from '@hooks/useTheme';
 
 import { CardListItem, ITEM_HEIGHT } from './CardListItem';
 
@@ -18,6 +19,8 @@ export const CardList = ({
   fetchNextPage,
   handlePressItem,
 }: CardListProps) => {
+  const { themeStyles } = useTheme();
+
   const loadNext = () => {
     if (hasNextPage) {
       fetchNextPage();
@@ -25,7 +28,7 @@ export const CardList = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, themeStyles.themedBackground100]}>
       <FlashList
         data={cards}
         renderItem={({ item: card }) => (

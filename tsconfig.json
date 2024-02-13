@@ -5,8 +5,10 @@
     "paths": {
       "@components/*": ["./src/components/*"],
       "@data/*": ["./src/data/*"],
+      "@hooks/*": ["./src/hooks/*"],
       "@navigation/*": ["./src/navigation/*"],
-      "@screens/*": ["./src/screens/*"]
+      "@screens/*": ["./src/screens/*"],
+      "@styles/*": ["./src/styles/*"]
     },
 
     "forceConsistentCasingInFileNames": true,

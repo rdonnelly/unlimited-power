@@ -55,7 +55,6 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: '#ffffff',
     flex: 1,
     justifyContent: 'center',
   },

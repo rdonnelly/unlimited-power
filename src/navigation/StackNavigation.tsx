@@ -20,6 +20,10 @@ export const StackNavigator = () => {
         <Stack.Screen
           name="StackCardDetailScreen"
           component={CardDetailScreen}
+          options={{
+            title: '',
+            headerBackTitleVisible: false,
+          }}
         />
       </Stack.Group>
     </Stack.Navigator>

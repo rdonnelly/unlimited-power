@@ -16,7 +16,6 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
 
   useEffect(() => {
     navigation.setOptions({
-      headerBackTitleVisible: false,
       headerTitle: data?.data.attributes.title ?? '',
     });
   }, [navigation, data]);
@@ -53,14 +52,13 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    backgroundColor: '#ffffff',
     flex: 1,
   },
   container: {
     alignItems: 'center',
-    backgroundColor: '#ffffff',
     flex: 1,
     justifyContent: 'center',
+    paddingTop: 16,
   },
   imageContainer: {
     alignItems: 'center',
