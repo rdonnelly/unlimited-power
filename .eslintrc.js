@@ -1,6 +1,9 @@
 module.exports = {
   root: true,
-  extends: ['universe/native'],
+  extends: [
+    'universe/native',
+    'plugin:@tanstack/eslint-plugin-query/recommended',
+  ],
   plugins: ['simple-import-sort'],
   rules: {
     'import/order': 'off',

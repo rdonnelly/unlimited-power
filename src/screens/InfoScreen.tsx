@@ -1,12 +1,5 @@
 import { A } from '@expo/html-elements';
-import {
-  Linking,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { useTheme } from '@hooks/useTheme';
 import type { InfoScreenProps } from '@navigation/types';

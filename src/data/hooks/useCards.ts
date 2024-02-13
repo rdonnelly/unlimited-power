@@ -1,6 +1,6 @@
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { type CardsResponse, CardsResponseSchema } from '@data/CardsResponse';
+import { CardsResponseSchema } from '@data/CardsResponse';
 
 export const PAGE_SIZE = 50;
 
@@ -16,9 +16,10 @@ export function useCards() {
     return parsed;
   };
 
-  return useInfiniteQuery<CardsResponse>({
+  return useInfiniteQuery({
     queryKey: ['cards'],
     queryFn: fetchCards,
+    initialPageParam: 1,
     getNextPageParam: (lastPage) => {
       if (
         lastPage.meta.pagination.page >= lastPage.meta.pagination.pageCount ||
