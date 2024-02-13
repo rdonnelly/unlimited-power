@@ -1,9 +1,12 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { Image } from 'expo-image';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { Card } from '@data/Card';
 import { useTheme } from '@hooks/useTheme';
 import { DARK_THEME, LIGHT_THEME } from '@styles/colors';
+
+import { CardListAspects } from './CardListAspects';
 
 export type CardListItemProps = {
   card: Card;
@@ -32,13 +35,41 @@ export const CardListItem = ({ card, handlePress }: CardListItemProps) => {
               pressed ? themeStyles.themedBackground300 : undefined,
             ]}
           >
-            <View>
-              <Text style={[styles.cardTitle, themeStyles.themedColor]}>
-                {card.attributes.title}
-              </Text>
-              <Text style={[styles.cardInfo, themeStyles.themedColorSubdued]}>
+            <View style={styles.innerDetails}>
+              <View style={styles.innerDetailsTitle}>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={[styles.cardTitle, themeStyles.themedColor]}
+                >
+                  {card.attributes.title}
+                </Text>
+                {card.attributes.unique ? (
+                  <Image
+                    style={[styles.cardUniqueIcon]}
+                    source={require('../../assets/icons/unique.png')}
+                    contentFit="cover"
+                  />
+                ) : null}
+              </View>
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={[styles.cardInfo, themeStyles.themedColorSubdued]}
+              >
                 {card.attributes.type.data.attributes.name}
+                {card.attributes.subtitle ? (
+                  <>
+                    {' – '}
+                    <Text style={{ fontStyle: 'italic' }}>
+                      {card.attributes.subtitle}
+                    </Text>
+                  </>
+                ) : null}
               </Text>
+            </View>
+            <View style={styles.innerAspects}>
+              <CardListAspects card={card.attributes} />
             </View>
             <Ionicons
               name="chevron-forward"
@@ -79,9 +110,27 @@ const styles = StyleSheet.create({
   innerPressed: {
     opacity: 0.5,
   },
+  innerDetails: {
+    flex: 1,
+  },
+  innerDetailsTitle: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 4,
+  },
+  cardUniqueIcon: {
+    backgroundColor: DARK_THEME.background300,
+    borderRadius: 8,
+    height: 12,
+    width: 12,
+  },
   cardTitle: {
     fontSize: 16,
     fontWeight: '800',
   },
   cardInfo: {},
+  innerAspects: {
+    flexDirection: 'row',
+    gap: 4,
+  },
 });
