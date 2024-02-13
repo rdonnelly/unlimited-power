@@ -1,10 +1,11 @@
-import { FontAwesome5 } from '@expo/vector-icons';
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Text, View } from 'react-native';
 
 import type { StackParamList } from '@navigation/types';
 import { CardDetailScreen } from '@screens/CardDetailScreen';
 import { CardListScreen } from '@screens/CardListScreen';
+import { InfoScreen } from '@screens/InfoScreen';
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -53,6 +54,17 @@ export const StackNavigator = () => {
         <Stack.Screen
           name="StackCardDetailScreen"
           component={CardDetailScreen}
+          options={{
+            title: '',
+            headerTitle: '',
+            headerBackTitleVisible: false,
+          }}
+        />
+      </Stack.Group>
+      <Stack.Group screenOptions={{ presentation: 'modal' }}>
+        <Stack.Screen
+          name="StackInfoScreen"
+          component={InfoScreen}
           options={{
             title: '',
             headerTitle: '',

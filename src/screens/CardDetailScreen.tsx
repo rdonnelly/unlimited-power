@@ -22,16 +22,14 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
 
   if (data) {
     return (
-      <>
-        <ScrollView style={styles.scrollContainer}>
-          <View style={styles.container}>
-            <View style={styles.imageContainer}>
-              <CardDetailImage art={data.data.attributes.artFront} />
-              <CardDetailImage art={data.data.attributes.artBack} />
-            </View>
+      <ScrollView style={styles.scrollContainer}>
+        <View style={styles.container}>
+          <View style={styles.imageContainer}>
+            <CardDetailImage art={data.data.attributes.artFront} />
+            <CardDetailImage art={data.data.attributes.artBack} />
           </View>
-        </ScrollView>
-      </>
+        </View>
+      </ScrollView>
     );
   }
 

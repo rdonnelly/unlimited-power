@@ -5,6 +5,7 @@ export type StackParamList = {
   StackCardDetailScreen: {
     id: number;
   };
+  StackInfoScreen: undefined;
 };
 
 export type CardListScreenProps = NativeStackScreenProps<
@@ -15,4 +16,9 @@ export type CardListScreenProps = NativeStackScreenProps<
 export type CardDetailScreenProps = NativeStackScreenProps<
   StackParamList,
   'StackCardDetailScreen'
+>;
+
+export type InfoScreenProps = NativeStackScreenProps<
+  StackParamList,
+  'StackInfoScreen'
 >;
