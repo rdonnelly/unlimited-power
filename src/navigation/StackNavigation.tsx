@@ -1,4 +1,6 @@
+import { FontAwesome5 } from '@expo/vector-icons';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Text, View } from 'react-native';
 
 import type { StackParamList } from '@navigation/types';
 import { CardDetailScreen } from '@screens/CardDetailScreen';
@@ -15,6 +17,37 @@ export const StackNavigator = () => {
           component={CardListScreen}
           options={{
             title: 'Unlimited Power',
+            headerTitle: ({ tintColor }) => {
+              return (
+                <View
+                  style={{
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    gap: 16,
+                  }}
+                >
+                  <FontAwesome5
+                    name="bolt"
+                    size={16}
+                    color={tintColor}
+                    style={{
+                      transform: [{ scaleX: -1 }],
+                    }}
+                  />
+                  <Text
+                    style={{
+                      color: tintColor,
+                      fontSize: 16,
+                      fontWeight: '700',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    Unlimited Power
+                  </Text>
+                  <FontAwesome5 name="bolt" size={16} color={tintColor} />
+                </View>
+              );
+            },
           }}
         />
         <Stack.Screen
@@ -22,6 +55,7 @@ export const StackNavigator = () => {
           component={CardDetailScreen}
           options={{
             title: '',
+            headerTitle: '',
             headerBackTitleVisible: false,
           }}
         />
