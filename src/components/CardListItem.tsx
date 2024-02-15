@@ -79,6 +79,7 @@ export const CardListItem = ({ card, handlePress }: CardListItemProps) => {
                   ? LIGHT_THEME.tintSubdued
                   : DARK_THEME.tintSubdued
               }
+              style={styles.innerChevron}
             />
           </View>
         )}
@@ -132,5 +133,8 @@ const styles = StyleSheet.create({
   innerAspects: {
     flexDirection: 'row',
     gap: 4,
+  },
+  innerChevron: {
+    marginRight: -8,
   },
 });

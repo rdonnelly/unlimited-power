@@ -4,18 +4,18 @@ import { CardsResponseSchema } from '@data/CardsResponse';
 
 export const PAGE_SIZE = 50;
 
+const fetchCards = async ({ pageParam = 1 }) => {
+  const response = await (
+    await fetch(
+      `https://admin.starwarsunlimited.com/api/cards?locale=en&orderBy[expansion][id]=asc&sort[0]=type.sortValue:asc,cardNumber&filters[variantOf][id][$null]=true&pagination[page]=${pageParam}&pagination[pageSize]=${PAGE_SIZE}`,
+    )
+  ).json();
+
+  const parsed = CardsResponseSchema.parse(response);
+  return parsed;
+};
+
 export function useCards() {
-  const fetchCards = async ({ pageParam = 1 }) => {
-    const response = await (
-      await fetch(
-        `https://admin.starwarsunlimited.com/api/cards?filters[variantOf][id][$null]=true&sort=cardNumber&pagination[page]=${pageParam}&pagination[pageSize]=${PAGE_SIZE}`,
-      )
-    ).json();
-
-    const parsed = CardsResponseSchema.parse(response);
-    return parsed;
-  };
-
   return useInfiniteQuery({
     queryKey: ['cards'],
     queryFn: fetchCards,
