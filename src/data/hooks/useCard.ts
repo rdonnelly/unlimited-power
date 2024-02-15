@@ -12,7 +12,6 @@ const fetchCard = async (id: number) => {
     await fetch(`https://admin.starwarsunlimited.com/api/cards/${id}`)
   ).json();
 
-  console.log('fetched card');
   const parsed = CardResponseSchema.parse(response);
   return parsed.data;
 };
