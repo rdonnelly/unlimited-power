@@ -37,10 +37,11 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
   }, [navigation]);
 
   const handlePressItem = useCallback(
-    (id: number) => {
+    (id: number, title: string) => {
       if (navigation) {
         navigation.push('StackCardDetailScreen', {
           id,
+          title,
         });
       }
     },

@@ -10,12 +10,26 @@ import {
   NavigationContainer,
   type Theme,
 } from '@react-navigation/native';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  focusManager,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import { StatusBar } from 'expo-status-bar';
 import { useMemo } from 'react';
+import { type AppStateStatus, Platform } from 'react-native';
 
+import { useAppState } from '@hooks/useAppState';
+import { useOnlineManager } from '@hooks/useOnlineManager';
 import { useTheme } from '@hooks/useTheme';
 import { StackNavigator } from '@navigation/StackNavigation';
+
+function onAppStateChange(status: AppStateStatus) {
+  // React Query already supports in web browser refetch on window focus by default
+  if (Platform.OS !== 'web') {
+    focusManager.setFocused(status === 'active');
+  }
+}
 
 const queryClient = new QueryClient();
 
@@ -24,6 +38,10 @@ export default function App() {
   useReactQueryDevTools(queryClient);
   const navigationRef = useNavigationContainerRef();
   useReactNavigationDevTools(navigationRef);
+
+  useOnlineManager();
+
+  useAppState(onAppStateChange);
 
   const { theme } = useTheme();
 

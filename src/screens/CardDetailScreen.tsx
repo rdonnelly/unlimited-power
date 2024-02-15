@@ -16,7 +16,7 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: data?.data.attributes.title ?? '',
+      headerTitle: data?.attributes.title ?? '',
     });
   }, [navigation, data]);
 
@@ -25,8 +25,8 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.container}>
           <View style={styles.imageContainer}>
-            <CardDetailImage art={data.data.attributes.artFront} />
-            <CardDetailImage art={data.data.attributes.artBack} />
+            <CardDetailImage art={data.attributes.artFront} />
+            <CardDetailImage art={data.attributes.artBack} />
           </View>
         </View>
       </ScrollView>

@@ -10,7 +10,7 @@ import { CardListAspects } from './CardListAspects';
 
 export type CardListItemProps = {
   card: Card;
-  handlePress: (id: number) => void;
+  handlePress: (id: number, title: string) => void;
 };
 
 export const ITEM_HEIGHT = 64;
@@ -26,7 +26,10 @@ export const CardListItem = ({ card, handlePress }: CardListItemProps) => {
         themeStyles.themedBorderSubdued,
       ]}
     >
-      <Pressable onPress={() => handlePress(card.id)} style={styles.pressable}>
+      <Pressable
+        onPress={() => handlePress(card.id, card.attributes.title)}
+        style={styles.pressable}
+      >
         {({ pressed }) => (
           <View
             style={[
@@ -127,7 +130,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 16,
-    fontWeight: '800',
+    fontWeight: '700',
   },
   cardInfo: {},
   innerAspects: {

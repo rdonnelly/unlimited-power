@@ -5,9 +5,14 @@ import { CardsResponseSchema } from '@data/CardsResponse';
 export const PAGE_SIZE = 50;
 
 const fetchCards = async ({ pageParam = 1 }) => {
+  const orderBy =
+    'orderBy[expansion][id]=asc&sort[0]=type.sortValue:asc,cardNumber';
+  const filter =
+    'filters[variantOf][id][$null]=true&filters[aspects][id][$in]=12&filters[aspects][id][$in]=2';
+  const pagination = `pagination[page]=${pageParam}&pagination[pageSize]=${PAGE_SIZE}`;
   const response = await (
     await fetch(
-      `https://admin.starwarsunlimited.com/api/cards?locale=en&orderBy[expansion][id]=asc&sort[0]=type.sortValue:asc,cardNumber&filters[variantOf][id][$null]=true&pagination[page]=${pageParam}&pagination[pageSize]=${PAGE_SIZE}`,
+      `https://admin.starwarsunlimited.com/api/cards?locale=en&${orderBy}&${filter}&${pagination}`,
     )
   ).json();
 

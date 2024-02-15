@@ -54,11 +54,11 @@ export const StackNavigator = () => {
         <Stack.Screen
           name="StackCardDetailScreen"
           component={CardDetailScreen}
-          options={{
+          options={({ route }) => ({
             title: '',
-            headerTitle: '',
+            headerTitle: route.params.title ?? '',
             headerBackTitleVisible: false,
-          }}
+          })}
         />
       </Stack.Group>
       <Stack.Group screenOptions={{ presentation: 'modal' }}>

@@ -1,12 +1,12 @@
 import * as z from 'zod';
 
 const VALUES = [
-  'Aggression',
-  'Command',
-  'Cunning',
-  'Heroism',
-  'Vigilance',
-  'Villainy',
+  'Aggression', // 12
+  'Command', // 7
+  'Cunning', // 17
+  'Heroism', // 22
+  'Vigilance', // 2
+  'Villainy', // 27
 ] as const;
 export const AspectEnum = z.enum(VALUES);
 export type Aspect = z.infer<typeof AspectEnum>;

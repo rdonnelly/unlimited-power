@@ -10,7 +10,7 @@ export type CardListProps = {
   cards: CardsResponseData;
   hasNextPage: boolean;
   fetchNextPage: () => void;
-  handlePressItem: (id: number) => void;
+  handlePressItem: (id: number, title: string) => void;
 };
 
 export const CardList = ({
