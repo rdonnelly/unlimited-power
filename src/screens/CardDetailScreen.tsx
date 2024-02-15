@@ -9,9 +9,12 @@ import {
 
 import { CardDetailImage } from '@components/CardDetailImage';
 import { useCard } from '@data/hooks/useCard';
+import { useTheme } from '@hooks/useTheme';
 import type { CardDetailScreenProps } from '@navigation/types';
+import { DARK_THEME, LIGHT_THEME } from '@styles/colors';
 
 export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
+  const { theme } = useTheme();
   const { data, error, isError } = useCard(route.params.id);
 
   useEffect(() => {
@@ -43,7 +46,14 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator />
+      <ActivityIndicator
+        size="large"
+        color={
+          theme.scheme === 'light'
+            ? LIGHT_THEME.tintSubdued
+            : DARK_THEME.tintSubdued
+        }
+      />
     </View>
   );
 }

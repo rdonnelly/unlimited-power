@@ -10,9 +10,13 @@ import {
 
 import { CardList } from '@components/CardList';
 import { useCards } from '@data/hooks/useCards';
+import { useTheme } from '@hooks/useTheme';
 import type { CardListScreenProps } from '@navigation/types';
+import { DARK_THEME, LIGHT_THEME } from '@styles/colors';
 
 export function CardListScreen({ navigation }: CardListScreenProps) {
+  const { theme, themeStyles } = useTheme();
+
   useEffect(() => {
     navigation.setOptions({
       headerRight: ({ tintColor }) => {
@@ -48,7 +52,7 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
     [navigation],
   );
 
-  const { data, error, isFetching, isError, hasNextPage, fetchNextPage } =
+  const { data, isFetching, isError, hasNextPage, fetchNextPage, refetch } =
     useCards();
 
   if (data) {
@@ -62,23 +66,56 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
             fetchNextPage={fetchNextPage}
             handlePressItem={handlePressItem}
           />
-          {isFetching ? <ActivityIndicator /> : null}
+          {isFetching ? (
+            <ActivityIndicator
+              size="large"
+              color={
+                theme.scheme === 'light'
+                  ? LIGHT_THEME.tintSubdued
+                  : DARK_THEME.tintSubdued
+              }
+            />
+          ) : null}
         </>
       </View>
     );
   }
 
   if (isError) {
-    if (error instanceof Error) {
-      return <Text>Error: {error.message}</Text>;
-    }
-
-    return <Text>An unknown error occured</Text>;
+    return (
+      <View style={styles.container}>
+        <View style={styles.error}>
+          <Text style={[styles.errorText, themeStyles.themedColorSubdued]}>
+            An unknown error occured while fetching card data.
+          </Text>
+        </View>
+        <Pressable onPress={() => refetch()}>
+          {({ pressed }) => (
+            <View
+              style={[
+                styles.retryButton,
+                pressed ? styles.retryButtonPressed : undefined,
+                themeStyles.themedBackgroundBrand,
+              ]}
+            >
+              <Text style={styles.retryButtonText}>Retry</Text>
+            </View>
+          )}
+        </Pressable>
+      </View>
+    );
   }
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator />
+      <ActivityIndicator
+        size="large"
+        color={
+          theme.scheme === 'light'
+            ? LIGHT_THEME.tintSubdued
+            : DARK_THEME.tintSubdued
+        }
+      />
     </View>
   );
 }
@@ -88,5 +125,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
+  },
+  error: {
+    marginBottom: 32,
+    maxWidth: 240,
+  },
+  errorText: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
+  retryButton: {
+    borderRadius: 8,
+    paddingHorizontal: 32,
+    paddingVertical: 16,
+  },
+  retryButtonPressed: {
+    opacity: 0.5,
+  },
+  retryButtonText: {
+    fontSize: 18,
+    fontWeight: '500',
   },
 });

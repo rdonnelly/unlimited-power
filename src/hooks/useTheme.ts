@@ -17,6 +17,9 @@ export function useTheme() {
     themedBackground300: {
       backgroundColor: theme.background300,
     },
+    themedBackgroundBrand: {
+      backgroundColor: theme.brand,
+    },
     themedColor: {
       color: theme.tint,
     },

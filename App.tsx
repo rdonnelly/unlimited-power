@@ -3,6 +3,7 @@ import 'expo-dev-client';
 import { useAsyncStorageDevTools } from '@dev-plugins/async-storage';
 import { useReactNavigationDevTools } from '@dev-plugins/react-navigation';
 import { useReactQueryDevTools } from '@dev-plugins/react-query';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigationContainerRef } from '@react-navigation/native';
 import {
   DarkTheme,
@@ -10,11 +11,9 @@ import {
   NavigationContainer,
   type Theme,
 } from '@react-navigation/native';
-import {
-  focusManager,
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
+import { focusManager, QueryClient } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { StatusBar } from 'expo-status-bar';
 import { useMemo } from 'react';
 import { type AppStateStatus, Platform } from 'react-native';
@@ -24,14 +23,24 @@ import { useOnlineManager } from '@hooks/useOnlineManager';
 import { useTheme } from '@hooks/useTheme';
 import { StackNavigator } from '@navigation/StackNavigation';
 
+const asyncStoragePersister = createAsyncStoragePersister({
+  storage: AsyncStorage,
+});
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      gcTime: 1000 * 60 * 60 * 24, // 24 hours
+    },
+  },
+});
+
 function onAppStateChange(status: AppStateStatus) {
   // React Query already supports in web browser refetch on window focus by default
   if (Platform.OS !== 'web') {
     focusManager.setFocused(status === 'active');
   }
 }
-
-const queryClient = new QueryClient();
 
 export default function App() {
   useAsyncStorageDevTools();
@@ -64,11 +73,19 @@ export default function App() {
 
   return (
     <>
-      <QueryClientProvider client={queryClient}>
+      <PersistQueryClientProvider
+        client={queryClient}
+        persistOptions={{
+          persister: asyncStoragePersister,
+          buster: __DEV__
+            ? (Math.random() + 1).toString(36).substring(7)
+            : undefined,
+        }}
+      >
         <NavigationContainer theme={navigationTheme} ref={navigationRef}>
           <StackNavigator />
         </NavigationContainer>
-      </QueryClientProvider>
+      </PersistQueryClientProvider>
       <StatusBar style="auto" />
     </>
   );
