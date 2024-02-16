@@ -14,15 +14,30 @@ import { DARK_THEME, LIGHT_THEME } from '@styles/colors';
 
 export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
   const { theme } = useTheme();
-  const { data, error, isError } = useCard(route.params.id);
+  const { data, error, isError, isFetching } = useCard(route.params.id);
 
   if (data) {
     return (
-      <ScrollView style={styles.scrollContainer}>
-        <View style={styles.container}>
-          <CardDetailImages cardAttributes={data.attributes} />
-        </View>
-      </ScrollView>
+      <View style={styles.container}>
+        <ScrollView style={styles.scrollContainer}>
+          <View style={styles.content}>
+            {!isFetching ? (
+              <CardDetailImages cardAttributes={data.attributes} />
+            ) : null}
+          </View>
+        </ScrollView>
+        {isFetching ? (
+          <View style={styles.activity}>
+            <ActivityIndicator
+              color={
+                theme.scheme === 'light'
+                  ? LIGHT_THEME.tintSubdued
+                  : DARK_THEME.tintSubdued
+              }
+            />
+          </View>
+        ) : null}
+      </View>
     );
   }
 
@@ -36,26 +51,38 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator
-        size="large"
-        color={
-          theme.scheme === 'light'
-            ? LIGHT_THEME.tintSubdued
-            : DARK_THEME.tintSubdued
-        }
-      />
+      <View style={styles.activity}>
+        <ActivityIndicator
+          color={
+            theme.scheme === 'light'
+              ? LIGHT_THEME.tintSubdued
+              : DARK_THEME.tintSubdued
+          }
+        />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollContainer: {
-    flex: 1,
-  },
   container: {
     alignItems: 'center',
     flex: 1,
     justifyContent: 'flex-start',
+    width: '100%',
+  },
+  scrollContainer: {
+    flex: 1,
+    width: '100%',
+  },
+  content: {
+    alignItems: 'center',
+    flex: 1,
+    justifyContent: 'flex-start',
     paddingTop: 16,
+  },
+  activity: {
+    bottom: 24,
+    position: 'absolute',
   },
 });

@@ -68,14 +68,15 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
             handlePressItem={handlePressItem}
           />
           {isFetching ? (
-            <ActivityIndicator
-              size="large"
-              color={
-                theme.scheme === 'light'
-                  ? LIGHT_THEME.tintSubdued
-                  : DARK_THEME.tintSubdued
-              }
-            />
+            <View style={styles.activity}>
+              <ActivityIndicator
+                color={
+                  theme.scheme === 'light'
+                    ? LIGHT_THEME.tintSubdued
+                    : DARK_THEME.tintSubdued
+                }
+              />
+            </View>
           ) : null}
         </>
       </View>
@@ -116,14 +117,15 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
 
   return (
     <View style={styles.container}>
-      <ActivityIndicator
-        size="large"
-        color={
-          theme.scheme === 'light'
-            ? LIGHT_THEME.tintSubdued
-            : DARK_THEME.tintSubdued
-        }
-      />
+      <View style={styles.activity}>
+        <ActivityIndicator
+          color={
+            theme.scheme === 'light'
+              ? LIGHT_THEME.tintSubdued
+              : DARK_THEME.tintSubdued
+          }
+        />
+      </View>
     </View>
   );
 }
@@ -133,6 +135,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
+  },
+  activity: {
+    bottom: 24,
+    position: 'absolute',
   },
   error: {
     marginBottom: 32,
