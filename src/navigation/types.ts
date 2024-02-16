@@ -5,6 +5,7 @@ export type StackParamList = {
   StackCardDetailScreen: {
     id: number;
     title: string;
+    caption?: string;
   };
   StackInfoScreen: undefined;
 };

@@ -10,7 +10,7 @@ export type CardListProps = {
   cards: CardsResponseData;
   hasNextPage: boolean;
   fetchNextPage: () => void;
-  handlePressItem: (id: number, title: string) => void;
+  handlePressItem: (id: number, title: string, caption?: string) => void;
 };
 
 export const CardList = ({
@@ -28,7 +28,7 @@ export const CardList = ({
   };
 
   return (
-    <View style={[styles.container, themeStyles.themedBackground100]}>
+    <View style={[styles.container, themeStyles.themedbackground0]}>
       <FlashList
         data={cards}
         renderItem={({ item: card }) => (

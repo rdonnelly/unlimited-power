@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -7,7 +6,7 @@ import {
   View,
 } from 'react-native';
 
-import { CardDetailImage } from '@components/CardDetailImage';
+import { CardDetailImages } from '@components/CardDetailImages';
 import { useCard } from '@data/hooks/useCard';
 import { useTheme } from '@hooks/useTheme';
 import type { CardDetailScreenProps } from '@navigation/types';
@@ -17,20 +16,11 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
   const { theme } = useTheme();
   const { data, error, isError } = useCard(route.params.id);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: data?.attributes.title ?? '',
-    });
-  }, [navigation, data]);
-
   if (data) {
     return (
       <ScrollView style={styles.scrollContainer}>
         <View style={styles.container}>
-          <View style={styles.imageContainer}>
-            <CardDetailImage art={data.attributes.artFront} />
-            <CardDetailImage art={data.attributes.artBack} />
-          </View>
+          <CardDetailImages cardAttributes={data.attributes} />
         </View>
       </ScrollView>
     );
@@ -65,11 +55,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     paddingTop: 16,
-  },
-  imageContainer: {
-    alignItems: 'center',
-    gap: 16,
   },
 });

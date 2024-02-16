@@ -42,5 +42,6 @@ export function useCards() {
 
       return lastPage.meta.pagination.page - 1;
     },
+    retry: !__DEV__,
   });
 }

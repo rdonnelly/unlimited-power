@@ -8,23 +8,44 @@ export function useTheme() {
   const theme = colorScheme === 'dark' ? DARK_THEME : LIGHT_THEME;
 
   const styles = StyleSheet.create({
-    themedBackground100: {
+    themedbackground0: {
+      backgroundColor: theme.background0,
+    },
+    themedbackground50: {
+      backgroundColor: theme.background50,
+    },
+    themedbackground100: {
       backgroundColor: theme.background100,
     },
-    themedBackground200: {
+    themedbackground200: {
       backgroundColor: theme.background200,
     },
-    themedBackground300: {
+    themedbackground300: {
       backgroundColor: theme.background300,
+    },
+    themedbackground400: {
+      backgroundColor: theme.background400,
     },
     themedBackgroundBrand: {
       backgroundColor: theme.brand,
+    },
+    themedBackgroundButton: {
+      backgroundColor: theme.button,
+    },
+    themedBackgroundButtonSubdued: {
+      backgroundColor: theme.buttonSubdued,
     },
     themedColor: {
       color: theme.tint,
     },
     themedColorSubdued: {
       color: theme.tintSubdued,
+    },
+    themedColorButton: {
+      color: theme.buttonTint,
+    },
+    themedColorButtonSubdued: {
+      color: theme.buttonSubduedTint,
     },
     themedBorder: {
       borderColor: theme.tint,

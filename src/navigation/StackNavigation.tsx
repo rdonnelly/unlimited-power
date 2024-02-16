@@ -40,6 +40,7 @@ export const StackNavigator = () => {
                       color: tintColor,
                       fontSize: 16,
                       fontWeight: '700',
+                      textAlign: 'center',
                       textTransform: 'uppercase',
                     }}
                   >
@@ -56,7 +57,36 @@ export const StackNavigator = () => {
           component={CardDetailScreen}
           options={({ route }) => ({
             title: '',
-            headerTitle: route.params.title ?? '',
+            headerTitle: ({ tintColor }) => {
+              return (
+                <View>
+                  <Text
+                    style={{
+                      color: tintColor,
+                      fontSize: 16,
+                      fontWeight: '700',
+                      textAlign: 'center',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {route.params.title ?? ''}
+                  </Text>
+                  {route.params.caption ? (
+                    <Text
+                      style={{
+                        color: tintColor,
+                        fontSize: 13,
+                        opacity: 0.6,
+                        textAlign: 'center',
+                        marginTop: -2,
+                      }}
+                    >
+                      {route.params.caption}
+                    </Text>
+                  ) : null}
+                </View>
+              );
+            },
             headerBackTitleVisible: false,
           })}
         />

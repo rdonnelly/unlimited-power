@@ -1,38 +1,28 @@
 import { Image } from 'expo-image';
-import { StyleSheet, useWindowDimensions } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import type { Art } from '@data/CardArt';
 
 export type CardDetailImageProps = {
   art?: Art;
+  height: number;
+  width: number;
 };
 
 // TODO: blurhash based on color/orientation?
 const blurhash = 'TBC74;of00~VaeIp00WB-:00kC_3';
 
-export function CardDetailImage({ art }: CardDetailImageProps) {
-  const { width: windowWidth } = useWindowDimensions();
-
+export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
   if (!art?.data?.attributes) {
     return null;
   }
 
-  // TODO: make cards the same size?
-
-  const imageHeight = art.data.attributes.height;
-  const imageWidth = art.data.attributes.width;
-  const imageFrameWidth = Math.min(windowWidth - 32, imageWidth);
-  const imageFrameHeight = (imageFrameWidth / imageWidth) * imageHeight;
-
   return (
     <Image
-      style={[
-        styles.image,
-        { height: imageFrameHeight, width: imageFrameWidth },
-      ]}
+      style={[styles.image, { height, width }]}
       source={`${art.data?.attributes.url}`}
       placeholder={blurhash}
-      contentFit="cover"
+      contentFit="contain"
       transition={200}
     />
   );
@@ -41,7 +31,6 @@ export function CardDetailImage({ art }: CardDetailImageProps) {
 const styles = StyleSheet.create({
   image: {
     backgroundColor: '#000000',
-    borderRadius: 8,
-    flex: 1,
+    borderRadius: 16,
   },
 });

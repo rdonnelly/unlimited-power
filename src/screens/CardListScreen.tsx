@@ -41,11 +41,12 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
   }, [navigation]);
 
   const handlePressItem = useCallback(
-    (id: number, title: string) => {
+    (id: number, title: string, caption?: string) => {
       if (navigation) {
         navigation.push('StackCardDetailScreen', {
           id,
           title,
+          caption,
         });
       }
     },
@@ -95,10 +96,17 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
               style={[
                 styles.retryButton,
                 pressed ? styles.retryButtonPressed : undefined,
-                themeStyles.themedBackgroundBrand,
+                themeStyles.themedBackgroundButtonSubdued,
               ]}
             >
-              <Text style={styles.retryButtonText}>Retry</Text>
+              <Text
+                style={[
+                  styles.retryButtonText,
+                  themeStyles.themedColorButtonSubdued,
+                ]}
+              >
+                Retry
+              </Text>
             </View>
           )}
         </Pressable>

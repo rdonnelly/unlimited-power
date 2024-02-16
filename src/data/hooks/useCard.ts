@@ -22,22 +22,14 @@ export function useCard(cardId: number) {
     queryKey: ['card', cardId],
     queryFn: () => fetchCard(cardId),
     enabled: !!cardId,
-    initialData: () => {
-      // Get the query state
-      const state = queryClient.getQueryState<
-        InfiniteData<CardsResponse>,
-        Error
-      >(['cards']);
+    placeholderData: () => {
+      const data = queryClient.getQueryData<InfiniteData<CardsResponse>>([
+        'cards',
+      ]);
 
-      // If the query exists and has data that is no older than 10 seconds...
-      if (state && Date.now() - state.dataUpdatedAt <= 300 * 1000) {
-        const single = state.data?.pages
-          .map((page) => page.data.find((card) => card.id === cardId))
-          .find(Boolean);
-        return single;
-      }
-
-      // Otherwise, return undefined and let it fetch from a hard loading state!
+      return data?.pages
+        .map((page) => page.data.find((card) => card.id === cardId))
+        .find(Boolean);
     },
   });
 }

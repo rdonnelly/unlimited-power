@@ -6,15 +6,14 @@ import { ColorSchema } from '@data/Color';
 import { ExpansionEnum } from '@data/Expansion';
 import { RarityEnum, RarityShortEnum } from '@data/Rarity';
 import { TypeEnum } from '@data/Type';
-import { VariantEnum } from '@data/Variant';
 
 export const LocaleSchema = z.enum(['en']);
 export type Locale = z.infer<typeof LocaleSchema>;
 
 export const AttributeSchema = z.object({
-  // createdAt: z.coerce.date(),
-  // updatedAt: z.coerce.date(),
-  // publishedAt: z.coerce.date(),
+  createdAt: z.coerce.date(),
+  updatedAt: z.coerce.date(),
+  publishedAt: z.coerce.date(),
   locale: LocaleSchema,
 });
 export type Attribute = z.infer<typeof AttributeSchema>;
@@ -108,7 +107,7 @@ export const VariantAttributeSchema = z.object({
     z.object({
       id: z.number(),
       attributes: AttributeSchema.extend({
-        name: VariantEnum,
+        name: z.string(),
       }),
     }),
   ),

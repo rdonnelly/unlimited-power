@@ -6,63 +6,13 @@ import {
   AspectAttributeSchema,
   ExpansionAttributeSchema,
   GenericAttributeSchema,
-  LocaleSchema,
   RarityAttributeSchema,
   Type2AttributeSchema,
   TypeAttributeSchema,
   VariantAttributeSchema,
 } from '@data/Shared';
 
-// TODO: promo?
-export const NameSchema = z.enum([
-  'Event Exclusive',
-  'Ground',
-  'OP Promo',
-  'Prerelease Promo',
-  'Space',
-]);
-export type Name = z.infer<typeof NameSchema>;
-
-export const LocalizationsDatumSchema = z.object({
-  id: z.number(),
-  attributes: z.object({
-    title: z.string(),
-    subtitle: z.nullable(z.string()),
-    cardNumber: z.number(),
-    cardCount: z.number(),
-    artist: z.string(),
-    artFrontHorizontal: z.boolean(),
-    artBackHorizontal: z.null(),
-    hasFoil: z.boolean(),
-    cost: z.nullable(z.number()),
-    hp: z.nullable(z.number()),
-    power: z.nullable(z.number()),
-    text: z.nullable(z.string()),
-    textStyled: z.string(),
-    deployBox: z.nullable(z.string()),
-    deployBoxStyled: z.string(),
-    epicAction: z.nullable(z.string()),
-    epicActionStyled: z.string(),
-    linkHtml: z.string(),
-    cardId: z.string(),
-    createdAt: z.coerce.date(),
-    updatedAt: z.coerce.date(),
-    publishedAt: z.coerce.date(),
-    locale: z.enum(['de', 'es', 'fr', 'it']),
-    hyperspace: z.boolean(),
-    unique: z.boolean(),
-    showcase: z.boolean(),
-    cardUid: z.string(),
-  }),
-});
-export type LocalizationsDatum = z.infer<typeof LocalizationsDatumSchema>;
-
-export const LocalizationsSchema = z.object({
-  data: z.array(LocalizationsDatumSchema),
-});
-export type Localizations = z.infer<typeof LocalizationsSchema>;
-
-export const CardAttributesSchema = z.object({
+const BaseCardAttributesSchema = z.object({
   cardNumber: z.number(),
   title: z.string(),
   subtitle: z.nullable(z.string()),
@@ -79,9 +29,6 @@ export const CardAttributesSchema = z.object({
   epicActionStyled: z.string(),
   linkHtml: z.string(),
   artist: z.string(),
-
-  artFrontHorizontal: z.boolean(),
-  artBackHorizontal: z.null(),
   hasFoil: z.boolean(),
   hyperspace: z.boolean(),
   showcase: z.boolean(),
@@ -98,14 +45,12 @@ export const CardAttributesSchema = z.object({
   traits: GenericAttributeSchema,
 
   artBack: ArtSchema,
+  artBackHorizontal: z.nullable(z.boolean()),
   artFront: ArtSchema,
+  artFrontHorizontal: z.nullable(z.boolean()),
   artThumbnail: ArtThumbnailSchema,
 
-  variantTypes: VariantAttributeSchema,
-  locale: LocaleSchema,
-  // localizations: LocalizationsSchema,
-  // variantOf: ArenasSchema,
-  // variants: ArenasSchema,
+  variantTypes: z.nullable(VariantAttributeSchema),
 
   // probably don't need these for now
   // cardUid: z.string(),
@@ -114,6 +59,21 @@ export const CardAttributesSchema = z.object({
   // createdAt: z.coerce.date(),
   // updatedAt: z.coerce.date(),
   // publishedAt: z.coerce.date(),
+  // locale: LocaleSchema,
+  // localizations: LocalizationsSchema,
+});
+
+export const CardAttributesSchema = BaseCardAttributesSchema.extend({
+  variants: z.optional(
+    z.object({
+      data: z.array(
+        z.object({
+          id: z.number(),
+          attributes: BaseCardAttributesSchema,
+        }),
+      ),
+    }),
+  ),
 });
 export type CardAttributes = z.infer<typeof CardAttributesSchema>;
 

@@ -11,7 +11,7 @@ import { CardListAspects } from './CardListAspects';
 
 export type CardListItemProps = {
   card: Card;
-  handlePress: (id: number, title: string) => void;
+  handlePress: (id: number, title: string, caption?: string) => void;
 };
 
 export const ITEM_HEIGHT = 64;
@@ -23,12 +23,18 @@ export const CardListItem = ({ card, handlePress }: CardListItemProps) => {
     <View
       style={[
         styles.container,
-        themeStyles.themedBackground200,
+        themeStyles.themedbackground50,
         themeStyles.themedBorderSubdued,
       ]}
     >
       <Pressable
-        onPress={() => handlePress(card.id, card.attributes.title)}
+        onPress={() =>
+          handlePress(
+            card.id,
+            card.attributes.title,
+            card.attributes.subtitle ?? undefined,
+          )
+        }
         style={styles.pressable}
       >
         {({ pressed }) => (
@@ -36,7 +42,7 @@ export const CardListItem = ({ card, handlePress }: CardListItemProps) => {
             style={[
               styles.inner,
               pressed ? styles.innerPressed : undefined,
-              pressed ? themeStyles.themedBackground300 : undefined,
+              pressed ? themeStyles.themedbackground100 : undefined,
             ]}
           >
             <View style={styles.innerDetails}>
@@ -124,7 +130,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   cardUniqueIcon: {
-    backgroundColor: DARK_THEME.background300,
+    backgroundColor: DARK_THEME.background100,
     borderRadius: 8,
     height: 12,
     width: 12,
