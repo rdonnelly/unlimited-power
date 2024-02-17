@@ -8,11 +8,12 @@ import {
   View,
 } from 'react-native';
 
+import { Button } from '@components/Button';
 import { CardList } from '@components/CardList';
 import { useCards } from '@data/hooks/useCards';
 import { useTheme } from '@hooks/useTheme';
 import type { CardListScreenProps } from '@navigation/types';
-import { DARK_THEME, LIGHT_THEME } from '@styles/colors';
+import { DARK_THEME, LIGHT_THEME } from '@styles/theme';
 
 export function CardListScreen({ navigation }: CardListScreenProps) {
   const { theme, themeStyles } = useTheme();
@@ -91,26 +92,10 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
             An unknown error occured while fetching card data.
           </Text>
         </View>
-        <Pressable onPress={() => refetch()}>
-          {({ pressed }) => (
-            <View
-              style={[
-                styles.retryButton,
-                pressed ? styles.retryButtonPressed : undefined,
-                themeStyles.themedBackgroundButtonSubdued,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.retryButtonText,
-                  themeStyles.themedColorButtonSubdued,
-                ]}
-              >
-                Retry
-              </Text>
-            </View>
-          )}
-        </Pressable>
+
+        <Button variant="bold" onPress={() => refetch()}>
+          Retry
+        </Button>
       </View>
     );
   }
@@ -147,17 +132,5 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 16,
     textAlign: 'center',
-  },
-  retryButton: {
-    borderRadius: 8,
-    paddingHorizontal: 32,
-    paddingVertical: 16,
-  },
-  retryButtonPressed: {
-    opacity: 0.5,
-  },
-  retryButtonText: {
-    fontSize: 18,
-    fontWeight: '500',
   },
 });

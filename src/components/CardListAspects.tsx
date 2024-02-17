@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { getSortedAspects } from 'src/utils/CardUtils';
 
 import type { CardAttributes } from '@data/Card';
@@ -14,7 +14,7 @@ export function CardListAspects({ card }: CardListAspectsProps) {
   const aspects = getSortedAspects(card);
 
   return (
-    <>
+    <View style={styles.container}>
       {aspects.map((aspect, i) => (
         <Image
           style={[styles.image]}
@@ -24,13 +24,17 @@ export function CardListAspects({ card }: CardListAspectsProps) {
           key={`card-list-aspect-${aspect}-${i}`}
         />
       ))}
-    </>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    gap: 4,
+  },
   image: {
-    height: 24,
-    width: 24,
+    height: 20,
+    width: 20,
   },
 });

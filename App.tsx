@@ -2,7 +2,7 @@ import 'expo-dev-client';
 
 import { useAsyncStorageDevTools } from '@dev-plugins/async-storage';
 import { useReactNavigationDevTools } from '@dev-plugins/react-navigation';
-import { useReactQueryDevTools } from '@dev-plugins/react-query';
+// import { useReactQueryDevTools } from '@dev-plugins/react-query';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigationContainerRef } from '@react-navigation/native';
 import {
@@ -44,7 +44,7 @@ function onAppStateChange(status: AppStateStatus) {
 
 export default function App() {
   useAsyncStorageDevTools();
-  useReactQueryDevTools(queryClient);
+  // useReactQueryDevTools(queryClient);
   const navigationRef = useNavigationContainerRef();
   useReactNavigationDevTools(navigationRef);
 

@@ -270,37 +270,3 @@ export const colors = {
   rose900: '#881337',
   rose950: '#4c0519',
 } as const;
-
-export const LIGHT_THEME = {
-  scheme: 'light',
-  background0: colors.white,
-  background50: colors.stone50,
-  background100: colors.stone100,
-  background200: colors.stone200,
-  background300: colors.stone300,
-  background400: colors.stone400,
-  brand: colors.purple100,
-  button: colors.purple500,
-  buttonTint: colors.purple50,
-  buttonSubdued: colors.purple200,
-  buttonSubduedTint: colors.purple600,
-  tint: colors.stone950,
-  tintSubdued: colors.stone500,
-} as const;
-
-export const DARK_THEME = {
-  scheme: 'dark',
-  background0: colors.black,
-  background50: colors.stone950,
-  background100: colors.stone900,
-  background200: colors.stone800,
-  background300: colors.stone700,
-  background400: colors.stone600,
-  brand: colors.purple900,
-  button: colors.purple800,
-  buttonTint: colors.purple50,
-  buttonSubdued: colors.purple950,
-  buttonSubduedTint: colors.purple300,
-  tint: colors.stone50,
-  tintSubdued: colors.stone400,
-} as const;

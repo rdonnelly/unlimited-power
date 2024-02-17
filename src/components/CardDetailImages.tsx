@@ -1,15 +1,10 @@
 import { useMemo, useState } from 'react';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
 import type { CardAttributes } from '@data/Card';
 import { useTheme } from '@hooks/useTheme';
 
+import { Button } from './Button';
 import { CardDetailImage } from './CardDetailImage';
 
 export type CardDetailImagesProps = {
@@ -161,31 +156,14 @@ type ChipProps = {
 };
 
 function Chip({ label, isActive, handlePress }: ChipProps) {
-  const { themeStyles } = useTheme();
-
   return (
-    <Pressable onPress={() => handlePress()} style={styles.pressable}>
-      {({ pressed }) => (
-        <View
-          style={[
-            styles.pressableInner,
-            pressed ? styles.pressableInnerPressed : undefined,
-            themeStyles.themedBackgroundButtonSubdued,
-            isActive ? themeStyles.themedBackgroundButton : undefined,
-          ]}
-        >
-          <Text
-            style={[
-              styles.pressableText,
-              themeStyles.themedColorButtonSubdued,
-              isActive ? themeStyles.themedColorButton : undefined,
-            ]}
-          >
-            {label}
-          </Text>
-        </View>
-      )}
-    </Pressable>
+    <Button
+      size="small"
+      variant={isActive ? 'bold' : undefined}
+      onPress={() => handlePress()}
+    >
+      {label}
+    </Button>
   );
 }
 
@@ -203,8 +181,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     padding: 16,
-    // paddingHorizontal: 8,
-    // paddingVertical: 16,
   },
   variantSelectorHeading: {
     marginBottom: 8,
@@ -219,19 +195,6 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 16,
     width: '100%',
-  },
-  pressable: {},
-  pressableInner: {
-    borderRadius: 4,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
-  pressableInnerPressed: {
-    opacity: 0.5,
-  },
-  pressableInnerActive: {},
-  pressableText: {
-    fontWeight: '600',
   },
   images: {
     alignItems: 'center',

@@ -1,6 +1,6 @@
 import { StyleSheet, useColorScheme } from 'react-native';
 
-import { DARK_THEME, LIGHT_THEME } from '@styles/colors';
+import { DARK_THEME, LIGHT_THEME } from '@styles/theme';
 
 export function useTheme() {
   const colorScheme = useColorScheme();
@@ -29,29 +29,37 @@ export function useTheme() {
     themedBackgroundBrand: {
       backgroundColor: theme.brand,
     },
-    themedBackgroundButton: {
-      backgroundColor: theme.button,
-    },
-    themedBackgroundButtonSubdued: {
-      backgroundColor: theme.buttonSubdued,
-    },
     themedColor: {
       color: theme.tint,
     },
     themedColorSubdued: {
       color: theme.tintSubdued,
     },
-    themedColorButton: {
-      color: theme.buttonTint,
-    },
-    themedColorButtonSubdued: {
-      color: theme.buttonSubduedTint,
-    },
     themedBorder: {
       borderColor: theme.tint,
     },
     themedBorderSubdued: {
       borderColor: theme.tintSubdued,
+    },
+
+    // BUTTON
+    themedButtonContainer: {
+      backgroundColor: theme.button,
+    },
+    themedButtonContainerBold: {
+      backgroundColor: theme.buttonBold,
+    },
+    themedButtonBorder: {
+      borderColor: theme.buttonBorder,
+    },
+    themedButtonText: {
+      color: theme.buttonTint,
+    },
+    themedButtonTextBold: {
+      color: theme.buttonTintBold,
+    },
+    themedButtonBorderBold: {
+      borderColor: theme.buttonBorderBold,
     },
   });
 

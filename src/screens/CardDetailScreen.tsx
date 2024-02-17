@@ -10,7 +10,7 @@ import { CardDetailImages } from '@components/CardDetailImages';
 import { useCard } from '@data/hooks/useCard';
 import { useTheme } from '@hooks/useTheme';
 import type { CardDetailScreenProps } from '@navigation/types';
-import { DARK_THEME, LIGHT_THEME } from '@styles/colors';
+import { DARK_THEME, LIGHT_THEME } from '@styles/theme';
 
 export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
   const { theme } = useTheme();

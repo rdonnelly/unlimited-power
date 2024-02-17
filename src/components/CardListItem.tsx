@@ -5,7 +5,7 @@ import { Text } from 'react-native-fast-text';
 
 import type { Card } from '@data/Card';
 import { useTheme } from '@hooks/useTheme';
-import { DARK_THEME, LIGHT_THEME } from '@styles/colors';
+import { DARK_THEME, LIGHT_THEME } from '@styles/theme';
 
 import { CardListAspects } from './CardListAspects';
 
@@ -67,20 +67,22 @@ export const CardListItem = ({ card, handlePress }: CardListItemProps) => {
                 ellipsizeMode="tail"
                 style={[styles.cardInfo, themeStyles.themedColorSubdued]}
               >
-                {card.attributes.type.data.attributes.name}
                 {card.attributes.subtitle ? (
                   <>
-                    {' – '}
                     <Text style={{ fontStyle: 'italic' }}>
                       {card.attributes.subtitle}
                     </Text>
+                    {' · '}
                   </>
                 ) : null}
+                {card.attributes.arenas.data.length
+                  ? card.attributes.arenas.data
+                      .map((arena) => arena.attributes.name)
+                      .join(', ')
+                  : card.attributes.type.data.attributes.name}
               </Text>
             </View>
-            <View style={styles.innerAspects}>
-              <CardListAspects card={card.attributes} />
-            </View>
+            <CardListAspects card={card.attributes} />
             <Ionicons
               name="chevron-forward"
               size={24}
@@ -139,10 +141,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
   },
-  cardInfo: {},
-  innerAspects: {
-    flexDirection: 'row',
-    gap: 4,
+  cardInfo: {
+    fontSize: 13,
   },
   innerChevron: {
     marginRight: -8,
