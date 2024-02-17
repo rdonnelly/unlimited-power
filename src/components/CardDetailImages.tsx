@@ -1,29 +1,67 @@
 import { useMemo, useState } from 'react';
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
+import { CardDetailImage } from '@components/CardDetailImage';
+import { Chips } from '@components/Chips';
 import type { CardAttributes } from '@data/Card';
+import { useCardImages } from '@hooks/useCardImages';
 import { useTheme } from '@hooks/useTheme';
-
-import { Button } from './Button';
-import { CardDetailImage } from './CardDetailImage';
 
 export type CardDetailImagesProps = {
   cardAttributes: CardAttributes;
 };
 
 export function CardDetailImages({ cardAttributes }: CardDetailImagesProps) {
-  const [variant, setVariant] = useState<number | false>(false);
-
   const { themeStyles } = useTheme();
-  const { width: windowWidth } = useWindowDimensions();
+
+  const variants = useMemo(() => {
+    const v: Record<string, number | null> = { Original: null };
+
+    if (cardAttributes.variants?.data) {
+      cardAttributes.variants.data.map((variantCardAttributes, i) => {
+        switch (true) {
+          case variantCardAttributes.attributes.hyperspace:
+            v.Hyperspace = i;
+            break;
+          case variantCardAttributes.attributes.showcase:
+            v.Showcase = i;
+            break;
+          default:
+            if (
+              variantCardAttributes.attributes.variantTypes?.data[0]?.attributes
+                .name
+            ) {
+              v[
+                variantCardAttributes.attributes.variantTypes?.data[0].attributes.name
+              ] = i;
+            }
+        }
+      });
+    }
+
+    return v;
+  }, [cardAttributes]);
+
+  const [variantKey, setVariantKey] = useState<string>('Original');
 
   const selectedCardAttributes = useMemo(() => {
-    if (typeof variant === 'number' && cardAttributes.variants?.data[variant]) {
-      return cardAttributes.variants?.data[variant]?.attributes;
+    const variantIndex = variantKey
+      ? variants[variantKey] ?? undefined
+      : undefined;
+    if (
+      typeof variantIndex === 'number' &&
+      cardAttributes.variants?.data[variantIndex]
+    ) {
+      return (
+        cardAttributes.variants?.data[variantIndex]?.attributes ??
+        cardAttributes
+      );
     }
 
     return cardAttributes;
-  }, [variant]);
+  }, [variantKey]);
+
+  const cardImages = useCardImages(selectedCardAttributes);
 
   if (
     !selectedCardAttributes ||
@@ -31,48 +69,6 @@ export function CardDetailImages({ cardAttributes }: CardDetailImagesProps) {
       !selectedCardAttributes.artBack.data?.attributes)
   ) {
     return null;
-  }
-
-  const ratios = [];
-  const images = [];
-
-  if (selectedCardAttributes.artFront.data?.attributes) {
-    const frontWidth = selectedCardAttributes.artFront.data.attributes.width;
-    ratios.push(Math.min(windowWidth - 64, frontWidth) / frontWidth);
-  }
-
-  if (selectedCardAttributes.artBack.data?.attributes) {
-    const backWidth = selectedCardAttributes.artBack.data.attributes.width;
-    ratios.push(Math.min(windowWidth - 64, backWidth) / backWidth);
-  }
-
-  const ratio = Math.min(...ratios);
-
-  if (selectedCardAttributes.artFront.data?.attributes) {
-    const frontHeight = selectedCardAttributes.artFront.data.attributes.height;
-    const frontWidth = selectedCardAttributes.artFront.data.attributes.width;
-
-    images.push(
-      <CardDetailImage
-        art={selectedCardAttributes.artFront}
-        height={frontHeight * ratio}
-        width={frontWidth * ratio}
-        key={`card-image-${selectedCardAttributes.cardNumber}-front`}
-      />,
-    );
-  }
-
-  if (selectedCardAttributes.artBack.data?.attributes) {
-    const backHeight = selectedCardAttributes.artBack.data.attributes.height;
-    const backWidth = selectedCardAttributes.artBack.data.attributes.width;
-    images.push(
-      <CardDetailImage
-        art={selectedCardAttributes.artBack}
-        height={backHeight * ratio}
-        width={backWidth * ratio}
-        key={`card-image-${selectedCardAttributes.cardNumber}-back`}
-      />,
-    );
   }
 
   return (
@@ -86,84 +82,20 @@ export function CardDetailImages({ cardAttributes }: CardDetailImagesProps) {
             {cardAttributes.variants?.data.length ? 's' : null}
           </Text>
         </View>
-        <View style={styles.variantSelector}>
-          <Chip
-            label="Original"
-            isActive={variant === false}
-            handlePress={() => {
-              setVariant(false);
-            }}
-            key="variant-chip-original"
-          />
-          {cardAttributes.variants?.data
-            ? cardAttributes.variants.data.map((variantCardAttributes, i) => {
-                switch (true) {
-                  case variantCardAttributes.attributes.hyperspace:
-                    return (
-                      <Chip
-                        label="Hyperspace"
-                        isActive={variant === i}
-                        handlePress={function () {
-                          setVariant(i);
-                        }}
-                        key="variant-chip-hyperspace"
-                      />
-                    );
-                  case variantCardAttributes.attributes.showcase:
-                    return (
-                      <Chip
-                        label="Showcase"
-                        isActive={variant === i}
-                        handlePress={function () {
-                          setVariant(i);
-                        }}
-                        key="variant-chip-showcase"
-                      />
-                    );
-                  default:
-                    if (
-                      variantCardAttributes.attributes.variantTypes?.data[0]
-                        ?.attributes.name
-                    ) {
-                      return (
-                        <Chip
-                          label={
-                            variantCardAttributes.attributes.variantTypes
-                              ?.data[0].attributes.name
-                          }
-                          isActive={variant === i}
-                          handlePress={() => {
-                            setVariant(i);
-                          }}
-                          key={`variant-chip-${i}`}
-                        />
-                      );
-                    }
-                }
-              })
-            : null}
+        <Chips
+          options={Object.keys(variants).map((key) => ({ key, label: key }))}
+          selectedOption={variantKey}
+          onChange={(selection) => {
+            setVariantKey(selection);
+          }}
+        />
+        <View style={styles.images}>
+          {cardImages.map((cardImageProps) => (
+            <CardDetailImage {...cardImageProps} />
+          ))}
         </View>
-        <View style={styles.images}>{images}</View>
       </View>
     </View>
-  );
-}
-
-type ChipProps = {
-  label: string;
-  isActive: boolean;
-  handlePress: () => void;
-};
-
-function Chip({ label, isActive, handlePress }: ChipProps) {
-  return (
-    <Button
-      size="small"
-      variant={isActive ? 'bold' : undefined}
-      onPress={() => handlePress()}
-    >
-      {label}
-    </Button>
   );
 }
 
