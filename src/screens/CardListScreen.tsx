@@ -1,5 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -41,11 +41,30 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
     });
   }, [navigation]);
 
+  const {
+    data,
+    isFetching,
+    isLoading,
+    isError,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useCards();
+
+  const cards = useMemo(() => {
+    return data?.pages.flatMap((page) => page.data) ?? [];
+  }, [data]);
+
+  const cardCount = useMemo(() => {
+    return data?.pages[0]?.meta.pagination.total;
+  }, [data]);
+
   const handlePressItem = useCallback(
-    (id: number, title: string, caption?: string) => {
+    (id: number, index: number, title: string, caption?: string) => {
       if (navigation) {
         navigation.push('StackCardDetailScreen', {
           id,
+          index,
           title,
           caption,
         });
@@ -54,31 +73,18 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
     [navigation],
   );
 
-  const { data, isFetching, isError, hasNextPage, fetchNextPage, refetch } =
-    useCards();
-
-  if (data) {
-    const cards = data.pages.flatMap((page) => page.data);
+  if (cards && cards.length) {
     return (
       <View style={styles.container}>
         <>
           <CardList
             cards={cards}
+            cardCount={cardCount}
+            showLoading={isFetching || isLoading}
             hasNextPage={!!hasNextPage}
             fetchNextPage={fetchNextPage}
-            handlePressItem={handlePressItem}
+            onPressItem={handlePressItem}
           />
-          {isFetching ? (
-            <View style={styles.activity}>
-              <ActivityIndicator
-                color={
-                  theme.scheme === 'light'
-                    ? LIGHT_THEME.tintSubdued
-                    : DARK_THEME.tintSubdued
-                }
-              />
-            </View>
-          ) : null}
         </>
       </View>
     );
@@ -121,10 +127,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  activity: {
-    bottom: 24,
-    position: 'absolute',
-  },
+  activity: {},
   error: {
     marginBottom: 32,
     maxWidth: 240,

@@ -6,6 +6,7 @@ export type StackParamList = {
     id: number;
     title: string;
     caption?: string;
+    index: number;
   };
   StackInfoScreen: undefined;
 };

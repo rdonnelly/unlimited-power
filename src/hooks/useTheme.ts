@@ -30,10 +30,10 @@ export function useTheme() {
       backgroundColor: theme.brand,
     },
     themedColor: {
-      color: theme.tint,
+      color: theme.text,
     },
     themedColorSubdued: {
-      color: theme.tintSubdued,
+      color: theme.textSubdued,
     },
     themedBorder: {
       borderColor: theme.tint,

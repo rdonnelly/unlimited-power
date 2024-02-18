@@ -1,88 +1,124 @@
+import throttle from 'lodash/throttle';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
-  ActivityIndicator,
-  ScrollView,
+  Dimensions,
+  FlatList,
+  type ScaledSize,
   StyleSheet,
-  Text,
+  useWindowDimensions,
   View,
+  type ViewToken,
 } from 'react-native';
 
-import { CardDetailImages } from '@components/CardDetailImages';
-import { useCard } from '@data/hooks/useCard';
-import { useTheme } from '@hooks/useTheme';
+import { CardDetail } from '@components/CardDetail';
+import type { Card } from '@data/Card';
+import { useCards } from '@data/hooks/useCards';
 import type { CardDetailScreenProps } from '@navigation/types';
-import { DARK_THEME, LIGHT_THEME } from '@styles/theme';
 
 export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
-  const { theme } = useTheme();
-  const { data, error, isError, isFetching } = useCard(route.params.id);
+  const { width: windowWidth } = useWindowDimensions();
 
-  if (data) {
-    return (
-      <View style={styles.container}>
-        <ScrollView style={styles.scrollContainer}>
-          <View style={styles.content}>
-            {!isFetching ? (
-              <CardDetailImages cardAttributes={data.attributes} />
-            ) : null}
-          </View>
-        </ScrollView>
-        {isFetching ? (
-          <View style={styles.activity}>
-            <ActivityIndicator
-              color={
-                theme.scheme === 'light'
-                  ? LIGHT_THEME.tintSubdued
-                  : DARK_THEME.tintSubdued
-              }
-            />
-          </View>
-        ) : null}
-      </View>
-    );
-  }
+  const { data, hasNextPage, fetchNextPage } = useCards();
 
-  if (isError) {
-    if (error instanceof Error) {
-      return <Text>Error: {error.message}</Text>;
+  const cards = useMemo(() => {
+    return data?.pages.flatMap((page) => page.data) ?? [];
+  }, [data]);
+
+  const loadNextPage = () => {
+    if (hasNextPage) {
+      fetchNextPage();
     }
+  };
 
-    return <Text>An unknown error occured</Text>;
-  }
+  const flatListRef = useRef<FlatList>(null);
+
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener(
+      'change',
+      throttle(
+        ({ window }: { window: ScaledSize }) => {
+          flatListRef?.current?.scrollToOffset({
+            offset: window.width * route.params.index,
+            animated: false,
+          });
+        },
+        50,
+        { leading: false, trailing: true },
+      ),
+    );
+
+    return () => subscription?.remove();
+  }, []);
+
+  const renderItem = useCallback(
+    ({ item: card }: { item: Card }) => (
+      <View style={[styles.cell, { width: windowWidth }]}>
+        <CardDetail id={card.id} />
+      </View>
+    ),
+    [windowWidth],
+  );
+
+  const getItemLayout = useCallback(
+    (_: unknown, index: number) => ({
+      length: windowWidth,
+      offset: windowWidth * index,
+      index,
+    }),
+    [windowWidth],
+  );
+
+  const viewabilityConfig = useRef({
+    viewAreaCoveragePercentThreshold: 50,
+  });
+
+  const handleViewableItemsChanged = useCallback(
+    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+      if (viewableItems[0]?.index != null) {
+        navigation.setParams({
+          id: cards[viewableItems[0]?.index]?.id,
+          index: viewableItems[0]?.index,
+          title: cards[viewableItems[0]?.index]?.attributes.title,
+          caption:
+            cards[viewableItems[0]?.index]?.attributes.subtitle ?? undefined,
+        });
+      }
+    },
+    [],
+  );
 
   return (
     <View style={styles.container}>
-      <View style={styles.activity}>
-        <ActivityIndicator
-          color={
-            theme.scheme === 'light'
-              ? LIGHT_THEME.tintSubdued
-              : DARK_THEME.tintSubdued
-          }
-        />
-      </View>
+      <FlatList
+        data={cards}
+        keyExtractor={(item: Card) => `card-detail-${item.id}`}
+        renderItem={renderItem}
+        getItemLayout={getItemLayout}
+        horizontal
+        scrollEnabled
+        pagingEnabled
+        ref={flatListRef}
+        viewabilityConfig={viewabilityConfig.current}
+        onViewableItemsChanged={handleViewableItemsChanged}
+        initialScrollIndex={route.params.index}
+        windowSize={2}
+        initialNumToRender={1}
+        maxToRenderPerBatch={2}
+        updateCellsBatchingPeriod={100}
+        onEndReached={loadNextPage}
+        onEndReachedThreshold={2}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'flex-start',
+    height: '100%',
     width: '100%',
   },
-  scrollContainer: {
-    flex: 1,
-    width: '100%',
-  },
-  content: {
+  cell: {
     alignItems: 'center',
-    flex: 1,
-    justifyContent: 'flex-start',
-    paddingTop: 16,
-  },
-  activity: {
-    bottom: 24,
-    position: 'absolute',
+    height: '100%',
   },
 });

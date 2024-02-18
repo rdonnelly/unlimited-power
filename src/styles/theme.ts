@@ -1,4 +1,4 @@
-import { colors } from './colors';
+import { colors } from '@styles/colors';
 
 export const LIGHT_THEME = {
   scheme: 'light',
@@ -16,7 +16,11 @@ export const LIGHT_THEME = {
 
   // TINT
   tint: colors.stone950,
-  tintSubdued: colors.stone500,
+  tintSubdued: colors.stone400,
+
+  // TEXT
+  text: colors.stone950,
+  textSubdued: colors.stone500,
 
   // BUTTON
   button: colors.purple100,
@@ -43,7 +47,11 @@ export const DARK_THEME = {
 
   // TINT
   tint: colors.stone50,
-  tintSubdued: colors.stone400,
+  tintSubdued: colors.stone600,
+
+  // TEXT
+  text: colors.stone50,
+  textSubdued: colors.stone500,
 
   // BUTTON
   button: colors.stone900,
