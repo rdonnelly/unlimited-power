@@ -48,7 +48,7 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
     );
 
     return () => subscription?.remove();
-  }, []);
+  }, [route.params.index]);
 
   const renderItem = useCallback(
     ({ item: card }: { item: Card }) => (
@@ -84,7 +84,7 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
         });
       }
     },
-    [],
+    [cards, navigation],
   );
 
   return (

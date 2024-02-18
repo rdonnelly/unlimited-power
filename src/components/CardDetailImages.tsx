@@ -59,7 +59,7 @@ export function CardDetailImages({ cardAttributes }: CardDetailImagesProps) {
     }
 
     return cardAttributes;
-  }, [variantKey]);
+  }, [cardAttributes, variants, variantKey]);
 
   const cardImages = useCardImages(selectedCardAttributes);
 
