@@ -4,6 +4,7 @@ import {
   Dimensions,
   FlatList,
   type ScaledSize,
+  ScrollView,
   StyleSheet,
   useWindowDimensions,
   View,
@@ -53,7 +54,12 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
   const renderItem = useCallback(
     ({ item: card }: { item: Card }) => (
       <View style={[styles.cell, { width: windowWidth }]}>
-        <CardDetail id={card.id} />
+        <ScrollView
+          style={styles.scrollContainer}
+          contentContainerStyle={{ alignItems: 'center' }}
+        >
+          <CardDetail id={card.id} />
+        </ScrollView>
       </View>
     ),
     [windowWidth],
@@ -94,10 +100,13 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
         keyExtractor={(item: Card) => `card-detail-${item.id}`}
         renderItem={renderItem}
         getItemLayout={getItemLayout}
+        ref={flatListRef}
         horizontal
         scrollEnabled
         pagingEnabled
-        ref={flatListRef}
+        overScrollMode="never"
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
         viewabilityConfig={viewabilityConfig.current}
         onViewableItemsChanged={handleViewableItemsChanged}
         initialScrollIndex={route.params.index}
@@ -120,5 +129,9 @@ const styles = StyleSheet.create({
   cell: {
     alignItems: 'center',
     height: '100%',
+  },
+  scrollContainer: {
+    flex: 1,
+    width: '100%',
   },
 });

@@ -23,13 +23,11 @@ function CardDetail({ id }: CardDetailProps) {
   if (data) {
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.scrollContainer}>
-          <View style={styles.content}>
-            {!isFetching ? (
-              <CardDetailImages cardAttributes={data.attributes} />
-            ) : null}
-          </View>
-        </ScrollView>
+        <View style={styles.content}>
+          {!isFetching ? (
+            <CardDetailImages cardAttributes={data.attributes} />
+          ) : null}
+        </View>
         {isFetching ? (
           <View style={styles.activity}>
             <ActivityIndicator
