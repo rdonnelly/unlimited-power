@@ -2,27 +2,25 @@ import { StyleSheet, View } from 'react-native';
 
 import { Chip } from '@components/Chip';
 
-type ChipsProps = {
-  options: { key: string; label: string }[];
-  selectedOption: string;
-  onChange: (option: string) => void;
+type ChipsProps<T> = {
+  options: { key: T; label: string }[];
+  selectedOptions: T[];
+  onChange: (option: T, isSelected: boolean) => void;
 };
 
-export function Chips({
+export function Chips<T extends string>({
   options,
-  selectedOption,
+  selectedOptions,
   onChange: handleChange,
-}: ChipsProps) {
+}: ChipsProps<T>) {
   return (
     <View style={styles.container}>
       {options.map((option) => (
         <Chip
           label={option.label}
-          isActive={option.key === selectedOption}
+          isActive={selectedOptions.includes(option.key)}
           onPress={() => {
-            if (option.key !== selectedOption) {
-              handleChange(option.key);
-            }
+            handleChange(option.key, selectedOptions.includes(option.key));
           }}
           key={`chip-${option.key}`}
         />
