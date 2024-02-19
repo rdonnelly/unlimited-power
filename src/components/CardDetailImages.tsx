@@ -84,7 +84,7 @@ export function CardDetailImages({ cardAttributes }: CardDetailImagesProps) {
         </View>
         <Chips
           options={Object.keys(variants).map((key) => ({ key, label: key }))}
-          selectedOption={variantKey}
+          selectedOptions={[variantKey]}
           onChange={(selection) => {
             setVariantKey(selection);
           }}

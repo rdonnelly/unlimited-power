@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { PropsWithChildren } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useTheme } from '@hooks/useTheme';
@@ -7,7 +7,6 @@ export type ButtonProps = {
   size?: 'small';
   variant?: 'bold';
   onPress?: () => void;
-  children: ReactNode;
 };
 
 export function Button({
@@ -15,7 +14,7 @@ export function Button({
   variant,
   onPress: handlePress,
   children,
-}: ButtonProps) {
+}: PropsWithChildren<ButtonProps>) {
   const { themeStyles } = useTheme();
 
   return (
