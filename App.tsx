@@ -1,5 +1,6 @@
 import 'expo-dev-client';
 
+import Bugsnag from '@bugsnag/expo';
 import { useAsyncStorageDevTools } from '@dev-plugins/async-storage';
 import { useReactNavigationDevTools } from '@dev-plugins/react-navigation';
 // import { useReactQueryDevTools } from '@dev-plugins/react-query';
@@ -15,13 +16,17 @@ import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persi
 import { focusManager, QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { StatusBar } from 'expo-status-bar';
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { type AppStateStatus, Platform } from 'react-native';
 
 import { useAppState } from '@hooks/useAppState';
 import { useOnlineManager } from '@hooks/useOnlineManager';
 import { useTheme } from '@hooks/useTheme';
 import { StackNavigator } from '@navigation/StackNavigation';
+
+if (!__DEV__) {
+  Bugsnag.start();
+}
 
 const asyncStoragePersister = createAsyncStoragePersister({
   storage: AsyncStorage,

@@ -15,6 +15,7 @@
     "push:ios": "npx eas-cli@latest build --platform ios --auto-submit"
   },
   "dependencies": {
+    "@bugsnag/expo": "^50.0.0",
     "@dev-plugins/async-storage": "^0.0.1",
     "@dev-plugins/react-navigation": "^0.0.5",
     "@dev-plugins/react-query": "^0.0.5",
@@ -32,7 +33,11 @@
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "expo": "~50.0.7",
     "expo-application": "~5.8.3",
+    "expo-constants": "~15.4.5",
+    "expo-crypto": "~12.8.1",
     "expo-dev-client": "~3.3.8",
+    "expo-device": "~5.9.3",
+    "expo-file-system": "~16.0.6",
     "expo-image": "~1.10.6",
     "expo-sharing": "~11.10.0",
     "expo-status-bar": "~1.11.1",
@@ -44,8 +49,7 @@
     "react-native-reanimated": "~3.6.2",
     "react-native-safe-area-context": "4.8.2",
     "react-native-screens": "~3.29.0",
-    "zod": "^3.22.4",
-    "expo-file-system": "~16.0.6"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

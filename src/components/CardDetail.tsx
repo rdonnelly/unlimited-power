@@ -1,11 +1,5 @@
 import { memo } from 'react';
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import { CardDetailImages } from '@components/CardDetailImages';
 import { useCard } from '@data/hooks/useCard';
