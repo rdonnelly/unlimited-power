@@ -65,14 +65,23 @@ const BaseCardAttributesSchema = z.object({
 
 export const CardAttributesSchema = BaseCardAttributesSchema.extend({
   variants: z.optional(
-    z.object({
-      data: z.array(
-        z.object({
-          id: z.number(),
-          attributes: BaseCardAttributesSchema,
-        }),
+    z
+      .object({
+        data: z.array(
+          z.object({
+            id: z.number(),
+            attributes: BaseCardAttributesSchema,
+          }),
+        ),
+      })
+      .or(
+        z.array(
+          z.object({
+            id: z.number(),
+            attributes: BaseCardAttributesSchema,
+          }),
+        ),
       ),
-    }),
   ),
 });
 export type CardAttributes = z.infer<typeof CardAttributesSchema>;

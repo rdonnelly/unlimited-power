@@ -17,8 +17,16 @@ export function CardDetailImages({ cardAttributes }: CardDetailImagesProps) {
   const variants = useMemo(() => {
     const v: Record<string, number | null> = { Original: null };
 
-    if (cardAttributes.variants?.data) {
-      cardAttributes.variants.data.map((variantCardAttributes, i) => {
+    if (cardAttributes.variants) {
+      let variantData = [];
+
+      if (Array.isArray(cardAttributes.variants)) {
+        variantData = cardAttributes.variants;
+      } else {
+        variantData = cardAttributes.variants.data;
+      }
+
+      variantData.map((variantCardAttributes, i) => {
         switch (true) {
           case variantCardAttributes.attributes.hyperspace:
             v.Hyperspace = i;
@@ -48,14 +56,18 @@ export function CardDetailImages({ cardAttributes }: CardDetailImagesProps) {
     const variantIndex = variantKey
       ? variants[variantKey] ?? undefined
       : undefined;
-    if (
-      typeof variantIndex === 'number' &&
-      cardAttributes.variants?.data[variantIndex]
-    ) {
-      return (
-        cardAttributes.variants?.data[variantIndex]?.attributes ??
-        cardAttributes
-      );
+
+    if (typeof variantIndex === 'number' && cardAttributes.variants) {
+      if (Array.isArray(cardAttributes.variants)) {
+        return (
+          cardAttributes.variants[variantIndex]?.attributes ?? cardAttributes
+        );
+      } else {
+        return (
+          cardAttributes.variants.data[variantIndex]?.attributes ??
+          cardAttributes
+        );
+      }
     }
 
     return cardAttributes;
@@ -78,8 +90,8 @@ export function CardDetailImages({ cardAttributes }: CardDetailImagesProps) {
           <Text
             style={[styles.variantSelectorHeadingText, themeStyles.themedColor]}
           >
-            {(cardAttributes.variants?.data.length ?? 0) + 1} Variant
-            {cardAttributes.variants?.data.length ? 's' : null}
+            {(variants.length ?? 0) + 1} Variant
+            {variants.length ? 's' : null}
           </Text>
         </View>
         <Chips
