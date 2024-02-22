@@ -18,6 +18,7 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { StatusBar } from 'expo-status-bar';
 import React, { useMemo } from 'react';
 import { type AppStateStatus, Platform } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { useAppState } from '@hooks/useAppState';
 import { useOnlineManager } from '@hooks/useOnlineManager';
@@ -77,7 +78,7 @@ export default function App() {
   }, [theme]);
 
   return (
-    <>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <PersistQueryClientProvider
         client={queryClient}
         persistOptions={{
@@ -92,6 +93,6 @@ export default function App() {
         </NavigationContainer>
       </PersistQueryClientProvider>
       <StatusBar style="auto" />
-    </>
+    </GestureHandlerRootView>
   );
 }

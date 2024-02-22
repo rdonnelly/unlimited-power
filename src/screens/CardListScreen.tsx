@@ -3,6 +3,7 @@ import { useCallback, useEffect } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { CardList } from '@components/CardList';
+import { CardListBottomSheet } from '@components/CardListBottomSheet';
 import type { CardListScreenProps } from '@navigation/types';
 
 export function CardListScreen({ navigation }: CardListScreenProps) {
@@ -46,6 +47,7 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
   return (
     <View style={styles.container}>
       <CardList onPressItem={navigateToCardDetails} />
+      <CardListBottomSheet />
     </View>
   );
 }
@@ -55,14 +57,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     justifyContent: 'center',
-  },
-  activity: {},
-  error: {
-    marginBottom: 32,
-    maxWidth: 240,
-  },
-  errorText: {
-    fontSize: 16,
-    textAlign: 'center',
   },
 });

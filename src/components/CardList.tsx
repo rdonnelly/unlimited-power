@@ -31,7 +31,7 @@ export function CardList({ onPressItem: handlePressItem }: CardListProps) {
   } = useCards();
 
   const cards = useMemo(() => {
-    return data?.pages.flatMap((page) => page.data) ?? [];
+    return data?.pages.flatMap((page) => page.data) ?? undefined;
   }, [data]);
 
   const cardCount = useMemo(() => {
@@ -44,7 +44,28 @@ export function CardList({ onPressItem: handlePressItem }: CardListProps) {
     }
   }, [hasNextPage, fetchNextPage]);
 
-  if (cards && cards.length) {
+  if (cards && !isLoading) {
+    if (!cards.length) {
+      return (
+        <View style={styles.container}>
+          <View style={styles.error}>
+            <Text
+              style={[styles.errorHeaderText, themeStyles.themedColorSubdued]}
+            >
+              Karabast!
+            </Text>
+            <Text style={[styles.errorText, themeStyles.themedColorSubdued]}>
+              No cards found matching search and filter criteria.
+            </Text>
+          </View>
+
+          <Button variant="bold" onPress={() => refetch()}>
+            Retry
+          </Button>
+        </View>
+      );
+    }
+
     return (
       <View style={styles.container}>
         <View style={[styles.listContainer, themeStyles.themedbackground0]}>
@@ -61,9 +82,7 @@ export function CardList({ onPressItem: handlePressItem }: CardListProps) {
             onEndReached={loadNextPage}
             onEndReachedThreshold={1.5}
             ListFooterComponent={
-              <View
-                style={[styles.listFooter, themeStyles.themedbackground100]}
-              >
+              <View style={[styles.listFooter, themeStyles.themedbackground0]}>
                 {isLoading || isFetching || cardCount == null ? (
                   <ActivityIndicator
                     color={
@@ -89,6 +108,11 @@ export function CardList({ onPressItem: handlePressItem }: CardListProps) {
     return (
       <View style={styles.container}>
         <View style={styles.error}>
+          <Text
+            style={[styles.errorHeaderText, themeStyles.themedColorSubdued]}
+          >
+            Bantha Poodoo!
+          </Text>
           <Text style={[styles.errorText, themeStyles.themedColorSubdued]}>
             An unknown error occured while fetching card data.
           </Text>
@@ -123,10 +147,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
   },
-  activity: {},
+  activity: {
+    position: 'absolute',
+    top: 96,
+  },
   error: {
-    marginBottom: 32,
+    marginBottom: 64,
     maxWidth: 240,
+  },
+  errorHeaderText: {
+    fontSize: 22,
+    fontWeight: '700',
+    textAlign: 'center',
   },
   errorText: {
     fontSize: 16,
@@ -138,7 +170,8 @@ const styles = StyleSheet.create({
   },
   listFooter: {
     alignItems: 'center',
-    paddingVertical: 24,
+    paddingTop: 24,
+    paddingBottom: 128,
   },
   listFooterText: {
     fontWeight: '700',

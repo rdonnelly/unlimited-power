@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-const VALUES = [
+export const Aspects = [
   'Aggression', // 12
   'Command', // 7
   'Cunning', // 17
@@ -8,7 +8,7 @@ const VALUES = [
   'Vigilance', // 2
   'Villainy', // 27
 ] as const;
-export const AspectEnum = z.enum(VALUES);
+export const AspectEnum = z.enum(Aspects);
 export type Aspect = z.infer<typeof AspectEnum>;
 
 export const AspectRank: Record<Aspect, number> = {
