@@ -1,5 +1,6 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { useCallback, useEffect } from 'react';
+import type BottomSheet from '@gorhom/bottom-sheet';
+import { useCallback, useEffect, useRef } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { CardList } from '@components/CardList';
@@ -30,9 +31,16 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
     });
   }, [navigation]);
 
+  const bottomSheetRef = useRef<BottomSheet>(null);
+
+  const collapseBottomSheet = useCallback(() => {
+    bottomSheetRef.current?.collapse();
+  }, []);
+
   const navigateToCardDetails = useCallback(
     (id: number, index: number, title: string, caption?: string) => {
       if (navigation) {
+        collapseBottomSheet();
         navigation.push('StackCardDetailScreen', {
           id,
           index,
@@ -41,13 +49,16 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
         });
       }
     },
-    [navigation],
+    [navigation, collapseBottomSheet],
   );
 
   return (
     <View style={styles.container}>
-      <CardList onPressItem={navigateToCardDetails} />
-      <CardListBottomSheet />
+      <CardList
+        onPressItem={navigateToCardDetails}
+        collapseBottomSheet={collapseBottomSheet}
+      />
+      <CardListBottomSheet bottomSheetRef={bottomSheetRef} />
     </View>
   );
 }

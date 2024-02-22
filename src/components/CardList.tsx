@@ -15,9 +15,13 @@ type CardListProps = {
     title: string,
     caption?: string,
   ) => void;
+  collapseBottomSheet: () => void;
 };
 
-export function CardList({ onPressItem: handlePressItem }: CardListProps) {
+export function CardList({
+  onPressItem: handlePressItem,
+  collapseBottomSheet,
+}: CardListProps) {
   const { theme, themeStyles } = useTheme();
 
   const {
@@ -43,6 +47,10 @@ export function CardList({ onPressItem: handlePressItem }: CardListProps) {
       fetchNextPage();
     }
   }, [hasNextPage, fetchNextPage]);
+
+  const handleScrollBeginDrag = useCallback(() => {
+    collapseBottomSheet();
+  }, [collapseBottomSheet]);
 
   if (cards && !isLoading) {
     if (!cards.length) {
@@ -81,6 +89,7 @@ export function CardList({ onPressItem: handlePressItem }: CardListProps) {
             estimatedItemSize={ITEM_HEIGHT}
             onEndReached={loadNextPage}
             onEndReachedThreshold={1.5}
+            onScrollBeginDrag={handleScrollBeginDrag}
             ListFooterComponent={
               <View style={[styles.listFooter, themeStyles.themedbackground0]}>
                 {isLoading || isFetching || cardCount == null ? (

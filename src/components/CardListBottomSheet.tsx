@@ -1,4 +1,5 @@
 import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet';
+import type { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import debounce from 'lodash/debounce';
 import { useCallback, useMemo, useRef } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -19,10 +20,14 @@ import {
 } from '@data/stores/useTypeFilterStore';
 import { useTheme } from '@hooks/useTheme';
 
-export function CardListBottomSheet() {
-  const { theme, themeStyles } = useTheme();
+type CardListBottomSheetProps = {
+  bottomSheetRef: React.RefObject<BottomSheetMethods>;
+};
 
-  const bottomSheetRef = useRef<BottomSheet>(null);
+export function CardListBottomSheet({
+  bottomSheetRef,
+}: CardListBottomSheetProps) {
+  const { theme, themeStyles } = useTheme();
 
   const snapPoints = useMemo(() => [112, 400], []);
 
