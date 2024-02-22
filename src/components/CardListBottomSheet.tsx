@@ -1,14 +1,13 @@
 import BottomSheet, { BottomSheetTextInput } from '@gorhom/bottom-sheet';
+import debounce from 'lodash/debounce';
 import { useCallback, useMemo, useRef } from 'react';
-import {
-  type NativeSyntheticEvent,
-  StyleSheet,
-  Text,
-  type TextInputSubmitEditingEventData,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { Chips } from '@components/Chips';
+import {
+  aspectFilterOptions,
+  useAspectFilterStore,
+} from '@data/stores/useAspectFilterStore';
 import {
   rarityFilterOptions,
   useRarityFilterStore,
@@ -18,10 +17,6 @@ import {
   typeFilterOptions,
   useTypeFilterStore,
 } from '@data/stores/useTypeFilterStore';
-// import {
-//   aspectFilterOptions,
-//   useAspectFilterStore,
-// } from '@data/stores/useAspectFilterStore';
 import { useTheme } from '@hooks/useTheme';
 
 export function CardListBottomSheet() {
@@ -36,38 +31,27 @@ export function CardListBottomSheet() {
     state.update,
   ]);
 
-  //   const setSearchStringDebounced = useMemo(
-  //     () =>
-  //       debounce((value) => {
-  //         updateSearchString(value);
-  //       }, 500),
-  //     [updateSearchString],
-  //   );
-
-  //   const handleChange = useCallback(
-  //     (event: NativeSyntheticEvent<TextInputChangeEventData>) => {
-  //       const query = event.nativeEvent.text;
-  //       if (query) {
-  //         setSearchStringDebounced(query);
-  //       } else {
-  //         setSearchStringDebounced(undefined);
-  //       }
-  //     },
-  //     [setSearchStringDebounced],
-  //   );
-
-  const handleSubmitEditing = useCallback(
-    (event: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-      const query = event.nativeEvent.text;
-      if (query) {
-        updateSearchString(query);
-      } else {
-        updateSearchString(undefined);
-      }
-
-      bottomSheetRef.current?.collapse();
-    },
+  const setSearchStringDebounced = useMemo(
+    () =>
+      debounce((searchString) => {
+        updateSearchString(searchString);
+      }, 500),
     [updateSearchString],
+  );
+
+  const handleChangeText = useCallback(
+    (searchString: string) => {
+      if (searchString) {
+        setSearchStringDebounced(searchString);
+      } else {
+        setSearchStringDebounced(searchString);
+      }
+    },
+    [setSearchStringDebounced],
+  );
+
+  const [aspectOptions, addAspect, removeAspect] = useAspectFilterStore(
+    (state) => [state.aspects, state.add, state.remove],
   );
 
   const [rarityOptions, addRarity, removeRarity] = useRarityFilterStore(
@@ -84,8 +68,9 @@ export function CardListBottomSheet() {
     <BottomSheet
       ref={bottomSheetRef}
       snapPoints={snapPoints}
-      backgroundStyle={[styles.background, themeStyles.themedbackground100]}
       // index={0}
+      backgroundStyle={[styles.background, themeStyles.themedbackground100]}
+      handleIndicatorStyle={{ backgroundColor: theme.textSubdued }}
       keyboardBehavior="fillParent"
       keyboardBlurBehavior="restore"
     >
@@ -102,8 +87,7 @@ export function CardListBottomSheet() {
           placeholder="Search"
           placeholderTextColor={theme.textSubdued}
           returnKeyType="search"
-          onSubmitEditing={handleSubmitEditing}
-          //   onChange={handleChange}
+          onChangeText={handleChangeText}
           defaultValue={searchString ?? ''}
         />
 
@@ -116,7 +100,7 @@ export function CardListBottomSheet() {
               key: aspect,
               label: aspect,
             }))}
-            selectedOptions={aspectFilters}
+            selectedOptions={aspectOptions}
             onChange={(aspect, isSelected) => {
               if (isSelected) {
                 removeAspect(aspect);
@@ -129,7 +113,11 @@ export function CardListBottomSheet() {
 
         <View style={styles.filterSection}>
           <View style={styles.filterSectionHeader}>
-            <Text style={styles.filterSectionHeaderText}>Type</Text>
+            <Text
+              style={[styles.filterSectionHeaderText, themeStyles.themedColor]}
+            >
+              Type
+            </Text>
           </View>
           <Chips
             options={typeFilterOptions.map((type) => ({
@@ -149,7 +137,11 @@ export function CardListBottomSheet() {
 
         <View style={styles.filterSection}>
           <View style={styles.filterSectionHeader}>
-            <Text style={styles.filterSectionHeaderText}>Rarity</Text>
+            <Text
+              style={[styles.filterSectionHeaderText, themeStyles.themedColor]}
+            >
+              Rarity
+            </Text>
           </View>
           <Chips
             options={rarityFilterOptions.map((rarity) => ({

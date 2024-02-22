@@ -19,3 +19,12 @@ export const AspectRank: Record<Aspect, number> = {
   Heroism: 5,
   Villainy: 6,
 } as const;
+
+export const AspectCodes: Record<Aspect, number> = {
+  Aggression: 12,
+  Command: 7,
+  Cunning: 17,
+  Heroism: 22,
+  Vigilance: 2,
+  Villainy: 27,
+} as const;

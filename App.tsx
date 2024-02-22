@@ -62,7 +62,7 @@ export default function App() {
 
   const navigationTheme = useMemo(() => {
     const baseNavigationTheme =
-      theme.scheme === 'light' ? DefaultTheme : DarkTheme;
+      theme.scheme === 'dark' ? DarkTheme : DefaultTheme;
 
     return {
       ...baseNavigationTheme,

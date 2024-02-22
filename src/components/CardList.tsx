@@ -92,7 +92,12 @@ export function CardList({ onPressItem: handlePressItem }: CardListProps) {
                     }
                   />
                 ) : (
-                  <Text style={styles.listFooterText}>
+                  <Text
+                    style={[
+                      styles.listFooterText,
+                      themeStyles.themedColorSubdued,
+                    ]}
+                  >
                     {cardCount} Cards Found
                   </Text>
                 )}
@@ -126,7 +131,7 @@ export function CardList({ onPressItem: handlePressItem }: CardListProps) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, themeStyles.themedbackground0]}>
       <View style={styles.activity}>
         <ActivityIndicator
           color={

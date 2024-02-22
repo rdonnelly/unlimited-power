@@ -25,10 +25,10 @@ export const LIGHT_THEME = {
   // BUTTON
   button: colors.purple100,
   buttonTint: colors.purple700,
-  buttonBorder: colors.purple300,
+  buttonBorder: colors.purple200,
   buttonBold: colors.purple700,
   buttonTintBold: colors.purple50,
-  buttonBorderBold: colors.purple700,
+  buttonBorderBold: colors.purple950,
 } as const;
 
 export const DARK_THEME = {
@@ -50,14 +50,14 @@ export const DARK_THEME = {
   tintSubdued: colors.stone600,
 
   // TEXT
-  text: colors.stone50,
+  text: colors.stone200,
   textSubdued: colors.stone500,
 
   // BUTTON
   button: colors.stone900,
   buttonTint: colors.stone50,
-  buttonBorder: colors.stone400,
+  buttonBorder: colors.stone700,
   buttonBold: colors.purple950,
   buttonTintBold: colors.purple100,
-  buttonBorderBold: colors.purple400,
+  buttonBorderBold: colors.purple800,
 } as const;
