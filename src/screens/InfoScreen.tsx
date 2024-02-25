@@ -26,7 +26,7 @@ export function InfoScreen({ navigation }: InfoScreenProps) {
         </Text>
       </View>
 
-      <A href="https://rdonnelly.com" style={styles.credit}>
+      <A href="https://rdonnelly.com/unlimited-power" style={styles.credit}>
         <>
           <Text style={[styles.creditText, themeStyles.themedColor]}>{`
 Designed and Developed by
