@@ -3,6 +3,11 @@ import { Image } from 'expo-image';
 import * as Sharing from 'expo-sharing';
 import { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
+import Animated, {
+  Easing,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 import type { Art } from '@data/CardArt';
 
@@ -14,6 +19,8 @@ export type CardDetailImageProps = {
 
 // TODO: blurhash based on color/orientation?
 const blurhash = 'TBC74;of00~VaeIp00WB-:00kC_3';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
   const imageUrl = art?.data?.attributes.url;
@@ -48,12 +55,27 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
     }
   }, [imageUrl]);
 
+  const scale = useSharedValue(1);
+
+  const handlePressIn = () => {
+    scale.value = withTiming(1.1, { duration: 1000, easing: Easing.circle });
+  };
+
+  const handlePressOut = () => {
+    scale.value = withTiming(1);
+  };
+
   if (!imageUrl) {
     return null;
   }
 
   return (
-    <Pressable onLongPress={() => sharingIsAvailable && handleLongPress()}>
+    <AnimatedPressable
+      onLongPress={() => sharingIsAvailable && handleLongPress()}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      style={{ transform: [{ scale }] }}
+    >
       <Image
         style={[styles.image, { height, width }]}
         source={`${imageUrl}`}
@@ -61,7 +83,7 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
         contentFit="contain"
         transition={200}
       />
-    </Pressable>
+    </AnimatedPressable>
   );
 }
 
