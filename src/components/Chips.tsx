@@ -29,7 +29,7 @@ export function Chips<T>({
     () =>
       debounce((newOptions) => {
         handleChange(newOptions);
-      }, 2000),
+      }, 1000),
     [handleChange],
   );
 
