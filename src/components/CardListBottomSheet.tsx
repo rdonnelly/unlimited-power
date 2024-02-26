@@ -4,7 +4,7 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import type { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import debounce from 'lodash/debounce';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { Chips } from '@components/Chips';
@@ -33,6 +33,10 @@ export function CardListBottomSheet({
   const { theme, themeStyles } = useTheme();
 
   const snapPoints = useMemo(() => [112, 400], []);
+
+  useEffect(() => {
+    bottomSheetRef.current?.collapse();
+  }, [bottomSheetRef]);
 
   const [searchString, updateSearchString] = useSearchFilterStore((state) => [
     state.searchString,
