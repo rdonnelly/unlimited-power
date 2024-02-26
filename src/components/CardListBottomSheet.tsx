@@ -9,6 +9,10 @@ import { StyleSheet, View } from 'react-native';
 
 import { Chips } from '@components/Chips';
 import {
+  aspectFilterOptions,
+  useAspectFilterStore,
+} from '@data/stores/useAspectFilterStore';
+import {
   rarityFilterOptions,
   useRarityFilterStore,
 } from '@data/stores/useRarityFilterStore';
@@ -58,10 +62,10 @@ export function CardListBottomSheet({
     bottomSheetRef.current?.collapse();
   }, [bottomSheetRef]);
 
-  // const [aspectOptions, updateAspect] = useAspectFilterStore((state) => [
-  //   state.aspects,
-  //   state.update,
-  // ]);
+  const [aspectOptions, updateAspect] = useAspectFilterStore((state) => [
+    state.aspects,
+    state.update,
+  ]);
 
   const [rarityOptions, updateRarity] = useRarityFilterStore((state) => [
     state.rarities,
@@ -107,15 +111,15 @@ export function CardListBottomSheet({
           style={styles.scrollContainer}
           contentContainerStyle={styles.scrollContainerContent}
         >
-          {/* <Chips
+          <Chips
             heading="Aspects"
             options={aspectFilterOptions.map((aspect) => ({
               value: aspect,
               label: aspect,
             }))}
-            selectedOptions={aspectOptions}
+            selections={aspectOptions}
             onChange={updateAspect}
-          /> */}
+          />
 
           <Chips
             heading="Type"

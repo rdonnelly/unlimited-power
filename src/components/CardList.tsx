@@ -4,6 +4,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import { Button } from '@components/Button';
 import { CardListItem, ITEM_HEIGHT } from '@components/CardListItem';
+import { useAspectCardFilter } from '@data/hooks/useAspectCardFilter';
 import { useCards } from '@data/hooks/useCards';
 import { useTheme } from '@hooks/useTheme';
 import { DARK_THEME, LIGHT_THEME } from '@styles/theme';
@@ -34,13 +35,15 @@ export function CardList({
     refetch,
   } = useCards();
 
-  const cards = useMemo(() => {
+  const flatCards = useMemo(() => {
     return data?.pages.flatMap((page) => page.data) ?? undefined;
   }, [data]);
 
   const cardCount = useMemo(() => {
     return data?.pages[0]?.meta.pagination.total;
   }, [data]);
+
+  const cards = useAspectCardFilter(flatCards);
 
   const loadNextPage = useCallback(() => {
     if (hasNextPage) {
