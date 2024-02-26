@@ -50,6 +50,15 @@ const fetchCards = async ({ pageParam = 1, queryKey }) => {
   ).json();
 
   const parsed = CardsResponseSchema.parse(response);
+
+  const aspectFilters = useAspectFilterStore.getState().aspects;
+
+  parsed.data = parsed.data?.filter((card) => {
+    return card.attributes.aspects.data.every((aspect) =>
+      aspectFilters.includes(aspect.attributes.name),
+    );
+  });
+
   return parsed;
 };
 
@@ -144,10 +153,7 @@ export function useCards() {
     queryFn: fetchCards,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => {
-      if (
-        lastPage.meta.pagination.page >= lastPage.meta.pagination.pageCount ||
-        lastPage.data.length < PAGE_SIZE
-      ) {
+      if (lastPage.meta.pagination.page >= lastPage.meta.pagination.pageCount) {
         return undefined;
       }
 
