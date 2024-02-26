@@ -4,14 +4,10 @@ import BottomSheet, {
 } from '@gorhom/bottom-sheet';
 import type { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import debounce from 'lodash/debounce';
-import { useCallback, useMemo, useRef } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { useCallback, useMemo } from 'react';
+import { StyleSheet, View } from 'react-native';
 
 import { Chips } from '@components/Chips';
-import {
-  aspectFilterOptions,
-  useAspectFilterStore,
-} from '@data/stores/useAspectFilterStore';
 import {
   rarityFilterOptions,
   useRarityFilterStore,
@@ -62,10 +58,10 @@ export function CardListBottomSheet({
     bottomSheetRef.current?.collapse();
   }, [bottomSheetRef]);
 
-  const [aspectOptions, updateAspect] = useAspectFilterStore((state) => [
-    state.aspects,
-    state.update,
-  ]);
+  // const [aspectOptions, updateAspect] = useAspectFilterStore((state) => [
+  //   state.aspects,
+  //   state.update,
+  // ]);
 
   const [rarityOptions, updateRarity] = useRarityFilterStore((state) => [
     state.rarities,

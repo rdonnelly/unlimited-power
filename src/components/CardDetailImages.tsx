@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { useCallback, useMemo, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 
 import { CardDetailImage } from '@components/CardDetailImage';
 import { Chips } from '@components/Chips';
@@ -73,6 +73,24 @@ export function CardDetailImages({ cardAttributes }: CardDetailImagesProps) {
     return cardAttributes;
   }, [cardAttributes, variants, variantKey]);
 
+  const variantSelections = useMemo(() => {
+    return [variantKey];
+  }, [variantKey]);
+
+  const variantOptions = useMemo(
+    () =>
+      Object.keys(variants).map((value) => ({
+        value,
+        label: value,
+      })),
+    [variants],
+  );
+
+  const handleVariantSelection = useCallback((selection: string[]) => {
+    const selectedVariantKey = selection.at(0);
+    selectedVariantKey && setVariantKey(selectedVariantKey);
+  }, []);
+
   const cardImages = useCardImages(selectedCardAttributes);
 
   if (
@@ -86,20 +104,13 @@ export function CardDetailImages({ cardAttributes }: CardDetailImagesProps) {
   return (
     <View style={styles.container}>
       <View style={[styles.inner, themeStyles.themedbackground200]}>
-        <View style={styles.variantSelectorHeading}>
-          <Text
-            style={[styles.variantSelectorHeadingText, themeStyles.themedColor]}
-          >
-            {(variants.length ?? 0) + 1} Variant
-            {variants.length ? 's' : null}
-          </Text>
-        </View>
         <Chips
-          options={Object.keys(variants).map((key) => ({ key, label: key }))}
-          selectedOptions={[variantKey]}
-          onChange={(selection) => {
-            setVariantKey(selection);
-          }}
+          heading={`${Object.values(variants).length} Variant${Object.values(variants).length !== 1 ? 's' : ''}`}
+          options={variantOptions}
+          selections={variantSelections}
+          onChange={handleVariantSelection}
+          single
+          delay={500}
         />
         <View style={styles.images}>
           {cardImages.map((cardImageProps) => (
@@ -125,13 +136,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     padding: 16,
-  },
-  variantSelectorHeading: {
-    marginBottom: 8,
-  },
-  variantSelectorHeadingText: {
-    fontSize: 16,
-    fontWeight: '700',
   },
   variantSelector: {
     flexDirection: 'row',

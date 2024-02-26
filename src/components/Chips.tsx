@@ -12,6 +12,7 @@ type ChipsProps<T> = {
   selections: T[];
   onChange: (options: T[]) => void;
   single?: boolean;
+  delay?: number;
 };
 
 export function Chips<T>({
@@ -19,7 +20,8 @@ export function Chips<T>({
   options,
   selections,
   onChange: handleChange,
-  single,
+  single = false,
+  delay = 1000,
 }: ChipsProps<T>) {
   const { themeStyles } = useTheme();
 
@@ -29,8 +31,8 @@ export function Chips<T>({
     () =>
       debounce((newOptions) => {
         handleChange(newOptions);
-      }, 1000),
-    [handleChange],
+      }, delay),
+    [handleChange, delay],
   );
 
   const handlePressChip = useCallback(
