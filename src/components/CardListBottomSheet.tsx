@@ -60,20 +60,21 @@ export function CardListBottomSheet({
 
   const handleSubmitEditing = useCallback(() => {
     bottomSheetRef.current?.collapse();
-  }, []);
+  }, [bottomSheetRef]);
 
-  const [aspectOptions, addAspect, removeAspect] = useAspectFilterStore(
-    (state) => [state.aspects, state.add, state.remove],
-  );
+  const [aspectOptions, updateAspect] = useAspectFilterStore((state) => [
+    state.aspects,
+    state.update,
+  ]);
 
-  const [rarityOptions, addRarity, removeRarity] = useRarityFilterStore(
-    (state) => [state.rarities, state.add, state.remove],
-  );
+  const [rarityOptions, updateRarity] = useRarityFilterStore((state) => [
+    state.rarities,
+    state.update,
+  ]);
 
-  const [typeOptions, addType, removeType] = useTypeFilterStore((state) => [
+  const [typeOptions, updateType] = useTypeFilterStore((state) => [
     state.types,
-    state.add,
-    state.remove,
+    state.update,
   ]);
 
   return (
@@ -110,79 +111,35 @@ export function CardListBottomSheet({
           style={styles.scrollContainer}
           contentContainerStyle={styles.scrollContainerContent}
         >
-          {/* <View style={styles.filterSection}>
-          <View style={styles.filterSectionHeader}>
-            <Text style={styles.filterSectionHeaderText}>Aspects</Text>
-          </View>
-          <Chips
+          {/* <Chips
+            heading="Aspects"
             options={aspectFilterOptions.map((aspect) => ({
-              key: aspect,
+              value: aspect,
               label: aspect,
             }))}
             selectedOptions={aspectOptions}
-            onChange={(aspect, isSelected) => {
-              if (isSelected) {
-                removeAspect(aspect);
-              } else {
-                addAspect(aspect);
-              }
-            }}
+            onChange={updateAspect}
+          /> */}
+
+          <Chips
+            heading="Type"
+            options={typeFilterOptions.map((type) => ({
+              value: type,
+              label: type,
+            }))}
+            selections={typeOptions}
+            onChange={updateType}
           />
-        </View> */}
 
-          <View style={styles.filterSection}>
-            <View style={styles.filterSectionHeader}>
-              <Text
-                style={[
-                  styles.filterSectionHeaderText,
-                  themeStyles.themedColor,
-                ]}
-              >
-                Type
-              </Text>
-            </View>
-            <Chips
-              options={typeFilterOptions.map((type) => ({
-                key: type,
-                label: type,
-              }))}
-              selectedOptions={typeOptions}
-              onChange={(type, isSelected) => {
-                if (isSelected) {
-                  removeType(type);
-                } else {
-                  addType(type);
-                }
-              }}
-            />
-          </View>
-
-          <View style={styles.filterSection}>
-            <View style={styles.filterSectionHeader}>
-              <Text
-                style={[
-                  styles.filterSectionHeaderText,
-                  themeStyles.themedColor,
-                ]}
-              >
-                Rarity
-              </Text>
-            </View>
-            <Chips
-              options={rarityFilterOptions.map((rarity) => ({
-                key: rarity,
-                label: rarity,
-              }))}
-              selectedOptions={rarityOptions}
-              onChange={(rarity, isSelected) => {
-                if (isSelected) {
-                  removeRarity(rarity);
-                } else {
-                  addRarity(rarity);
-                }
-              }}
-            />
-          </View>
+          <Chips
+            heading="Rarity"
+            options={rarityFilterOptions.map((rarity) => ({
+              value: rarity,
+              label: rarity,
+            }))}
+            selections={rarityOptions}
+            onChange={updateRarity}
+          />
         </BottomSheetScrollView>
       </View>
     </BottomSheet>

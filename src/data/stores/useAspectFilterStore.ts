@@ -9,22 +9,32 @@ type State = {
 };
 
 type Action = {
-  add: (aspect: (typeof aspectFilterOptions)[number]) => void;
-  remove: (aspect: (typeof aspectFilterOptions)[number]) => void;
+  update: (aspects: (typeof aspectFilterOptions)[number][]) => void;
+  toggle: (
+    type: (typeof aspectFilterOptions)[number],
+    isSelected: boolean,
+  ) => void;
+  selectAll: () => void;
+  selectNone: () => void;
 };
 
 export const useAspectFilterStore = create<State & Action>((set) => ({
   aspects: [...aspectFilterOptions],
-  add: (aspect) =>
-    set((state) => ({
-      aspects: [...state.aspects, aspect].filter((a, i, self) => {
-        return self.indexOf(a) === i;
-      }),
-    })),
-  remove: (aspect) =>
-    set((state) => ({
-      aspects: [...state.aspects].filter((a) => {
-        return a !== aspect;
-      }),
-    })),
+  update: (aspects) => set({ aspects }),
+  toggle: (aspect, isSelected) =>
+    set((state) =>
+      isSelected
+        ? {
+            aspects: [...state.aspects].filter((a) => {
+              return a !== aspect;
+            }),
+          }
+        : {
+            aspects: [...state.aspects, aspect].filter((a, i, self) => {
+              return self.indexOf(a) === i;
+            }),
+          },
+    ),
+  selectAll: () => set({ aspects: [...aspectFilterOptions] }),
+  selectNone: () => set({ aspects: [] }),
 }));

@@ -1,17 +1,23 @@
 import { Button } from '@components/Button';
 
-type ChipProps = {
+type ChipProps<T> = {
   label: string;
-  isActive: boolean;
-  onPress: () => void;
+  value: T;
+  isSelected: boolean;
+  onPress: (value: T, isSelected: boolean) => void;
 };
 
-export function Chip({ label, isActive, onPress: handlePress }: ChipProps) {
+export function Chip<T>({
+  label,
+  value,
+  isSelected,
+  onPress: handlePress,
+}: ChipProps<T>) {
   return (
     <Button
       size="small"
-      variant={isActive ? 'bold' : undefined}
-      onPress={() => handlePress()}
+      variant={isSelected ? 'bold' : undefined}
+      onPress={() => handlePress(value, isSelected)}
     >
       {label}
     </Button>

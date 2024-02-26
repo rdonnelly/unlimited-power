@@ -11,22 +11,32 @@ type State = {
 };
 
 type Action = {
-  add: (rarity: (typeof rarityFilterOptions)[number]) => void;
-  remove: (rarity: (typeof rarityFilterOptions)[number]) => void;
+  update: (rarities: (typeof rarityFilterOptions)[number][]) => void;
+  toggle: (
+    rarity: (typeof rarityFilterOptions)[number],
+    isSelected: boolean,
+  ) => void;
+  selectAll: () => void;
+  selectNone: () => void;
 };
 
 export const useRarityFilterStore = create<State & Action>((set) => ({
   rarities: [...rarityFilterOptions],
-  add: (rarity) =>
-    set((state) => ({
-      rarities: [...state.rarities, rarity].filter((a, i, self) => {
-        return self.indexOf(a) === i;
-      }),
-    })),
-  remove: (rarity) =>
-    set((state) => ({
-      rarities: [...state.rarities].filter((a) => {
-        return a !== rarity;
-      }),
-    })),
+  update: (rarities) => set({ rarities }),
+  toggle: (rarity, isSelected) =>
+    set((state) =>
+      isSelected
+        ? {
+            rarities: [...state.rarities].filter((a) => {
+              return a !== rarity;
+            }),
+          }
+        : {
+            rarities: [...state.rarities, rarity].filter((a, i, self) => {
+              return self.indexOf(a) === i;
+            }),
+          },
+    ),
+  selectAll: () => set({ rarities: [...rarityFilterOptions] }),
+  selectNone: () => set({ rarities: [] }),
 }));
