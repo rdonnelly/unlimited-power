@@ -6,7 +6,6 @@ import { Button } from '@components/Button';
 import { CardListItem, ITEM_HEIGHT } from '@components/CardListItem';
 import { useCards } from '@data/hooks/useCards';
 import { useTheme } from '@hooks/useTheme';
-import { DARK_THEME, LIGHT_THEME } from '@styles/theme';
 
 type CardListProps = {
   onPressItem: (
@@ -26,8 +25,8 @@ export function CardList({
 
   const {
     data,
-    isFetching,
     isLoading,
+    isFetching,
     isError,
     hasNextPage,
     fetchNextPage,
@@ -35,12 +34,12 @@ export function CardList({
   } = useCards();
 
   const cards = useMemo(() => {
-    return data?.pages.flatMap((page) => page.data) ?? undefined;
+    return data?.pages.flatMap((page) => page.data) ?? [];
   }, [data]);
 
   const cardCount = useMemo(() => {
-    return data?.pages[0]?.meta.pagination.total;
-  }, [data]);
+    return cards.length;
+  }, [cards.length]);
 
   const loadNextPage = useCallback(() => {
     if (hasNextPage) {
@@ -52,67 +51,11 @@ export function CardList({
     collapseBottomSheet();
   }, [collapseBottomSheet]);
 
-  if (cards && !isLoading) {
-    if (!cards.length) {
-      return (
-        <View style={styles.container}>
-          <View style={styles.error}>
-            <Text
-              style={[styles.errorHeaderText, themeStyles.themedColorSubdued]}
-            >
-              Karabast!
-            </Text>
-            <Text style={[styles.errorText, themeStyles.themedColorSubdued]}>
-              No cards found matching search and filter criteria.
-            </Text>
-          </View>
-
-          <Button variant="bold" onPress={() => refetch()}>
-            Retry
-          </Button>
-        </View>
-      );
-    }
-
+  if (isLoading || (isFetching && !cards.length) || data == null) {
     return (
-      <View style={styles.container}>
-        <View style={[styles.listContainer, themeStyles.themedbackground0]}>
-          <FlashList
-            data={cards}
-            renderItem={({ item: card, index }) => (
-              <CardListItem
-                card={card}
-                index={index}
-                onPress={handlePressItem}
-              />
-            )}
-            estimatedItemSize={ITEM_HEIGHT}
-            onEndReached={loadNextPage}
-            onEndReachedThreshold={1.5}
-            onScrollBeginDrag={handleScrollBeginDrag}
-            ListFooterComponent={
-              <View style={[styles.listFooter, themeStyles.themedbackground0]}>
-                {isLoading || isFetching || cardCount == null ? (
-                  <ActivityIndicator
-                    color={
-                      theme.scheme === 'light'
-                        ? LIGHT_THEME.tintSubdued
-                        : DARK_THEME.tintSubdued
-                    }
-                  />
-                ) : (
-                  <Text
-                    style={[
-                      styles.listFooterText,
-                      themeStyles.themedColorSubdued,
-                    ]}
-                  >
-                    {cardCount} Cards Found
-                  </Text>
-                )}
-              </View>
-            }
-          />
+      <View style={[styles.container, themeStyles.themedbackground0]}>
+        <View style={styles.activity}>
+          <ActivityIndicator color={theme.tintSubdued} />
         </View>
       </View>
     );
@@ -139,14 +82,54 @@ export function CardList({
     );
   }
 
+  if (!cards.length) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.error}>
+          <Text
+            style={[styles.errorHeaderText, themeStyles.themedColorSubdued]}
+          >
+            Karabast!
+          </Text>
+          <Text style={[styles.errorText, themeStyles.themedColorSubdued]}>
+            No cards found matching search and filter criteria.
+          </Text>
+        </View>
+
+        <Button variant="bold" onPress={() => refetch()}>
+          Retry
+        </Button>
+      </View>
+    );
+  }
+
   return (
-    <View style={[styles.container, themeStyles.themedbackground0]}>
-      <View style={styles.activity}>
-        <ActivityIndicator
-          color={
-            theme.scheme === 'light'
-              ? LIGHT_THEME.tintSubdued
-              : DARK_THEME.tintSubdued
+    <View style={styles.container}>
+      <View style={[styles.listContainer, themeStyles.themedbackground0]}>
+        <FlashList
+          data={cards}
+          renderItem={({ item: card, index }) => (
+            <CardListItem card={card} index={index} onPress={handlePressItem} />
+          )}
+          estimatedItemSize={ITEM_HEIGHT}
+          onEndReached={loadNextPage}
+          onEndReachedThreshold={1.5}
+          onScrollBeginDrag={handleScrollBeginDrag}
+          ListFooterComponent={
+            <View style={[styles.listFooter, themeStyles.themedbackground0]}>
+              {isLoading || isFetching || hasNextPage || cardCount == null ? (
+                <ActivityIndicator color={theme.tintSubdued} />
+              ) : (
+                <Text
+                  style={[
+                    styles.listFooterText,
+                    themeStyles.themedColorSubdued,
+                  ]}
+                >
+                  {cardCount} Cards Found
+                </Text>
+              )}
+            </View>
           }
         />
       </View>

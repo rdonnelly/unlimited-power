@@ -26,9 +26,6 @@ export function useTheme() {
     themedbackground400: {
       backgroundColor: theme.background400,
     },
-    themedBackgroundBrand: {
-      backgroundColor: theme.brand,
-    },
     themedColor: {
       color: theme.text,
     },

@@ -6,7 +6,7 @@ import { Text } from 'react-native-fast-text';
 import { CardListAspects } from '@components/CardListAspects';
 import type { Card } from '@data/Card';
 import { useTheme } from '@hooks/useTheme';
-import { DARK_THEME, LIGHT_THEME } from '@styles/theme';
+import { DARK_THEME } from '@styles/theme';
 
 export type CardListItemProps = {
   card: Card;
@@ -88,11 +88,7 @@ export const CardListItem = ({
           <Ionicons
             name="chevron-forward"
             size={24}
-            color={
-              theme.scheme === 'light'
-                ? LIGHT_THEME.tintSubdued
-                : DARK_THEME.tintSubdued
-            }
+            color={theme.tintSubdued}
             style={styles.innerChevron}
           />
         </View>

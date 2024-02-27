@@ -4,7 +4,6 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { CardDetailImages } from '@components/CardDetailImages';
 import { useCard } from '@data/hooks/useCard';
 import { useTheme } from '@hooks/useTheme';
-import { DARK_THEME, LIGHT_THEME } from '@styles/theme';
 
 type CardDetailProps = {
   id: number;
@@ -24,13 +23,7 @@ function CardDetail({ id }: CardDetailProps) {
         </View>
         {isFetching ? (
           <View style={styles.activity}>
-            <ActivityIndicator
-              color={
-                theme.scheme === 'light'
-                  ? LIGHT_THEME.tintSubdued
-                  : DARK_THEME.tintSubdued
-              }
-            />
+            <ActivityIndicator color={theme.tintSubdued} />
           </View>
         ) : null}
       </View>
@@ -48,13 +41,7 @@ function CardDetail({ id }: CardDetailProps) {
   return (
     <View style={styles.container}>
       <View style={styles.activity}>
-        <ActivityIndicator
-          color={
-            theme.scheme === 'light'
-              ? LIGHT_THEME.tintSubdued
-              : DARK_THEME.tintSubdued
-          }
-        />
+        <ActivityIndicator color={theme.tintSubdued} />
       </View>
     </View>
   );
