@@ -62,10 +62,21 @@ export function Chips<T>({
       }
 
       setSelectedOptions(selectedOptionsRef.current);
-
       handleChangeDebounced();
     },
     [single, handleChangeDebounced],
+  );
+
+  const handleLongPressChip = useCallback(
+    (option: T) => {
+      Haptics.selectionAsync();
+
+      selectedOptionsRef.current = [option];
+
+      setSelectedOptions(selectedOptionsRef.current);
+      handleChangeDebounced();
+    },
+    [handleChangeDebounced],
   );
 
   return (
@@ -82,6 +93,7 @@ export function Chips<T>({
             value={option.value}
             isSelected={selectedOptions.includes(option.value)}
             onPress={handlePressChip}
+            onLongPress={handleLongPressChip}
             key={`chip-${option.value}`}
           />
         ))}

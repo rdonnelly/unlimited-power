@@ -7,12 +7,14 @@ export type ButtonProps = {
   size?: 'small';
   variant?: 'bold';
   onPress?: () => void;
+  onLongPress?: () => void;
 };
 
 export function Button({
   size,
   variant,
   onPress: handlePress,
+  onLongPress: handleLongPress,
   children,
 }: PropsWithChildren<ButtonProps>) {
   const { themeStyles } = useTheme();
@@ -21,6 +23,7 @@ export function Button({
     <Pressable
       style={styles.container}
       onPress={() => handlePress && handlePress()}
+      onLongPress={() => handleLongPress && handleLongPress()}
     >
       {({ pressed }) => (
         <View
