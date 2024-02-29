@@ -2,8 +2,8 @@ import { FlashList } from '@shopify/flash-list';
 import { useCallback, useMemo } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
-import { Button } from '@components/Button';
 import { CardListItem, ITEM_HEIGHT } from '@components/CardListItem';
+import { Error } from '@components/Error';
 import { useCards } from '@data/hooks/useCards';
 import { useTheme } from '@hooks/useTheme';
 
@@ -62,44 +62,16 @@ export function CardList({
   }
 
   if (isError) {
-    return (
-      <View style={styles.container}>
-        <View style={styles.error}>
-          <Text
-            style={[styles.errorHeaderText, themeStyles.themedColorSubdued]}
-          >
-            Bantha Poodoo!
-          </Text>
-          <Text style={[styles.errorText, themeStyles.themedColorSubdued]}>
-            An unknown error occured while fetching card data.
-          </Text>
-        </View>
-
-        <Button variant="bold" onPress={() => refetch()}>
-          Retry
-        </Button>
-      </View>
-    );
+    return <Error onRetry={() => refetch()} />;
   }
 
   if (!cards.length) {
     return (
-      <View style={styles.container}>
-        <View style={styles.error}>
-          <Text
-            style={[styles.errorHeaderText, themeStyles.themedColorSubdued]}
-          >
-            Karabast!
-          </Text>
-          <Text style={[styles.errorText, themeStyles.themedColorSubdued]}>
-            No cards found matching search and filter criteria.
-          </Text>
-        </View>
-
-        <Button variant="bold" onPress={() => refetch()}>
-          Retry
-        </Button>
-      </View>
+      <Error
+        heading="Karabast!"
+        message="No cards found matching search and filter criteria."
+        onRetry={() => refetch()}
+      />
     );
   }
 
@@ -141,7 +113,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     width: '100%',
   },
   activity: {
@@ -149,15 +121,18 @@ const styles = StyleSheet.create({
     top: 96,
   },
   error: {
-    marginBottom: 64,
     maxWidth: 240,
+    paddingTop: 96,
   },
-  errorHeaderText: {
+  errorInfo: {
+    marginBottom: 64,
+  },
+  errorInfoHeading: {
     fontSize: 22,
     fontWeight: '700',
     textAlign: 'center',
   },
-  errorText: {
+  errorInfoText: {
     fontSize: 16,
     textAlign: 'center',
   },

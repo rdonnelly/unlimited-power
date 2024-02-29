@@ -1,7 +1,8 @@
 import { memo } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { CardDetailImages } from '@components/CardDetailImages';
+import { Error } from '@components/Error';
 import { useCard } from '@data/hooks/useCard';
 import { useTheme } from '@hooks/useTheme';
 
@@ -11,38 +12,34 @@ type CardDetailProps = {
 
 function CardDetail({ id }: CardDetailProps) {
   const { theme } = useTheme();
-  const { data, error, isError, isFetching } = useCard(id);
+  const { data, isLoading, isError, isFetching, refetch } = useCard(id);
 
-  if (data) {
+  if (isLoading || data == null) {
     return (
       <View style={styles.container}>
-        <View style={styles.content}>
-          {!isFetching ? (
-            <CardDetailImages cardAttributes={data.attributes} />
-          ) : null}
+        <View style={styles.activity}>
+          <ActivityIndicator color={theme.tintSubdued} />
         </View>
-        {isFetching ? (
-          <View style={styles.activity}>
-            <ActivityIndicator color={theme.tintSubdued} />
-          </View>
-        ) : null}
       </View>
     );
   }
 
   if (isError) {
-    if (error instanceof Error) {
-      return <Text>Error: {error.message}</Text>;
-    }
-
-    return <Text>An unknown error occured</Text>;
+    return <Error onRetry={() => refetch()} />;
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.activity}>
-        <ActivityIndicator color={theme.tintSubdued} />
+      <View style={styles.content}>
+        {!isFetching ? (
+          <CardDetailImages cardAttributes={data.attributes} />
+        ) : null}
       </View>
+      {isFetching ? (
+        <View style={styles.activity}>
+          <ActivityIndicator color={theme.tintSubdued} />
+        </View>
+      ) : null}
     </View>
   );
 }
