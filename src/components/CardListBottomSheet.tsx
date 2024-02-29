@@ -123,6 +123,7 @@ export function CardListBottomSheet({
             }))}
             selections={aspectOptions}
             onChange={updateAspect}
+            delay={1000}
           />
 
           <Chips

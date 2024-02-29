@@ -110,7 +110,6 @@ export function CardDetailImages({ cardAttributes }: CardDetailImagesProps) {
           selections={variantSelections}
           onChange={handleVariantSelection}
           single
-          delay={500}
         />
         <View style={styles.images}>
           {cardImages.map((cardImageProps) => (

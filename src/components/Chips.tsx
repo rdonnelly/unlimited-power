@@ -1,6 +1,6 @@
 import * as Haptics from 'expo-haptics';
 import debounce from 'lodash/debounce';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Chip } from '@components/Chip';
@@ -21,16 +21,17 @@ export function Chips<T>({
   selections,
   onChange: handleChange,
   single = false,
-  delay = 1000,
+  delay = 0,
 }: ChipsProps<T>) {
   const { themeStyles } = useTheme();
 
+  const selectedOptionsRef = useRef(selections);
   const [selectedOptions, setSelectedOptions] = useState(selections);
 
   const handleChangeDebounced = useMemo(
     () =>
-      debounce((newOptions) => {
-        handleChange(newOptions);
+      debounce(() => {
+        handleChange(selectedOptionsRef.current);
       }, delay),
     [handleChange, delay],
   );
@@ -39,32 +40,33 @@ export function Chips<T>({
     (option: T, isSelected: boolean) => {
       Haptics.selectionAsync();
 
-      setSelectedOptions((state) => {
-        if (isSelected) {
-          if (single) {
-            return state;
-          }
-
-          return [...state].filter((a) => {
-            return a !== option;
-          });
+      if (isSelected) {
+        if (!single) {
+          selectedOptionsRef.current = [...selectedOptionsRef.current].filter(
+            (a) => {
+              return a !== option;
+            },
+          );
         }
-
+      } else {
         if (single) {
-          return [option];
+          selectedOptionsRef.current = [option];
         }
 
-        return [...state, option].filter((a, i, self) => {
+        selectedOptionsRef.current = [
+          ...selectedOptionsRef.current,
+          option,
+        ].filter((a, i, self) => {
           return self.indexOf(a) === i;
         });
-      });
-    },
-    [single],
-  );
+      }
 
-  useEffect(() => {
-    handleChangeDebounced(selectedOptions);
-  }, [selectedOptions, handleChangeDebounced]);
+      setSelectedOptions(selectedOptionsRef.current);
+
+      handleChangeDebounced();
+    },
+    [single, handleChangeDebounced],
+  );
 
   return (
     <View style={styles.container}>
