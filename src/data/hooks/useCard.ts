@@ -6,6 +6,7 @@ import {
 
 import { CardResponseSchema } from '@data/CardResponse';
 import type { CardsResponse } from '@data/CardsResponse';
+import { useCardsQueryKey } from '@data/hooks/useCardsQueryKey';
 
 const fetchCard = async (id: number) => {
   const response = await (
@@ -17,19 +18,22 @@ const fetchCard = async (id: number) => {
 };
 
 export function useCard(cardId: number) {
+  const cardsQueryKey = useCardsQueryKey();
+
   const queryClient = useQueryClient();
   return useQuery({
     queryKey: ['card', cardId],
     queryFn: () => fetchCard(cardId),
     enabled: !!cardId,
     placeholderData: () => {
-      const data = queryClient.getQueryData<InfiniteData<CardsResponse>>([
-        'cards',
-      ]);
+      const data =
+        queryClient.getQueryData<InfiniteData<CardsResponse>>(cardsQueryKey);
 
-      return data?.pages
+      const card = data?.pages
         .map((page) => page.data.find((card) => card.id === cardId))
         .find(Boolean);
+
+      return card;
     },
   });
 }
