@@ -31,9 +31,10 @@ function CardDetail({ id }: CardDetailProps) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        {!isFetching ? (
-          <CardDetailImages cardAttributes={data.attributes} />
-        ) : null}
+        <CardDetailImages
+          cardAttributes={data.attributes}
+          isFetching={isFetching}
+        />
       </View>
       {isFetching ? (
         <View style={styles.activity}>

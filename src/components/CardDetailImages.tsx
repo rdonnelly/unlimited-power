@@ -9,15 +9,19 @@ import { useTheme } from '@hooks/useTheme';
 
 export type CardDetailImagesProps = {
   cardAttributes: CardAttributes;
+  isFetching: boolean;
 };
 
-export function CardDetailImages({ cardAttributes }: CardDetailImagesProps) {
+export function CardDetailImages({
+  cardAttributes,
+  isFetching,
+}: CardDetailImagesProps) {
   const { themeStyles } = useTheme();
 
   const variants = useMemo(() => {
     const v: Record<string, number | null> = { Original: null };
 
-    if (cardAttributes.variants) {
+    if (!isFetching && cardAttributes.variants) {
       let variantData = [];
 
       if (Array.isArray(cardAttributes.variants)) {
@@ -48,7 +52,7 @@ export function CardDetailImages({ cardAttributes }: CardDetailImagesProps) {
     }
 
     return v;
-  }, [cardAttributes]);
+  }, [cardAttributes, isFetching]);
 
   const [variantKey, setVariantKey] = useState<string>('Original');
 
@@ -77,14 +81,38 @@ export function CardDetailImages({ cardAttributes }: CardDetailImagesProps) {
     return [variantKey];
   }, [variantKey]);
 
-  const variantOptions = useMemo(
-    () =>
-      Object.keys(variants).map((value) => ({
+  const variantOptions = useMemo(() => {
+    const { Original, Hyperspace, Showcase, ...otherVariants } = variants;
+
+    const options = [
+      {
+        value: 'Original',
+        label: 'Original',
+      },
+      ...(Hyperspace !== undefined
+        ? [
+            {
+              value: 'Hyperspace',
+              label: 'Hyperspace',
+            },
+          ]
+        : []),
+      ...(Showcase !== undefined
+        ? [
+            {
+              value: 'Showcase',
+              label: 'Showcase',
+            },
+          ]
+        : []),
+      ...Object.keys(otherVariants).map((value) => ({
         value,
         label: value,
       })),
-    [variants],
-  );
+    ];
+
+    return options;
+  }, [variants]);
 
   const handleVariantSelection = useCallback((selection: string[]) => {
     const selectedVariantKey = selection.at(0);
@@ -105,7 +133,7 @@ export function CardDetailImages({ cardAttributes }: CardDetailImagesProps) {
     <View style={styles.container}>
       <View style={[styles.inner, themeStyles.themedbackground200]}>
         <Chips
-          heading={`${Object.values(variants).length} Variant${Object.values(variants).length !== 1 ? 's' : ''}`}
+          heading="Variants"
           options={variantOptions}
           selections={variantSelections}
           onChange={handleVariantSelection}
