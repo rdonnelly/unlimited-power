@@ -85,6 +85,8 @@ export const CardListItem = ({
                       .map((arena) => arena.attributes.name)
                       .join(', ')} ${card.attributes.type.data.attributes.name}`
                   : card.attributes.type.data.attributes.name}
+
+                <Text>{' · '}</Text>
               </Text>
               <CardListRarity cardAttibutes={card.attributes} />
             </View>
@@ -135,7 +137,6 @@ const styles = StyleSheet.create({
   innerDetailsCaption: {
     alignItems: 'flex-end',
     flexDirection: 'row',
-    gap: 4,
   },
   cardUniqueIcon: {
     backgroundColor: DARK_THEME.background100,
