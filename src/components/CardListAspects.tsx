@@ -19,7 +19,6 @@ export function CardListAspects({ card }: CardListAspectsProps) {
           style={[styles.image]}
           source={ASPECT_IMAGES[aspect]}
           contentFit="cover"
-          transition={200}
           key={`card-list-aspect-${aspect}-${i}`}
         />
       ))}

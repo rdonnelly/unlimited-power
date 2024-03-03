@@ -8,6 +8,8 @@ import type { Card } from '@data/Card';
 import { useTheme } from '@hooks/useTheme';
 import { DARK_THEME } from '@styles/theme';
 
+import { CardListRarity } from './CardListRarity';
+
 export type CardListItemProps = {
   card: Card;
   index: number;
@@ -64,25 +66,28 @@ export const CardListItem = ({
                 />
               ) : null}
             </View>
-            <Text
-              numberOfLines={1}
-              ellipsizeMode="tail"
-              style={[styles.cardInfo, themeStyles.themedColorSubdued]}
-            >
-              {card.attributes.subtitle ? (
-                <>
-                  <Text style={{ fontStyle: 'italic' }}>
-                    {card.attributes.subtitle}
-                  </Text>
-                  {' · '}
-                </>
-              ) : null}
-              {card.attributes.arenas.data.length
-                ? `${card.attributes.arenas.data
-                    .map((arena) => arena.attributes.name)
-                    .join(', ')} ${card.attributes.type.data.attributes.name}`
-                : card.attributes.type.data.attributes.name}
-            </Text>
+            <View style={styles.innerDetailsCaption}>
+              <Text
+                numberOfLines={1}
+                ellipsizeMode="tail"
+                style={[styles.cardInfo, themeStyles.themedColorSubdued]}
+              >
+                {card.attributes.subtitle ? (
+                  <>
+                    <Text style={{ fontStyle: 'italic' }}>
+                      {card.attributes.subtitle}
+                    </Text>
+                    {' · '}
+                  </>
+                ) : null}
+                {card.attributes.arenas.data.length
+                  ? `${card.attributes.arenas.data
+                      .map((arena) => arena.attributes.name)
+                      .join(', ')} ${card.attributes.type.data.attributes.name}`
+                  : card.attributes.type.data.attributes.name}
+              </Text>
+              <CardListRarity cardAttibutes={card.attributes} />
+            </View>
           </View>
           <CardListAspects card={card.attributes} />
           <Ionicons
@@ -111,6 +116,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     flexDirection: 'row',
+    gap: 4,
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     width: '100%',
@@ -123,6 +129,11 @@ const styles = StyleSheet.create({
   },
   innerDetailsTitle: {
     alignItems: 'center',
+    flexDirection: 'row',
+    gap: 4,
+  },
+  innerDetailsCaption: {
+    alignItems: 'flex-end',
     flexDirection: 'row',
     gap: 4,
   },
