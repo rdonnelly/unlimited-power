@@ -93,7 +93,7 @@ export function CardListBottomSheet({
       keyboardBehavior="fillParent"
       keyboardBlurBehavior="none"
     >
-      <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+      <View style={styles.container}>
         <View style={styles.inputContainer}>
           <BottomSheetTextInput
             style={[
@@ -115,7 +115,10 @@ export function CardListBottomSheet({
 
         <BottomSheetScrollView
           style={styles.scrollContainer}
-          contentContainerStyle={styles.scrollContainerContent}
+          contentContainerStyle={[
+            styles.scrollContainerContent,
+            { paddingBottom: insets.bottom },
+          ]}
         >
           <Chips
             heading="Aspects"

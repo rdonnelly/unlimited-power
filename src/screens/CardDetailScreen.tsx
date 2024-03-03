@@ -55,15 +55,13 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
 
   const renderItem = useCallback(
     ({ item: card }: { item: Card }) => (
-      <View
-        style={[
-          styles.cell,
-          { paddingBottom: insets.bottom, width: windowWidth },
-        ]}
-      >
+      <View style={[styles.cell, { width: windowWidth }]}>
         <ScrollView
           style={styles.scrollContainer}
-          contentContainerStyle={{ alignItems: 'center' }}
+          contentContainerStyle={{
+            alignItems: 'center',
+            paddingBottom: insets.bottom,
+          }}
         >
           <CardDetail id={card.id} />
         </ScrollView>
