@@ -55,6 +55,14 @@ function CardDetailRulesClarifications({
     } satisfies MixedStyleRecord;
   }, [theme]);
 
+  if (
+    !deployRulesClarifications &&
+    !epicActionRulesClarifications &&
+    !textRulesClarifications
+  ) {
+    return null;
+  }
+
   return (
     <View style={styles.container}>
       <View
@@ -62,9 +70,9 @@ function CardDetailRulesClarifications({
           styles.inner,
           {
             backgroundColor:
-              theme.scheme === 'light' ? colors.yellow100 : colors.yellow950,
+              theme.scheme === 'light' ? colors.orange100 : colors.amber950,
             borderColor:
-              theme.scheme === 'light' ? colors.yellow500 : colors.yellow700,
+              theme.scheme === 'light' ? colors.yellow500 : colors.amber800,
           },
         ]}
       >
