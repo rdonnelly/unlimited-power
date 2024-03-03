@@ -1,15 +1,19 @@
 import { A } from '@expo/html-elements';
 import * as Application from 'expo-application';
+import * as Linking from 'expo-linking';
 import { StyleSheet, Text, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { LinkButton } from '@components/LinkButton';
 import { useTheme } from '@hooks/useTheme';
 import type { InfoScreenProps } from '@navigation/types';
 
 export function InfoScreen({ navigation }: InfoScreenProps) {
   const { themeStyles } = useTheme();
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
       <View style={styles.disclaimer}>
         <Text style={[styles.disclaimerText, themeStyles.themedColor]}>
           The information presented in this app about Star Wars Unlimited, both
@@ -19,11 +23,47 @@ export function InfoScreen({ navigation }: InfoScreenProps) {
         </Text>
       </View>
 
-      <View style={styles.version}>
-        <Text style={[styles.versionText, themeStyles.themedColor]}>
-          {Application.applicationName} {Application.nativeApplicationVersion} (
-          {Application.nativeBuildVersion})
-        </Text>
+      <View style={styles.links}>
+        <LinkButton
+          size="small"
+          onPress={() => Linking.openURL('https://starwarsunlimited.com/')}
+        >
+          Star Wars: Unlimited Website
+        </LinkButton>
+        <LinkButton
+          size="small"
+          onPress={() =>
+            Linking.openURL(
+              'https://starwarsunlimited.com/how-to-play?chapter=rules',
+            )
+          }
+        >
+          Rules and How to Play
+        </LinkButton>
+        <LinkButton
+          size="small"
+          onPress={() => Linking.openURL('https://starwarsunlimited.com/cards')}
+        >
+          Official Card Database
+        </LinkButton>
+        <LinkButton
+          size="small"
+          onPress={() => Linking.openURL('https://swudb.com/')}
+        >
+          SWUDB.com
+        </LinkButton>
+        <LinkButton
+          size="small"
+          onPress={() => Linking.openURL('https://sw-unlimited-db.com')}
+        >
+          SW-Unlimited-db.com
+        </LinkButton>
+        <LinkButton
+          size="small"
+          onPress={() => Linking.openURL('https://sw-unlimited-db.com')}
+        >
+          Unlimited Power Website
+        </LinkButton>
       </View>
 
       <A href="https://rdonnelly.com/unlimited-power" style={styles.credit}>
@@ -31,9 +71,16 @@ export function InfoScreen({ navigation }: InfoScreenProps) {
           <Text style={[styles.creditText, themeStyles.themedColor]}>{`
 Designed and Developed by
 Ryan Donnelly
-            `}</Text>
+      `}</Text>
         </>
       </A>
+
+      <View style={styles.version}>
+        <Text style={[styles.versionText, themeStyles.themedColor]}>
+          {Application.applicationName} {Application.nativeApplicationVersion} (
+          {Application.nativeBuildVersion})
+        </Text>
+      </View>
     </View>
   );
 }
@@ -42,28 +89,31 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
-    justifyContent: 'center',
-    paddingTop: 16,
+    gap: 32,
+    justifyContent: 'space-between',
+    paddingVertical: 16,
   },
   disclaimer: {
     flex: 1,
-    padding: 16,
-    paddingBottom: 32,
+    paddingHorizontal: 16,
   },
   disclaimerText: {
     textAlign: 'justify',
   },
+  links: {
+    gap: 16,
+    paddingHorizontal: 16,
+    width: '100%',
+  },
   version: {
-    padding: 16,
-    paddingBottom: 32,
+    paddingHorizontal: 16,
   },
   versionText: {
     fontWeight: '600',
     textAlign: 'justify',
   },
   credit: {
-    padding: 16,
-    paddingBottom: 32,
+    paddingHorizontal: 16,
   },
   creditText: {
     textAlign: 'center',
