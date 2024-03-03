@@ -6,6 +6,8 @@ import { Error } from '@components/Error';
 import { useCard } from '@data/hooks/useCard';
 import { useTheme } from '@hooks/useTheme';
 
+import { CardDetailRulesClarifications } from './CardDetailRulesClarifications';
+
 type CardDetailProps = {
   id: number;
 };
@@ -36,11 +38,7 @@ function CardDetail({ id }: CardDetailProps) {
           isFetching={isFetching}
         />
       </View>
-      {isFetching ? (
-        <View style={styles.activity}>
-          <ActivityIndicator color={theme.tintSubdued} />
-        </View>
-      ) : null}
+      <CardDetailRulesClarifications cardAttributes={data.attributes} />
     </View>
   );
 }
@@ -49,6 +47,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
+    gap: 32,
     justifyContent: 'flex-start',
     maxWidth: 768,
     width: '100%',

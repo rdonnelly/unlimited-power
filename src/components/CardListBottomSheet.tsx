@@ -6,6 +6,7 @@ import type { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/typ
 import debounce from 'lodash/debounce';
 import { useCallback, useEffect, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Chips } from '@components/Chips';
 import {
@@ -31,6 +32,7 @@ export function CardListBottomSheet({
   bottomSheetRef,
 }: CardListBottomSheetProps) {
   const { theme, themeStyles } = useTheme();
+  const insets = useSafeAreaInsets();
 
   const snapPoints = useMemo(() => [112, 400], []);
 
@@ -91,7 +93,7 @@ export function CardListBottomSheet({
       keyboardBehavior="fillParent"
       keyboardBlurBehavior="none"
     >
-      <View style={styles.container}>
+      <View style={[styles.container, { paddingBottom: insets.bottom }]}>
         <View style={styles.inputContainer}>
           <BottomSheetTextInput
             style={[
@@ -174,18 +176,8 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   scrollContainerContent: {
+    gap: 16,
     paddingHorizontal: 16,
     paddingTop: 24,
-  },
-  filterSection: {
-    marginBottom: 16,
-    width: '100%',
-  },
-  filterSectionHeader: {
-    marginBottom: 8,
-  },
-  filterSectionHeaderText: {
-    fontSize: 20,
-    fontWeight: '700',
   },
 });

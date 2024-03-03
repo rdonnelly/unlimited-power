@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { CardDetailImage } from '@components/CardDetailImage';
 import { Chips } from '@components/Chips';
@@ -144,6 +144,7 @@ export function CardDetailImages({
             <CardDetailImage {...cardImageProps} />
           ))}
         </View>
+        {cardAttributes.hasFoil ? <Text>Has foil!</Text> : null}
       </View>
     </View>
   );
@@ -163,12 +164,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     padding: 16,
+    paddingBottom: 32,
   },
   variantSelector: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
-    marginBottom: 16,
     width: '100%',
   },
   images: {

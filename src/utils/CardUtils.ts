@@ -15,3 +15,10 @@ export function getSortedAspects(card: CardAttributes) {
     return 0;
   });
 }
+
+const RULES_CLARIFICATION_REGEX = RegExp(
+  /<p>Rules Clarifications:<\/p>(.*)$/gm,
+);
+export function getRulesClarifications(cardText: string) {
+  return cardText.match(RULES_CLARIFICATION_REGEX)?.pop();
+}

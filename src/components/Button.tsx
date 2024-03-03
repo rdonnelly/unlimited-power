@@ -78,5 +78,6 @@ const styles = StyleSheet.create({
   },
   innerText__small: {
     fontSize: 14,
+    lineHeight: 20,
   },
 });

@@ -104,7 +104,6 @@ export function Chips<T>({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
     width: '100%',
   },
   heading: {

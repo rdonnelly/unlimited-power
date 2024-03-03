@@ -25,3 +25,9 @@ export type InfoScreenProps = NativeStackScreenProps<
   StackParamList,
   'StackInfoScreen'
 >;
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends StackParamList {}
+  }
+}

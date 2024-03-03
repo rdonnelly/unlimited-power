@@ -10,6 +10,7 @@ import {
   View,
   type ViewToken,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CardDetail } from '@components/CardDetail';
 import type { Card } from '@data/Card';
@@ -18,6 +19,7 @@ import type { CardDetailScreenProps } from '@navigation/types';
 
 export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
   const { width: windowWidth } = useWindowDimensions();
+  const insets = useSafeAreaInsets();
 
   const { data, hasNextPage, fetchNextPage } = useCards();
 
@@ -53,7 +55,12 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
 
   const renderItem = useCallback(
     ({ item: card }: { item: Card }) => (
-      <View style={[styles.cell, { width: windowWidth }]}>
+      <View
+        style={[
+          styles.cell,
+          { paddingBottom: insets.bottom, width: windowWidth },
+        ]}
+      >
         <ScrollView
           style={styles.scrollContainer}
           contentContainerStyle={{ alignItems: 'center' }}
@@ -62,7 +69,7 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
         </ScrollView>
       </View>
     ),
-    [windowWidth],
+    [insets.bottom, windowWidth],
   );
 
   const getItemLayout = useCallback(

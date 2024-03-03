@@ -13,6 +13,7 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
       headerRight: ({ tintColor }) => {
         return (
           <Pressable
+            style={{ padding: 8, marginRight: -12 }}
             onPress={() => {
               navigation.push('StackInfoScreen');
             }}

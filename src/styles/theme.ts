@@ -57,7 +57,7 @@ export const DARK_THEME = {
   button: colors.stone900,
   buttonTint: colors.stone50,
   buttonBorder: colors.stone700,
-  buttonBold: colors.purple950,
+  buttonBold: colors.purple900,
   buttonTintBold: colors.purple100,
-  buttonBorderBold: colors.purple800,
+  buttonBorderBold: colors.purple400,
 } as const;
