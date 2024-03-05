@@ -1,4 +1,5 @@
 import * as FileSystem from 'expo-file-system';
+import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import * as Sharing from 'expo-sharing';
 import { useCallback, useEffect, useState } from 'react';
@@ -51,6 +52,8 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
         downloadPath,
       );
 
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+
       await Sharing.shareAsync(localUrl);
     }
   }, [imageUrl]);
@@ -72,6 +75,7 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
   return (
     <AnimatedPressable
       onLongPress={() => sharingIsAvailable && handleLongPress()}
+      delayLongPress={400}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       style={{ transform: [{ scale }] }}

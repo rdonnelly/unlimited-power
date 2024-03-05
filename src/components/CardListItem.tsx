@@ -1,12 +1,10 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { Image } from 'expo-image';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-fast-text';
 
 import { CardListAspects } from '@components/CardListAspects';
 import type { Card } from '@data/Card';
 import { useTheme } from '@hooks/useTheme';
-import { DARK_THEME } from '@styles/theme';
 
 import { CardListRarity } from './CardListRarity';
 
@@ -59,11 +57,9 @@ export const CardListItem = ({
                 {card.attributes.title}
               </Text>
               {card.attributes.unique ? (
-                <Image
-                  style={[styles.cardUniqueIcon]}
-                  source={require('../../assets/icons/unique.png')}
-                  contentFit="cover"
-                />
+                <Text style={[styles.cardTitle, themeStyles.themedColor]}>
+                  ⟡
+                </Text>
               ) : null}
             </View>
             <View style={styles.innerDetailsCaption}>
@@ -137,12 +133,6 @@ const styles = StyleSheet.create({
   innerDetailsCaption: {
     alignItems: 'flex-end',
     flexDirection: 'row',
-  },
-  cardUniqueIcon: {
-    backgroundColor: DARK_THEME.background100,
-    borderRadius: 8,
-    height: 12,
-    width: 12,
   },
   cardTitle: {
     fontSize: 16,

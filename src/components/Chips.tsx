@@ -1,4 +1,3 @@
-import * as Haptics from 'expo-haptics';
 import debounce from 'lodash/debounce';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -38,8 +37,6 @@ export function Chips<T>({
 
   const handlePressChip = useCallback(
     (option: T, isSelected: boolean) => {
-      Haptics.selectionAsync();
-
       if (isSelected) {
         if (!single) {
           selectedOptionsRef.current = [...selectedOptionsRef.current].filter(
@@ -69,8 +66,6 @@ export function Chips<T>({
 
   const handleLongPressChip = useCallback(
     (option: T) => {
-      Haptics.selectionAsync();
-
       selectedOptionsRef.current = [option];
 
       setSelectedOptions(selectedOptionsRef.current);

@@ -1,3 +1,5 @@
+import * as Haptics from 'expo-haptics';
+
 import { Button } from '@components/Button';
 
 type ChipProps<T> = {
@@ -19,8 +21,14 @@ export function Chip<T>({
     <Button
       size="small"
       variant={isSelected ? 'bold' : undefined}
-      onPress={() => handlePress(value, isSelected)}
-      onLongPress={() => handleLongPress(value, isSelected)}
+      onPress={() => {
+        Haptics.selectionAsync();
+        handlePress(value, isSelected);
+      }}
+      onLongPress={() => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        handleLongPress(value, isSelected);
+      }}
     >
       {label}
     </Button>

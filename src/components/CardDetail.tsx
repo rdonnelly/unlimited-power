@@ -7,6 +7,8 @@ import { Error } from '@components/Error';
 import { useCard } from '@data/hooks/useCard';
 import { useTheme } from '@hooks/useTheme';
 
+import { CardDetailLinks } from './CardDetailLinks';
+
 type CardDetailProps = {
   id: number;
 };
@@ -38,6 +40,7 @@ function CardDetail({ id }: CardDetailProps) {
         />
       </View>
       <CardDetailRulesClarifications cardAttributes={data.attributes} />
+      <CardDetailLinks cardAttributes={data.attributes} />
     </View>
   );
 }

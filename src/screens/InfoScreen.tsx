@@ -1,7 +1,7 @@
-import { A } from '@expo/html-elements';
 import * as Application from 'expo-application';
 import * as Linking from 'expo-linking';
-import { StyleSheet, Text, View } from 'react-native';
+import { useCallback } from 'react';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { LinkButton } from '@components/LinkButton';
@@ -11,6 +11,16 @@ import type { InfoScreenProps } from '@navigation/types';
 export function InfoScreen({ navigation }: InfoScreenProps) {
   const { themeStyles } = useTheme();
   const insets = useSafeAreaInsets();
+
+  const openUrl = useCallback((url: string) => {
+    try {
+      Linking.openURL(url);
+    } catch {
+      Alert.alert('Karabast!', 'The URL could not be opened, sorry!', [
+        { text: 'OK' },
+      ]);
+    }
+  }, []);
 
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
@@ -26,54 +36,40 @@ export function InfoScreen({ navigation }: InfoScreenProps) {
       <View style={styles.links}>
         <LinkButton
           size="small"
-          onPress={() => Linking.openURL('https://starwarsunlimited.com/')}
+          onPress={() => openUrl('https://starwarsunlimited.com/')}
         >
           Star Wars: Unlimited Website
         </LinkButton>
         <LinkButton
           size="small"
           onPress={() =>
-            Linking.openURL(
-              'https://starwarsunlimited.com/how-to-play?chapter=rules',
-            )
+            openUrl('https://starwarsunlimited.com/how-to-play?chapter=rules')
           }
         >
           Rules and How to Play
         </LinkButton>
         <LinkButton
           size="small"
-          onPress={() => Linking.openURL('https://starwarsunlimited.com/cards')}
+          onPress={() => openUrl('https://starwarsunlimited.com/cards')}
         >
           Official Card Database
         </LinkButton>
-        <LinkButton
-          size="small"
-          onPress={() => Linking.openURL('https://swudb.com/')}
-        >
+        <LinkButton size="small" onPress={() => openUrl('https://swudb.com/')}>
           SWUDB.com
         </LinkButton>
         <LinkButton
           size="small"
-          onPress={() => Linking.openURL('https://sw-unlimited-db.com')}
+          onPress={() => openUrl('https://sw-unlimited-db.com')}
         >
           SW-Unlimited-db.com
         </LinkButton>
         <LinkButton
           size="small"
-          onPress={() => Linking.openURL('https://sw-unlimited-db.com')}
+          onPress={() => openUrl('https://rdonnelly.com/unlimited-power')}
         >
           Unlimited Power Website
         </LinkButton>
       </View>
-
-      <A href="https://rdonnelly.com/unlimited-power" style={styles.credit}>
-        <>
-          <Text style={[styles.creditText, themeStyles.themedColor]}>{`
-Designed and Developed by
-Ryan Donnelly
-      `}</Text>
-        </>
-      </A>
 
       <View style={styles.version}>
         <Text style={[styles.versionText, themeStyles.themedColor]}>

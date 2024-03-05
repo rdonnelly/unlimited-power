@@ -1,3 +1,4 @@
+import { A } from '@expo/html-elements';
 import { memo, useMemo } from 'react';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import RenderHtml, { type MixedStyleRecord } from 'react-native-render-html';
@@ -14,7 +15,7 @@ type CardDetailRulesClarificationsProps = {
 function CardDetailRulesClarifications({
   cardAttributes,
 }: CardDetailRulesClarificationsProps) {
-  const { theme } = useTheme();
+  const { theme, themeStyles } = useTheme();
   const { width: windowWidth } = useWindowDimensions();
 
   const deployRulesClarifications = getRulesClarifications(
@@ -97,6 +98,14 @@ function CardDetailRulesClarifications({
             tagsStyles={tagsStyles}
           />
         ) : null}
+        <View style={styles.credit}>
+          <A
+            href={`https://starwarsunlimited.com/cards?cid=${cardAttributes.cardUid}`}
+            style={[styles.creditText, themeStyles.themedColorSubdued]}
+          >
+            Source: starwarsunlimited.com
+          </A>
+        </View>
       </View>
     </View>
   );
@@ -117,6 +126,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     paddingHorizontal: 16,
+  },
+  credit: {
+    alignSelf: 'flex-end',
+    marginBottom: 16,
+  },
+  creditText: {
+    fontStyle: 'italic',
   },
 });
 

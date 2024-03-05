@@ -1,3 +1,4 @@
+import Ionicons from '@expo/vector-icons/Ionicons';
 import type { PropsWithChildren } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
@@ -17,7 +18,7 @@ export function LinkButton({
   onLongPress: handleLongPress,
   children,
 }: PropsWithChildren<ButtonProps>) {
-  const { themeStyles } = useTheme();
+  const { theme, themeStyles } = useTheme();
 
   return (
     <Pressable
@@ -49,6 +50,12 @@ export function LinkButton({
           >
             {children}
           </Text>
+
+          <Ionicons
+            name="exit-outline"
+            size={16}
+            color={variant === 'bold' ? theme.buttonTintBold : theme.buttonTint}
+          />
         </View>
       )}
     </Pressable>
@@ -62,6 +69,10 @@ const styles = StyleSheet.create({
   inner: {
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
     paddingHorizontal: 32,
     paddingVertical: 16,
   },

@@ -17,6 +17,7 @@ const BaseCardAttributesSchema = z.object({
   title: z.string(),
   subtitle: z.nullable(z.string()),
   unique: z.boolean(),
+  cardUid: z.string(),
 
   cost: z.nullable(z.number()),
   hp: z.nullable(z.number()),
@@ -53,7 +54,6 @@ const BaseCardAttributesSchema = z.object({
   variantTypes: z.nullable(VariantAttributeSchema),
 
   // probably don't need these for now
-  // cardUid: z.string(),
   // cardId: z.nullable(z.string()),
   // cardCount: z.number(),
   // createdAt: z.coerce.date(),
