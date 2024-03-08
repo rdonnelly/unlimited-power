@@ -35,7 +35,7 @@ export function CardListBottomSheet({
   const insets = useSafeAreaInsets();
 
   const snapPoints = useMemo(
-    () => [72 + Math.max(16, insets.bottom), 400],
+    () => [72 + Math.max(16, insets.bottom), 400, '100%'],
     [insets.bottom],
   );
 
@@ -93,28 +93,27 @@ export function CardListBottomSheet({
       index={0}
       backgroundStyle={[styles.background, themeStyles.themedbackground100]}
       handleIndicatorStyle={{ backgroundColor: theme.textSubdued }}
-      keyboardBehavior="fillParent"
+      keyboardBehavior="interactive"
       keyboardBlurBehavior="none"
+      android_keyboardInputMode="adjustResize"
     >
       <View style={styles.container}>
-        <View style={styles.inputContainer}>
-          <BottomSheetTextInput
-            style={[
-              styles.input,
-              themeStyles.themedbackground200,
-              themeStyles.themedColor,
-            ]}
-            autoCapitalize="none"
-            autoCorrect={false}
-            clearButtonMode="always"
-            placeholder="Search"
-            placeholderTextColor={theme.textSubdued}
-            returnKeyType="search"
-            onChangeText={handleChangeText}
-            onSubmitEditing={handleSubmitEditing}
-            defaultValue={searchString ?? ''}
-          />
-        </View>
+        <BottomSheetTextInput
+          style={[
+            styles.input,
+            themeStyles.themedbackground200,
+            themeStyles.themedColor,
+          ]}
+          autoCapitalize="none"
+          autoCorrect={false}
+          clearButtonMode="always"
+          placeholder="Search"
+          placeholderTextColor={theme.textSubdued}
+          returnKeyType="search"
+          onChangeText={handleChangeText}
+          onSubmitEditing={handleSubmitEditing}
+          defaultValue={searchString ?? ''}
+        />
 
         <BottomSheetScrollView
           style={styles.scrollContainer}
@@ -164,19 +163,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  inputContainer: {
-    marginBottom: 16,
-    paddingHorizontal: 16,
-    width: '100%',
-  },
   input: {
     borderRadius: 8,
     borderWidth: 0,
     fontSize: 16,
     height: 48,
     lineHeight: 20,
+    marginBottom: 16,
+    marginHorizontal: 16,
     padding: 12,
-    width: '100%',
   },
   scrollContainer: {
     width: '100%',
