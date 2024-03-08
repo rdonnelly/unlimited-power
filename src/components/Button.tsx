@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   inner__small: {
     borderRadius: 6,
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 10,
   },
   innerPressed: {
     opacity: 0.5,

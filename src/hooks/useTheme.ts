@@ -54,17 +54,37 @@ export function useTheme() {
     buttonContainerBold: {
       backgroundColor: theme.buttonBold,
     },
-    buttonBorder: {
-      borderColor: theme.buttonBorder,
-    },
     buttonText: {
       color: theme.buttonTint,
     },
     buttonTextBold: {
       color: theme.buttonTintBold,
     },
+    buttonBorder: {
+      borderColor: theme.buttonBorder,
+    },
     buttonBorderBold: {
       borderColor: theme.buttonBorderBold,
+    },
+
+    // CHIP
+    chipContainer: {
+      backgroundColor: theme.chip,
+    },
+    chipBorder: {
+      borderColor: theme.chipBorder,
+    },
+    chipText: {
+      color: theme.chipTint,
+    },
+    chipSelectedContainer: {
+      backgroundColor: theme.chipSelected,
+    },
+    chipSelectedText: {
+      color: theme.chipSelectedTint,
+    },
+    chipSelectedBorder: {
+      borderColor: theme.chipSelectedBorder,
     },
   });
 

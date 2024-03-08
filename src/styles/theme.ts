@@ -30,6 +30,14 @@ export const LIGHT_THEME = {
   buttonBold: colors.purple700,
   buttonTintBold: colors.purple50,
   buttonBorderBold: colors.purple950,
+
+  // CHIP
+  chip: colors.stone100,
+  chipTint: colors.stone500,
+  chipBorder: colors.stone200,
+  chipSelected: colors.purple100,
+  chipSelectedTint: colors.purple700,
+  chipSelectedBorder: colors.purple200,
 } as const;
 
 export const DARK_THEME = {
@@ -62,4 +70,12 @@ export const DARK_THEME = {
   buttonBold: colors.purple900,
   buttonTintBold: colors.purple100,
   buttonBorderBold: colors.purple400,
+
+  // CHIP
+  chip: colors.stone900,
+  chipTint: colors.stone50,
+  chipBorder: colors.stone700,
+  chipSelected: colors.purple900,
+  chipSelectedTint: colors.purple100,
+  chipSelectedBorder: colors.purple400,
 } as const;
