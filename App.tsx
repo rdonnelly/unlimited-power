@@ -70,7 +70,7 @@ export default function App() {
       colors: {
         ...baseNavigationTheme.colors,
         background: theme.background100,
-        card: theme.brand,
+        card: theme.primary100,
         primary: theme.tint,
         text: theme.tint,
       },

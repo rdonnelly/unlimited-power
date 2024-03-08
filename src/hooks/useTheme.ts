@@ -8,54 +8,62 @@ export function useTheme() {
   const theme = colorScheme === 'dark' ? DARK_THEME : LIGHT_THEME;
 
   const styles = StyleSheet.create({
-    themedbackground0: {
+    // BACKGROUND
+    background0: {
       backgroundColor: theme.background0,
     },
-    themedbackground50: {
+    background50: {
       backgroundColor: theme.background50,
     },
-    themedbackground100: {
+    background100: {
       backgroundColor: theme.background100,
     },
-    themedbackground200: {
+    background200: {
       backgroundColor: theme.background200,
     },
-    themedbackground300: {
+    background300: {
       backgroundColor: theme.background300,
     },
-    themedbackground400: {
+    background400: {
       backgroundColor: theme.background400,
     },
-    themedColor: {
+    primaryBackground100: {
+      backgroundColor: theme.secondary100,
+    },
+
+    // COLOR
+    color: {
       color: theme.text,
     },
-    themedColorSubdued: {
+    colorSubdued: {
       color: theme.textSubdued,
     },
-    themedBorder: {
+
+    // BORDER
+    border: {
       borderColor: theme.tint,
     },
-    themedBorderSubdued: {
+    borderSubdued: {
       borderColor: theme.tintSubdued,
     },
 
     // BUTTON
-    themedButtonContainer: {
+    buttonContainer: {
       backgroundColor: theme.button,
     },
-    themedButtonContainerBold: {
+    buttonContainerBold: {
       backgroundColor: theme.buttonBold,
     },
-    themedButtonBorder: {
+    buttonBorder: {
       borderColor: theme.buttonBorder,
     },
-    themedButtonText: {
+    buttonText: {
       color: theme.buttonTint,
     },
-    themedButtonTextBold: {
+    buttonTextBold: {
       color: theme.buttonTintBold,
     },
-    themedButtonBorderBold: {
+    buttonBorderBold: {
       borderColor: theme.buttonBorderBold,
     },
   });

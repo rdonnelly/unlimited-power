@@ -16,12 +16,10 @@ export function Error({ heading, message, onRetry: handleRetry }: ErrorProps) {
     <View style={styles.container}>
       <View style={styles.error}>
         <View style={styles.errorInfo}>
-          <Text
-            style={[styles.errorInfoHeading, themeStyles.themedColorSubdued]}
-          >
+          <Text style={[styles.errorInfoHeading, themeStyles.colorSubdued]}>
             {heading ?? 'Bantha Poodoo!'}
           </Text>
-          <Text style={[styles.errorInfoText, themeStyles.themedColorSubdued]}>
+          <Text style={[styles.errorInfoText, themeStyles.colorSubdued]}>
             {message ?? 'An unknown error occured while fetching card data.'}
           </Text>
         </View>

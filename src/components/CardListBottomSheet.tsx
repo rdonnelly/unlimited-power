@@ -91,7 +91,7 @@ export function CardListBottomSheet({
       ref={bottomSheetRef}
       snapPoints={snapPoints}
       index={0}
-      backgroundStyle={[styles.background, themeStyles.themedbackground100]}
+      backgroundStyle={[styles.background, themeStyles.background200]}
       handleIndicatorStyle={{ backgroundColor: theme.textSubdued }}
       keyboardBehavior="interactive"
       keyboardBlurBehavior="none"
@@ -101,8 +101,9 @@ export function CardListBottomSheet({
         <BottomSheetTextInput
           style={[
             styles.input,
-            themeStyles.themedbackground200,
-            themeStyles.themedColor,
+            themeStyles.background300,
+            themeStyles.color,
+            { marginBottom: Math.max(24, insets.bottom) },
           ]}
           autoCapitalize="none"
           autoCorrect={false}
@@ -116,7 +117,7 @@ export function CardListBottomSheet({
         />
 
         <BottomSheetScrollView
-          style={styles.scrollContainer}
+          style={[styles.scrollContainer, themeStyles.borderSubdued]}
           contentContainerStyle={[
             styles.scrollContainerContent,
             { paddingBottom: insets.bottom },
@@ -169,16 +170,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     height: 48,
     lineHeight: 20,
-    marginBottom: 16,
     marginHorizontal: 16,
     padding: 12,
   },
   scrollContainer: {
-    width: '100%',
+    borderTopWidth: StyleSheet.hairlineWidth,
+    marginHorizontal: 16,
   },
   scrollContainerContent: {
     gap: 16,
-    paddingHorizontal: 16,
-    paddingTop: 24,
+    paddingTop: 16,
   },
 });

@@ -29,22 +29,20 @@ export function Button({
         <View
           style={[
             styles.inner,
-            themeStyles.themedButtonContainer,
-            themeStyles.themedButtonBorder,
+            themeStyles.buttonContainer,
+            themeStyles.buttonBorder,
             size === 'small' ? styles.inner__small : undefined,
-            variant === 'bold'
-              ? themeStyles.themedButtonContainerBold
-              : undefined,
-            variant === 'bold' ? themeStyles.themedButtonBorderBold : undefined,
+            variant === 'bold' ? themeStyles.buttonContainerBold : undefined,
+            variant === 'bold' ? themeStyles.buttonBorderBold : undefined,
             pressed ? styles.innerPressed : undefined,
           ]}
         >
           <Text
             style={[
               styles.innerText,
-              themeStyles.themedButtonText,
+              themeStyles.buttonText,
               size === 'small' ? styles.innerText__small : undefined,
-              variant === 'bold' ? themeStyles.themedButtonTextBold : undefined,
+              variant === 'bold' ? themeStyles.buttonTextBold : undefined,
             ]}
           >
             {children}

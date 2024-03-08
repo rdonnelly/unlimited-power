@@ -101,7 +101,7 @@ function CardDetailRulesClarifications({
         <View style={styles.credit}>
           <A
             href={`https://starwarsunlimited.com/cards?cid=${cardAttributes.cardUid}`}
-            style={[styles.creditText, themeStyles.themedColorSubdued]}
+            style={[styles.creditText, themeStyles.colorSubdued]}
           >
             Source: starwarsunlimited.com
           </A>

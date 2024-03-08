@@ -27,8 +27,8 @@ export const CardListItem = ({
     <Pressable
       style={[
         styles.container,
-        themeStyles.themedbackground50,
-        themeStyles.themedBorderSubdued,
+        themeStyles.background50,
+        themeStyles.borderSubdued,
       ]}
       onPress={() =>
         handlePress(
@@ -44,7 +44,7 @@ export const CardListItem = ({
           style={[
             styles.inner,
             pressed ? styles.innerPressed : undefined,
-            pressed ? themeStyles.themedbackground100 : undefined,
+            pressed ? themeStyles.background100 : undefined,
           ]}
         >
           <View style={styles.innerDetails}>
@@ -52,21 +52,19 @@ export const CardListItem = ({
               <Text
                 numberOfLines={1}
                 ellipsizeMode="tail"
-                style={[styles.cardTitle, themeStyles.themedColor]}
+                style={[styles.cardTitle, themeStyles.color]}
               >
                 {card.attributes.title}
               </Text>
               {card.attributes.unique ? (
-                <Text style={[styles.cardTitle, themeStyles.themedColor]}>
-                  ⟡
-                </Text>
+                <Text style={[styles.cardTitle, themeStyles.color]}>⟡</Text>
               ) : null}
             </View>
             <View style={styles.innerDetailsCaption}>
               <Text
                 numberOfLines={1}
                 ellipsizeMode="tail"
-                style={[styles.cardInfo, themeStyles.themedColorSubdued]}
+                style={[styles.cardInfo, themeStyles.colorSubdued]}
               >
                 {card.attributes.subtitle ? (
                   <>

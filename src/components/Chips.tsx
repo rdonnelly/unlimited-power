@@ -77,9 +77,7 @@ export function Chips<T>({
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
-        <Text style={[styles.headingText, themeStyles.themedColor]}>
-          {heading}
-        </Text>
+        <Text style={[styles.headingText, themeStyles.color]}>{heading}</Text>
       </View>
       <View style={styles.chipsContainer}>
         {options.map((option) => (

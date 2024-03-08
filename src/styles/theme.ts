@@ -4,7 +4,8 @@ export const LIGHT_THEME = {
   scheme: 'light',
 
   // BRAND
-  brand: colors.purple100,
+  primary100: colors.purple100,
+  secondary100: colors.teal50,
 
   // BACKGROUND
   background0: colors.white,
@@ -35,7 +36,8 @@ export const DARK_THEME = {
   scheme: 'dark',
 
   // BRAND
-  brand: colors.purple900,
+  primary100: colors.purple900,
+  secondary100: colors.teal900,
 
   // BACKGROUND
   background0: colors.black,

@@ -131,7 +131,7 @@ export function CardDetailImages({
 
   return (
     <View style={styles.container}>
-      <View style={[styles.inner, themeStyles.themedbackground200]}>
+      <View style={[styles.inner, themeStyles.background200]}>
         <Chips
           heading="Variants"
           options={variantOptions}

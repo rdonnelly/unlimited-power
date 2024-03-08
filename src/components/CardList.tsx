@@ -53,7 +53,7 @@ export function CardList({
 
   if (isLoading || (isFetching && !cards.length) || data == null) {
     return (
-      <View style={[styles.container, themeStyles.themedbackground0]}>
+      <View style={[styles.container, themeStyles.background0]}>
         <View style={styles.activity}>
           <ActivityIndicator color={theme.tintSubdued} />
         </View>
@@ -77,7 +77,7 @@ export function CardList({
 
   return (
     <View style={styles.container}>
-      <View style={[styles.listContainer, themeStyles.themedbackground0]}>
+      <View style={[styles.listContainer, themeStyles.background0]}>
         <FlashList
           data={cards}
           renderItem={({ item: card, index }) => (
@@ -88,16 +88,11 @@ export function CardList({
           onEndReachedThreshold={1.5}
           onScrollBeginDrag={handleScrollBeginDrag}
           ListFooterComponent={
-            <View style={[styles.listFooter, themeStyles.themedbackground0]}>
+            <View style={[styles.listFooter, themeStyles.background0]}>
               {isLoading || isFetching || hasNextPage || cardCount == null ? (
                 <ActivityIndicator color={theme.tintSubdued} />
               ) : (
-                <Text
-                  style={[
-                    styles.listFooterText,
-                    themeStyles.themedColorSubdued,
-                  ]}
-                >
+                <Text style={[styles.listFooterText, themeStyles.colorSubdued]}>
                   {cardCount} Cards Found
                 </Text>
               )}

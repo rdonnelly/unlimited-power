@@ -27,7 +27,7 @@ export function InfoScreen({ navigation }: InfoScreenProps) {
       style={[styles.container, { paddingBottom: Math.max(32, insets.bottom) }]}
     >
       <View style={styles.disclaimer}>
-        <Text style={[styles.disclaimerText, themeStyles.themedColor]}>
+        <Text style={[styles.disclaimerText, themeStyles.color]}>
           The information presented in this app about Star Wars Unlimited, both
           literal and graphical, is copyrighted by Fantasy Flight Games. This
           app is not produced by, endorsed by, supported by, or affiliated with
@@ -74,7 +74,7 @@ export function InfoScreen({ navigation }: InfoScreenProps) {
       </View>
 
       <View style={styles.version}>
-        <Text style={[styles.versionText, themeStyles.themedColor]}>
+        <Text style={[styles.versionText, themeStyles.color]}>
           {Application.applicationName} {Application.nativeApplicationVersion} (
           {Application.nativeBuildVersion})
         </Text>
