@@ -135,7 +135,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   innerDetailsCaption: {
-    backgroundColor: 'yellow',
     alignItems: 'center',
     flexDirection: 'row',
     paddingRight: 16,
@@ -144,7 +143,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   innerChevron: {
-    backgroundColor: 'orange',
     marginRight: -4,
     width: 16,
   },
