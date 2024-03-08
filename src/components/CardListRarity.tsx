@@ -29,6 +29,7 @@ export function CardListRarity({ cardAttibutes }: CardListRarityProps) {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: 'blue',
     flexDirection: 'row',
     gap: 4,
     marginBottom: -2,

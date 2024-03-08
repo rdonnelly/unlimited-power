@@ -23,7 +23,9 @@ export function InfoScreen({ navigation }: InfoScreenProps) {
   }, []);
 
   return (
-    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+    <View
+      style={[styles.container, { paddingBottom: Math.max(32, insets.bottom) }]}
+    >
       <View style={styles.disclaimer}>
         <Text style={[styles.disclaimerText, themeStyles.themedColor]}>
           The information presented in this app about Star Wars Unlimited, both

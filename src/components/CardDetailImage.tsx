@@ -85,7 +85,6 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
         source={`${imageUrl}`}
         placeholder={blurhash}
         contentFit="contain"
-        transition={200}
       />
     </AnimatedPressable>
   );

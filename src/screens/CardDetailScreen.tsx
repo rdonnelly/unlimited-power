@@ -60,7 +60,7 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
           style={styles.scrollContainer}
           contentContainerStyle={{
             alignItems: 'center',
-            paddingBottom: insets.bottom,
+            paddingBottom: Math.max(32, insets.bottom),
           }}
         >
           <CardDetail id={card.id} />

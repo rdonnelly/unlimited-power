@@ -130,18 +130,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 4,
   },
-  innerDetailsCaption: {
-    alignItems: 'flex-end',
-    flexDirection: 'row',
-  },
   cardTitle: {
     fontSize: 16,
     fontWeight: '700',
+  },
+  innerDetailsCaption: {
+    backgroundColor: 'yellow',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingRight: 16,
   },
   cardInfo: {
     fontSize: 13,
   },
   innerChevron: {
-    marginRight: -8,
+    backgroundColor: 'orange',
+    marginRight: -4,
+    width: 16,
   },
 });

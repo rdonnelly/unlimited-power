@@ -34,7 +34,10 @@ export function CardListBottomSheet({
   const { theme, themeStyles } = useTheme();
   const insets = useSafeAreaInsets();
 
-  const snapPoints = useMemo(() => [112, 400], []);
+  const snapPoints = useMemo(
+    () => [72 + Math.max(16, insets.bottom), 400],
+    [insets.bottom],
+  );
 
   useEffect(() => {
     bottomSheetRef.current?.collapse();
@@ -170,7 +173,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 0,
     fontSize: 16,
-    height: 44,
+    height: 48,
     lineHeight: 20,
     padding: 12,
     width: '100%',
