@@ -51,6 +51,10 @@ export function CardList({
     collapseBottomSheet();
   }, [collapseBottomSheet]);
 
+  if (isError) {
+    return <Error onRetry={() => refetch()} />;
+  }
+
   if (isLoading || (isFetching && !cards.length) || data == null) {
     return (
       <View style={[styles.container, themeStyles.background0]}>
@@ -59,10 +63,6 @@ export function CardList({
         </View>
       </View>
     );
-  }
-
-  if (isError) {
-    return <Error onRetry={() => refetch()} />;
   }
 
   if (!cards.length) {

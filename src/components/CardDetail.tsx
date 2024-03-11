@@ -17,6 +17,10 @@ function CardDetail({ id }: CardDetailProps) {
   const { theme } = useTheme();
   const { data, isLoading, isError, isFetching, refetch } = useCard(id);
 
+  if (isError) {
+    return <Error onRetry={() => refetch()} />;
+  }
+
   if (isLoading || data == null) {
     return (
       <View style={styles.container}>
@@ -25,10 +29,6 @@ function CardDetail({ id }: CardDetailProps) {
         </View>
       </View>
     );
-  }
-
-  if (isError) {
-    return <Error onRetry={() => refetch()} />;
   }
 
   return (

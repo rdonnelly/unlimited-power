@@ -31,9 +31,27 @@ export function useCardsQueryKey() {
 
     if (searchString) {
       filters.push({
-        title: {
-          $containsi: searchString,
-        },
+        $or: [
+          {
+            title: {
+              $containsi: searchString,
+            },
+          },
+          {
+            traits: {
+              name: {
+                $containsi: searchString,
+              },
+            },
+          },
+          {
+            keywords: {
+              name: {
+                $containsi: searchString,
+              },
+            },
+          },
+        ],
       });
     }
 

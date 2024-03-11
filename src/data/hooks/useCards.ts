@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import qs from 'qs';
 
-import { CardsResponseSchema } from '@data/CardsResponse';
+import { type CardsResponse } from '@data/CardsResponse';
 import { useCardsQueryKey } from '@data/hooks/useCardsQueryKey';
 import { useAspectFilterStore } from '@data/stores/useAspectFilterStore';
 
@@ -29,23 +29,25 @@ const fetchCards = async ({ pageParam = 1, queryKey }) => {
     },
   });
 
-  const response = await (
-    await fetch(
-      `https://admin.starwarsunlimited.com/api/cards?locale=en&${query}`,
-    )
-  ).json();
+  const response = await fetch(
+    `https://admin.starwarsunlimited.com/api/cards?locale=en&${query}`,
+  );
 
-  const parsed = CardsResponseSchema.parse(response);
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+
+  const body = (await response.json()) as CardsResponse;
 
   const aspectFilters = useAspectFilterStore.getState().aspects;
 
-  parsed.data = parsed.data?.filter((card) => {
+  body.data = body.data?.filter((card) => {
     return card.attributes.aspects.data.every((aspect) =>
       aspectFilters.includes(aspect.attributes.name),
     );
   });
 
-  return parsed;
+  return body;
 };
 
 export function useCards() {

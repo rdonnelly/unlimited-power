@@ -4,17 +4,22 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
-import { CardResponseSchema } from '@data/CardResponse';
+import { type CardResponse } from '@data/CardResponse';
 import type { CardsResponse } from '@data/CardsResponse';
 import { useCardsQueryKey } from '@data/hooks/useCardsQueryKey';
 
 const fetchCard = async (id: number) => {
-  const response = await (
-    await fetch(`https://admin.starwarsunlimited.com/api/cards/${id}`)
-  ).json();
+  const response = await fetch(
+    `https://admin.starwarsunlimited.com/api/cards/${id}`,
+  );
 
-  const parsed = CardResponseSchema.parse(response);
-  return parsed.data;
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+
+  const body = (await response.json()) as CardResponse;
+
+  return body.data;
 };
 
 export function useCard(cardId: number) {

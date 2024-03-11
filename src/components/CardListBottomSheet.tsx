@@ -108,7 +108,7 @@ export function CardListBottomSheet({
           autoCapitalize="none"
           autoCorrect={false}
           clearButtonMode="always"
-          placeholder="Search"
+          placeholder="Search by Title, Trait, or Keyword"
           placeholderTextColor={theme.textSubdued}
           returnKeyType="search"
           onChangeText={handleChangeText}
