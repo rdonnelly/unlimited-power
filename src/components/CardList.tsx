@@ -27,6 +27,7 @@ export function CardList({
     data,
     isLoading,
     isFetching,
+    fetchStatus,
     isError,
     hasNextPage,
     fetchNextPage,
@@ -53,6 +54,15 @@ export function CardList({
 
   if (isError) {
     return <Error onRetry={() => refetch()} />;
+  }
+
+  if (fetchStatus === 'paused') {
+    return (
+      <Error
+        message="Make sure you have a network connection and try again."
+        onRetry={() => refetch()}
+      />
+    );
   }
 
   if (isLoading || (isFetching && !cards.length) || data == null) {

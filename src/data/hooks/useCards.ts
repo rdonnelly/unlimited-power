@@ -37,17 +37,22 @@ const fetchCards = async ({ pageParam = 1, queryKey }) => {
   if (!response.ok) {
     if (!__DEV__) {
       // TODO: remove later after testing
-      const text = await response.text();
-      Bugsnag.notify(
-        new Error('Network response was not ok'),
-        function (event) {
-          event.addMetadata('response', {
-            status: response.status,
-            body: text,
-          });
-        },
-      );
+      try {
+        const text = await response.text();
+        Bugsnag.notify(
+          new Error('Network response was not ok'),
+          function (event) {
+            event.addMetadata('response', {
+              status: response.status,
+              body: text,
+            });
+          },
+        );
+      } catch {
+        Bugsnag.notify(new Error('Unknown network fetch error'));
+      }
     }
+
     throw new Error('Network response was not ok');
   }
 

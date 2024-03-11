@@ -69,7 +69,7 @@ export const DARK_THEME = {
   buttonBorder: colors.stone700,
   buttonBold: colors.purple900,
   buttonTintBold: colors.purple100,
-  buttonBorderBold: colors.purple400,
+  buttonBorderBold: colors.purple700,
 
   // CHIP
   chip: colors.stone900,
