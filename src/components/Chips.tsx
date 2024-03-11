@@ -1,6 +1,6 @@
 import debounce from 'lodash/debounce';
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Chip } from '@components/Chip';
 import { useTheme } from '@hooks/useTheme';
@@ -74,10 +74,54 @@ export function Chips<T>({
     [handleChangeDebounced],
   );
 
+  const handlePressAll = () => {
+    selectedOptionsRef.current = [...options.map((option) => option.value)];
+
+    setSelectedOptions(selectedOptionsRef.current);
+    handleChangeDebounced();
+  };
+
+  const handlePressNone = () => {
+    selectedOptionsRef.current = [];
+
+    setSelectedOptions(selectedOptionsRef.current);
+    handleChangeDebounced();
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
         <Text style={[styles.headingText, themeStyles.color]}>{heading}</Text>
+        <View style={styles.headingControls}>
+          <Pressable onPress={() => handlePressAll && handlePressAll()}>
+            {({ pressed }) => (
+              <View
+                style={[
+                  styles.headingControl,
+                  themeStyles.chipContainer,
+                  themeStyles.chipBorder,
+                  pressed ? styles.headingControlPressed : undefined,
+                ]}
+              >
+                <Text style={[themeStyles.chipText]}>All</Text>
+              </View>
+            )}
+          </Pressable>
+          <Pressable onPress={() => handlePressNone && handlePressNone()}>
+            {({ pressed }) => (
+              <View
+                style={[
+                  styles.headingControl,
+                  themeStyles.chipContainer,
+                  themeStyles.chipBorder,
+                  pressed ? styles.headingControlPressed : undefined,
+                ]}
+              >
+                <Text style={[themeStyles.chipText]}>None</Text>
+              </View>
+            )}
+          </Pressable>
+        </View>
       </View>
       <View style={styles.chipsContainer}>
         {options.map((option) => (
@@ -100,11 +144,28 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   heading: {
-    marginBottom: 8,
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 16,
+    marginBottom: 16,
   },
   headingText: {
     fontSize: 20,
     fontWeight: '700',
+  },
+  headingControls: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 12,
+  },
+  headingControl: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 6,
+    paddingHorizontal: 16,
+    paddingVertical: 4,
+  },
+  headingControlPressed: {
+    opacity: 0.5,
   },
   chipsContainer: {
     flexDirection: 'row',
