@@ -7,6 +7,7 @@ import { useTheme } from '@hooks/useTheme';
 
 type ChipsProps<T> = {
   heading: string;
+  showHeaderControls?: boolean;
   options: { value: T; label: string }[];
   selections: T[];
   onChange: (options: T[]) => void;
@@ -16,6 +17,7 @@ type ChipsProps<T> = {
 
 export function Chips<T>({
   heading,
+  showHeaderControls = false,
   options,
   selections,
   onChange: handleChange,
@@ -92,36 +94,38 @@ export function Chips<T>({
     <View style={styles.container}>
       <View style={styles.heading}>
         <Text style={[styles.headingText, themeStyles.color]}>{heading}</Text>
-        <View style={styles.headingControls}>
-          <Pressable onPress={() => handlePressAll && handlePressAll()}>
-            {({ pressed }) => (
-              <View
-                style={[
-                  styles.headingControl,
-                  themeStyles.chipContainer,
-                  themeStyles.chipBorder,
-                  pressed ? styles.headingControlPressed : undefined,
-                ]}
-              >
-                <Text style={[themeStyles.chipText]}>All</Text>
-              </View>
-            )}
-          </Pressable>
-          <Pressable onPress={() => handlePressNone && handlePressNone()}>
-            {({ pressed }) => (
-              <View
-                style={[
-                  styles.headingControl,
-                  themeStyles.chipContainer,
-                  themeStyles.chipBorder,
-                  pressed ? styles.headingControlPressed : undefined,
-                ]}
-              >
-                <Text style={[themeStyles.chipText]}>None</Text>
-              </View>
-            )}
-          </Pressable>
-        </View>
+        {showHeaderControls ? (
+          <View style={styles.headingControls}>
+            <Pressable onPress={() => handlePressAll && handlePressAll()}>
+              {({ pressed }) => (
+                <View
+                  style={[
+                    styles.headingControl,
+                    themeStyles.chipContainer,
+                    themeStyles.chipBorder,
+                    pressed ? styles.headingControlPressed : undefined,
+                  ]}
+                >
+                  <Text style={[themeStyles.chipText]}>All</Text>
+                </View>
+              )}
+            </Pressable>
+            <Pressable onPress={() => handlePressNone && handlePressNone()}>
+              {({ pressed }) => (
+                <View
+                  style={[
+                    styles.headingControl,
+                    themeStyles.chipContainer,
+                    themeStyles.chipBorder,
+                    pressed ? styles.headingControlPressed : undefined,
+                  ]}
+                >
+                  <Text style={[themeStyles.chipText]}>None</Text>
+                </View>
+              )}
+            </Pressable>
+          </View>
+        ) : null}
       </View>
       <View style={styles.chipsContainer}>
         {options.map((option) => (

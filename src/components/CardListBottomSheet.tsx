@@ -125,6 +125,7 @@ export function CardListBottomSheet({
         >
           <Chips
             heading="Aspects"
+            showHeaderControls
             options={aspectFilterOptions.map((aspect) => ({
               value: aspect,
               label: aspect,
@@ -136,6 +137,7 @@ export function CardListBottomSheet({
 
           <Chips
             heading="Type"
+            showHeaderControls
             options={typeFilterOptions.map((type) => ({
               value: type,
               label: type,
@@ -146,6 +148,7 @@ export function CardListBottomSheet({
 
           <Chips
             heading="Rarity"
+            showHeaderControls
             options={rarityFilterOptions.map((rarity) => ({
               value: rarity,
               label: rarity,

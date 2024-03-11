@@ -74,8 +74,8 @@ export const DARK_THEME = {
   // CHIP
   chip: colors.stone900,
   chipTint: colors.stone50,
-  chipBorder: colors.stone700,
+  chipBorder: colors.stone800,
   chipSelected: colors.purple900,
   chipSelectedTint: colors.purple100,
-  chipSelectedBorder: colors.purple400,
+  chipSelectedBorder: colors.purple700,
 } as const;
