@@ -27,8 +27,9 @@ export function CardList({
     data,
     isLoading,
     isFetching,
-    fetchStatus,
     isError,
+    isFetched,
+    isPaused,
     hasNextPage,
     fetchNextPage,
     refetch,
@@ -56,7 +57,7 @@ export function CardList({
     return <Error onRetry={() => refetch()} />;
   }
 
-  if (fetchStatus === 'paused') {
+  if (isPaused) {
     return (
       <Error
         message="Make sure you have a network connection and try again."
@@ -65,13 +66,22 @@ export function CardList({
     );
   }
 
-  if (isLoading || (isFetching && !cards.length) || data == null) {
+  if (isLoading || (isFetching && !isFetched) || data === undefined) {
     return (
       <View style={[styles.container, themeStyles.background0]}>
         <View style={styles.activity}>
           <ActivityIndicator color={theme.tintSubdued} />
         </View>
       </View>
+    );
+  }
+
+  if (isPaused) {
+    return (
+      <Error
+        message="Make sure you have a network connection and try again."
+        onRetry={() => refetch()}
+      />
     );
   }
 
