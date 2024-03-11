@@ -3,10 +3,9 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-fast-text';
 
 import { CardListAspects } from '@components/CardListAspects';
+import { CardListRarity } from '@components/CardListRarity';
 import type { Card } from '@data/Card';
 import { useTheme } from '@hooks/useTheme';
-
-import { CardListRarity } from './CardListRarity';
 
 export type CardListItemProps = {
   card: Card;
@@ -79,8 +78,16 @@ export const CardListItem = ({
                       .map((arena) => arena.attributes.name)
                       .join(', ')} ${card.attributes.type.data.attributes.name}`
                   : card.attributes.type.data.attributes.name}
-
                 <Text>{' · '}</Text>
+                {card.attributes.cost &&
+                !['Leader', 'Leader Unit'].includes(
+                  card.attributes.type.data.attributes.name,
+                ) ? (
+                  <>
+                    {card.attributes.cost}
+                    {' · '}
+                  </>
+                ) : null}
               </Text>
               <CardListRarity cardAttibutes={card.attributes} />
             </View>

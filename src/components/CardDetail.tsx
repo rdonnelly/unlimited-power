@@ -2,12 +2,11 @@ import { memo } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { CardDetailImages } from '@components/CardDetailImages';
+import { CardDetailLinks } from '@components/CardDetailLinks';
 import { CardDetailRulesClarifications } from '@components/CardDetailRulesClarifications';
 import { Error } from '@components/Error';
 import { useCard } from '@data/hooks/useCard';
 import { useTheme } from '@hooks/useTheme';
-
-import { CardDetailLinks } from './CardDetailLinks';
 
 type CardDetailProps = {
   id: number;

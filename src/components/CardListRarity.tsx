@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     gap: 4,
-    marginBottom: -2,
+    marginBottom: -4,
   },
   image: {
     height: 14,
