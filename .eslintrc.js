@@ -26,7 +26,6 @@ module.exports = {
               [
                 '^(@api|@components|@context|@data|@hooks|@navigation|@screens|@store|@styles|@utils)(/.*|$)',
               ],
-              ['^(@mc-builder)(/.*|$)'],
               ['^\\.'],
             ],
           },
