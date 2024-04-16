@@ -5,6 +5,7 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { CardListItem, ITEM_HEIGHT } from '@components/CardListItem';
 import { Error } from '@components/Error';
 import { useCards } from '@data/hooks/useCards';
+import { useFilters } from '@hooks/useFilters';
 import { useTheme } from '@hooks/useTheme';
 
 type CardListProps = {
@@ -53,15 +54,18 @@ export function CardList({
     collapseBottomSheet();
   }, [collapseBottomSheet]);
 
+  const { reset: resetFilters } = useFilters();
+
   if (isError) {
-    return <Error onRetry={() => refetch()} />;
+    return <Error labelPrimary="Retry" onPrimary={() => refetch()} />;
   }
 
   if (isPaused) {
     return (
       <Error
         message="Make sure you have a network connection and try again."
-        onRetry={() => refetch()}
+        labelPrimary="Retry"
+        onPrimary={() => refetch()}
       />
     );
   }
@@ -80,7 +84,8 @@ export function CardList({
     return (
       <Error
         message="Make sure you have a network connection and try again."
-        onRetry={() => refetch()}
+        labelPrimary="Retry"
+        onPrimary={() => refetch()}
       />
     );
   }
@@ -90,7 +95,10 @@ export function CardList({
       <Error
         heading="Karabast!"
         message="No cards found matching search and filter criteria."
-        onRetry={() => refetch()}
+        labelPrimary="Retry"
+        onPrimary={() => refetch()}
+        labelSecondary="Reset Filters"
+        onSecondary={() => resetFilters()}
       />
     );
   }

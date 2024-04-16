@@ -6,10 +6,20 @@ import { useTheme } from '@hooks/useTheme';
 type ErrorProps = {
   heading?: string;
   message?: string;
-  onRetry: () => void;
+  labelPrimary: string;
+  onPrimary: () => void;
+  labelSecondary?: string;
+  onSecondary?: () => void;
 };
 
-export function Error({ heading, message, onRetry: handleRetry }: ErrorProps) {
+export function Error({
+  heading,
+  message,
+  labelPrimary,
+  onPrimary: handlePrimary,
+  labelSecondary,
+  onSecondary: handleSecondary,
+}: ErrorProps) {
   const { themeStyles } = useTheme();
 
   return (
@@ -24,9 +34,15 @@ export function Error({ heading, message, onRetry: handleRetry }: ErrorProps) {
           </Text>
         </View>
 
-        <Button variant="bold" onPress={handleRetry}>
-          Retry
-        </Button>
+        <View style={styles.errorControls}>
+          <Button variant="bold" onPress={handlePrimary}>
+            {labelPrimary}
+          </Button>
+
+          {labelSecondary && handleSecondary ? (
+            <Button onPress={handleSecondary}>{labelSecondary}</Button>
+          ) : null}
+        </View>
       </View>
     </View>
   );
@@ -44,7 +60,7 @@ const styles = StyleSheet.create({
     paddingTop: 96,
   },
   errorInfo: {
-    marginBottom: 64,
+    marginBottom: 32,
   },
   errorInfoHeading: {
     fontSize: 22,
@@ -54,5 +70,8 @@ const styles = StyleSheet.create({
   errorInfoText: {
     fontSize: 16,
     textAlign: 'center',
+  },
+  errorControls: {
+    gap: 16,
   },
 });

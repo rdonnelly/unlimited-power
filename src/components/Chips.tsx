@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Chip } from '@components/Chip';
@@ -28,6 +28,18 @@ export function Chips<T>({
 
   const selectedOptionsRef = useRef(selections);
   const [selectedOptions, setSelectedOptions] = useState(selections);
+
+  useEffect(() => {
+    // listen for external filter resets
+    const hasDifference = !selections.every((selection) =>
+      selectedOptionsRef.current.includes(selection),
+    );
+
+    if (hasDifference) {
+      selectedOptionsRef.current = [...selections];
+      setSelectedOptions([...selections]);
+    }
+  }, [selections]);
 
   const handleChangeDebounced = useMemo(
     () =>

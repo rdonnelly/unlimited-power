@@ -6,6 +6,7 @@ type State = {
 
 type Action = {
   update: (searchString: string | undefined) => void;
+  reset: () => void;
 };
 
 export const useSearchFilterStore = create<State & Action>((set) => ({

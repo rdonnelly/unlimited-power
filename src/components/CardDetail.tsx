@@ -17,7 +17,7 @@ function CardDetail({ id }: CardDetailProps) {
   const { data, isLoading, isError, isFetching, refetch } = useCard(id);
 
   if (isError) {
-    return <Error onRetry={() => refetch()} />;
+    return <Error labelPrimary="Retry" onPrimary={() => refetch()} />;
   }
 
   if (isLoading || data == null) {
