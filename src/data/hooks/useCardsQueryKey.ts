@@ -1,11 +1,16 @@
 import { useMemo } from 'react';
 
 import { AspectCodes } from '@data/Aspect';
+import { ExpansionCodes } from '@data/Expansion';
 import { RarityCodes } from '@data/Rarity';
 import {
   aspectFilterOptions,
   useAspectFilterStore,
 } from '@data/stores/useAspectFilterStore';
+import {
+  expansionFilterOptions,
+  useExpansionFilterStore,
+} from '@data/stores/useExpansionFilterStore';
 import {
   rarityFilterOptions,
   useRarityFilterStore,
@@ -19,9 +24,10 @@ import { TypeCodes } from '@data/Type';
 
 export function useCardsQueryKey() {
   const searchString = useSearchFilterStore((state) => state.searchString);
+  const aspectFilters = useAspectFilterStore((state) => state.aspects);
+  const expansionFilters = useExpansionFilterStore((state) => state.expansions);
   const rarityFilters = useRarityFilterStore((state) => state.rarities);
   const typeFilters = useTypeFilterStore((state) => state.types);
-  const aspectFilters = useAspectFilterStore((state) => state.aspects);
 
   const queryKey = useMemo(() => {
     const sort = ['type.sortValue:asc', 'expansion.id:asc', 'cardNumber:asc'];
@@ -51,36 +57,6 @@ export function useCardsQueryKey() {
             },
           },
         ],
-      });
-    }
-
-    const rarityExclusions = rarityFilterOptions.reduce(
-      (acc, cur) =>
-        !rarityFilters.includes(cur) ? acc.concat(RarityCodes[cur]) : acc,
-      [] as number[],
-    );
-    if (rarityExclusions.length) {
-      filters.push({
-        rarity: {
-          id: {
-            $notIn: rarityExclusions,
-          },
-        },
-      });
-    }
-
-    const typeExclusions = typeFilterOptions.reduce(
-      (acc, cur) =>
-        !typeFilters.includes(cur) ? acc.concat(TypeCodes[cur]) : acc,
-      [] as number[],
-    );
-    if (typeExclusions.length) {
-      filters.push({
-        type: {
-          id: {
-            $notIn: typeExclusions,
-          },
-        },
       });
     }
 
@@ -122,8 +98,59 @@ export function useCardsQueryKey() {
       }
     }
 
+    const expansionExclusions = expansionFilterOptions.reduce(
+      (acc, cur) =>
+        !expansionFilters.includes(cur) ? acc.concat(ExpansionCodes[cur]) : acc,
+      [] as number[],
+    );
+    if (expansionExclusions.length) {
+      filters.push({
+        expansion: {
+          id: {
+            $notIn: expansionExclusions,
+          },
+        },
+      });
+    }
+
+    const rarityExclusions = rarityFilterOptions.reduce(
+      (acc, cur) =>
+        !rarityFilters.includes(cur) ? acc.concat(RarityCodes[cur]) : acc,
+      [] as number[],
+    );
+    if (rarityExclusions.length) {
+      filters.push({
+        rarity: {
+          id: {
+            $notIn: rarityExclusions,
+          },
+        },
+      });
+    }
+
+    const typeExclusions = typeFilterOptions.reduce(
+      (acc, cur) =>
+        !typeFilters.includes(cur) ? acc.concat(TypeCodes[cur]) : acc,
+      [] as number[],
+    );
+    if (typeExclusions.length) {
+      filters.push({
+        type: {
+          id: {
+            $notIn: typeExclusions,
+          },
+        },
+      });
+    }
+
     return ['cards', sort, filters];
-  }, [searchString, rarityFilters, typeFilters, aspectFilters]);
+  }, [
+    searchString,
+    aspectFilters,
+    expansionFilters,
+    rarityFilters,
+    typeFilters,
+  ]);
 
   return queryKey;
 }

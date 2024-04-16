@@ -9,10 +9,15 @@ import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Chips } from '@components/Chips';
+import { ExpansionNames } from '@data/Expansion';
 import {
   aspectFilterOptions,
   useAspectFilterStore,
 } from '@data/stores/useAspectFilterStore';
+import {
+  expansionFilterOptions,
+  useExpansionFilterStore,
+} from '@data/stores/useExpansionFilterStore';
 import {
   rarityFilterOptions,
   useRarityFilterStore,
@@ -76,6 +81,10 @@ export function CardListBottomSheet({
     state.update,
   ]);
 
+  const [expansionOptions, updateExpansion] = useExpansionFilterStore(
+    (state) => [state.expansions, state.update],
+  );
+
   const [rarityOptions, updateRarity] = useRarityFilterStore((state) => [
     state.rarities,
     state.update,
@@ -132,6 +141,18 @@ export function CardListBottomSheet({
             }))}
             selections={aspectOptions}
             onChange={updateAspect}
+            delay={1000}
+          />
+
+          <Chips
+            heading="Sets"
+            showHeaderControls
+            options={expansionFilterOptions.map((expansion) => ({
+              value: expansion,
+              label: ExpansionNames[expansion],
+            }))}
+            selections={expansionOptions}
+            onChange={updateExpansion}
             delay={1000}
           />
 
