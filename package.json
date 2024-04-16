@@ -15,9 +15,9 @@
   },
   "dependencies": {
     "@bugsnag/expo": "^50.0.0",
-    "@dev-plugins/async-storage": "^0.0.1",
-    "@dev-plugins/react-navigation": "^0.0.5",
-    "@dev-plugins/react-query": "^0.0.5",
+    "@dev-plugins/async-storage": "^0.0.2",
+    "@dev-plugins/react-navigation": "^0.0.6",
+    "@dev-plugins/react-query": "^0.0.6",
     "@expo/html-elements": "^0.9.1",
     "@gorhom/bottom-sheet": "^4.6.0",
     "@react-native-async-storage/async-storage": "1.21.0",
