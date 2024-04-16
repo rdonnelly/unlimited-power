@@ -24,8 +24,7 @@ export function useCardsQueryKey() {
   const aspectFilters = useAspectFilterStore((state) => state.aspects);
 
   const queryKey = useMemo(() => {
-    // orderBy[expansion][id]=asc&sort[0]=type.sortValue:asc,cardNumber
-    const sort = ['type.sortValue:asc', 'cardNumber'];
+    const sort = ['type.sortValue:asc', 'expansion.id:asc', 'cardNumber:asc'];
 
     const filters = [];
 

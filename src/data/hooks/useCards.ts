@@ -5,7 +5,7 @@ import { type CardsResponse } from '@data/CardsResponse';
 import { useCardsQueryKey } from '@data/hooks/useCardsQueryKey';
 import { useAspectFilterStore } from '@data/stores/useAspectFilterStore';
 
-export const PAGE_SIZE = 100;
+export const PAGE_SIZE = 50;
 
 // @ts-expect-error
 const fetchCards = async ({ pageParam = 1, queryKey }) => {
