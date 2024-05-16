@@ -18,15 +18,15 @@ function CardDetailRulesClarifications({
   const { theme, themeStyles } = useTheme();
   const { width: windowWidth } = useWindowDimensions();
 
-  const deployRulesClarifications = getRulesClarifications(
-    cardAttributes.deployBoxStyled,
-  );
-  const epicActionRulesClarifications = getRulesClarifications(
-    cardAttributes.epicActionStyled,
-  );
-  const textRulesClarifications = getRulesClarifications(
-    cardAttributes.textStyled,
-  );
+  const deployRulesClarifications = cardAttributes.deployBoxStyled
+    ? getRulesClarifications(cardAttributes.deployBoxStyled)
+    : undefined;
+  const epicActionRulesClarifications = cardAttributes.epicActionStyled
+    ? getRulesClarifications(cardAttributes.epicActionStyled)
+    : undefined;
+  const textRulesClarifications = cardAttributes.textStyled
+    ? getRulesClarifications(cardAttributes.textStyled)
+    : undefined;
 
   const tagsStyles = useMemo(() => {
     return {
