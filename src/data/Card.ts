@@ -28,6 +28,8 @@ const BaseCardAttributesSchema = z.object({
   deployBoxStyled: z.nullable(z.string()),
   epicAction: z.nullable(z.string()),
   epicActionStyled: z.nullable(z.string()),
+  rules: z.nullable(z.string()),
+  rulesStyled: z.nullable(z.string()),
   linkHtml: z.string(),
   artist: z.string(),
   hasFoil: z.boolean(),

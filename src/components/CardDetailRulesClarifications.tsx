@@ -1,8 +1,7 @@
 import { A } from '@expo/html-elements';
 import { memo, useMemo } from 'react';
-import { StyleSheet, useWindowDimensions, View } from 'react-native';
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import RenderHtml, { type MixedStyleRecord } from 'react-native-render-html';
-import { getRulesClarifications } from 'src/utils/CardUtils';
 
 import type { CardAttributes } from '@data/Card';
 import { useTheme } from '@hooks/useTheme';
@@ -18,36 +17,12 @@ function CardDetailRulesClarifications({
   const { theme, themeStyles } = useTheme();
   const { width: windowWidth } = useWindowDimensions();
 
-  const deployRulesClarifications = cardAttributes.deployBoxStyled
-    ? getRulesClarifications(cardAttributes.deployBoxStyled)
-    : undefined;
-  const epicActionRulesClarifications = cardAttributes.epicActionStyled
-    ? getRulesClarifications(cardAttributes.epicActionStyled)
-    : undefined;
-  const textRulesClarifications = cardAttributes.textStyled
-    ? getRulesClarifications(cardAttributes.textStyled)
-    : undefined;
-
   const tagsStyles = useMemo(() => {
     return {
       body: {
         color: theme.text,
-        paddingTop: 16,
       },
       p: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginTop: 0,
-        marginHorizontal: 0,
-        marginBottom: 16,
-        padding: 0,
-      },
-      ul: {
-        listStyleType: 'none',
-        margin: 0,
-        padding: 0,
-      },
-      li: {
         marginTop: 0,
         marginHorizontal: 0,
         marginBottom: 16,
@@ -56,11 +31,17 @@ function CardDetailRulesClarifications({
     } satisfies MixedStyleRecord;
   }, [theme]);
 
-  if (
-    !deployRulesClarifications &&
-    !epicActionRulesClarifications &&
-    !textRulesClarifications
-  ) {
+  const rulesStyled = cardAttributes.rulesStyled
+    ?.replace('\n', '')
+    .replaceAll('</td><td>', ': ')
+    .replaceAll('<td>', '<p>')
+    .replaceAll('</td>', '</p>')
+    .replaceAll(/<\/?tr>|<\/?tbody>|<\/?table>/g, '')
+    .replaceAll('<figure class="table">', '')
+    .replaceAll('</figure>', '')
+    .trim();
+
+  if (!rulesStyled) {
     return null;
   }
 
@@ -77,27 +58,12 @@ function CardDetailRulesClarifications({
           },
         ]}
       >
-        {deployRulesClarifications ? (
-          <RenderHtml
-            contentWidth={windowWidth - 32}
-            source={{ html: deployRulesClarifications }}
-            tagsStyles={tagsStyles}
-          />
-        ) : null}
-        {epicActionRulesClarifications ? (
-          <RenderHtml
-            contentWidth={windowWidth - 32}
-            source={{ html: epicActionRulesClarifications }}
-            tagsStyles={tagsStyles}
-          />
-        ) : null}
-        {textRulesClarifications ? (
-          <RenderHtml
-            contentWidth={windowWidth - 32}
-            source={{ html: textRulesClarifications }}
-            tagsStyles={tagsStyles}
-          />
-        ) : null}
+        <Text style={styles.heading}>Rules Clarifications:</Text>
+        <RenderHtml
+          contentWidth={windowWidth - 32}
+          source={{ html: rulesStyled }}
+          tagsStyles={tagsStyles}
+        />
         <View style={styles.credit}>
           <A
             href={`https://starwarsunlimited.com/cards?cid=${cardAttributes.cardUid}`}
@@ -126,6 +92,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
     paddingHorizontal: 16,
+    paddingTop: 16,
+  },
+  heading: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 16,
   },
   credit: {
     alignSelf: 'flex-end',

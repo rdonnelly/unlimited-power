@@ -10,7 +10,7 @@ import { useCardsQueryKey } from '@data/hooks/useCardsQueryKey';
 
 const fetchCard = async (id: number) => {
   const response = await fetch(
-    `https://admin.starwarsunlimited.com/api/cards/${id}`,
+    `https://admin.starwarsunlimited.com/api/card/details/${id}`,
   );
 
   if (!response.ok) {
