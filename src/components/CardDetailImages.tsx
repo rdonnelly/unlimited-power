@@ -58,7 +58,7 @@ export function CardDetailImages({
 
   const selectedCardAttributes = useMemo(() => {
     const variantIndex = variantKey
-      ? variants[variantKey] ?? undefined
+      ? (variants[variantKey] ?? undefined)
       : undefined;
 
     if (typeof variantIndex === 'number' && cardAttributes.variants) {
