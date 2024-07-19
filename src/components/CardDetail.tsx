@@ -5,7 +5,7 @@ import { CardDetailImages } from '@components/CardDetailImages';
 import { CardDetailLinks } from '@components/CardDetailLinks';
 import { CardDetailRulesClarifications } from '@components/CardDetailRulesClarifications';
 import { Error } from '@components/Error';
-import { useCard } from '@data/hooks/useCard';
+import { useCardDetails } from '@data/hooks/useCardDetails';
 import { useTheme } from '@hooks/useTheme';
 
 type CardDetailProps = {
@@ -14,7 +14,7 @@ type CardDetailProps = {
 
 function CardDetail({ id }: CardDetailProps) {
   const { theme } = useTheme();
-  const { data, isLoading, isError, isFetching, refetch } = useCard(id);
+  const { data, isLoading, isError, isFetching, refetch } = useCardDetails(id);
 
   if (isError) {
     return <Error labelPrimary="Retry" onPrimary={() => refetch()} />;

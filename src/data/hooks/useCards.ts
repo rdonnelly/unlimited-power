@@ -30,7 +30,7 @@ const fetchCards = async ({ pageParam = 1, queryKey }) => {
   });
 
   const response = await fetch(
-    `https://admin.starwarsunlimited.com/api/cards?locale=en&${query}`,
+    `https://admin.starwarsunlimited.com/api/card-list?locale=en&${query}`,
   );
 
   if (!response.ok) {

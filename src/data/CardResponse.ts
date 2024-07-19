@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { CardSchema } from '@data/Card';
+import { CardAttributesSchema, CardSchema } from '@data/Card';
 
 export const PaginationSchema = z.object({
   page: z.number(),
@@ -21,3 +21,10 @@ export const CardResponseSchema = z.object({
   meta: CardResponseMetaSchema,
 });
 export type CardResponse = z.infer<typeof CardResponseSchema>;
+
+export const CardPrintingsResponseSchema = z.object({
+  data: z.object({
+    original: CardAttributesSchema,
+  }),
+});
+export type CardPrintingsResponse = z.infer<typeof CardPrintingsResponseSchema>;
