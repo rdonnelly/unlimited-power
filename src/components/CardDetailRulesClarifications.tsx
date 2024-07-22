@@ -58,7 +58,9 @@ function CardDetailRulesClarifications({
           },
         ]}
       >
-        <Text style={styles.heading}>Rules Clarifications:</Text>
+        <Text style={[styles.heading, themeStyles.color]}>
+          Rules Clarifications:
+        </Text>
         <RenderHtml
           contentWidth={windowWidth - 32}
           source={{ html: rulesStyled }}
