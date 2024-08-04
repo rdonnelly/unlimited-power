@@ -76,10 +76,12 @@ export const CardListItem = ({
                 {card.attributes.arenas.data.length
                   ? `${card.attributes.arenas.data
                       .map((arena) => arena.attributes.name)
-                      .join(', ')} ${card.attributes.type.data.attributes.name}`
-                  : card.attributes.type.data.attributes.name}
+                      .join(', ')}`
+                  : null}
+                {card.attributes.type.data?.attributes.name}
                 <Text>{' · '}</Text>
                 {card.attributes.cost &&
+                card.attributes.type.data &&
                 !['Leader', 'Leader Unit'].includes(
                   card.attributes.type.data.attributes.name,
                 ) ? (

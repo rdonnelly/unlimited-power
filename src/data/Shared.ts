@@ -81,12 +81,14 @@ export const RarityAttributeSchema = z.object({
 export type RarityAttribute = z.infer<typeof RarityAttributeSchema>;
 
 export const TypeAttributeSchema = z.object({
-  data: z.object({
-    id: z.number(),
-    attributes: AttributeSchema.extend({
-      name: TypeEnum,
+  data: z.nullable(
+    z.object({
+      id: z.number(),
+      attributes: AttributeSchema.extend({
+        name: TypeEnum,
+      }),
     }),
-  }),
+  ),
 });
 export type TypeAttribute = z.infer<typeof TypeAttributeSchema>;
 

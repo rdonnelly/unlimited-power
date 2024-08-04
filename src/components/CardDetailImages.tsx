@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { CardDetailImage } from '@components/CardDetailImage';
 import { Chips } from '@components/Chips';
@@ -144,7 +144,6 @@ export function CardDetailImages({
             <CardDetailImage {...cardImageProps} />
           ))}
         </View>
-        {cardAttributes.hasFoil ? <Text>Has foil!</Text> : null}
       </View>
     </View>
   );
