@@ -76,7 +76,7 @@ export const CardListItem = ({
                 {card.attributes.arenas.data.length
                   ? `${card.attributes.arenas.data
                       .map((arena) => arena.attributes.name)
-                      .join(', ')}`
+                      .join(', ')} `
                   : null}
                 {card.attributes.type.data?.attributes.name}
                 <Text>{' · '}</Text>
