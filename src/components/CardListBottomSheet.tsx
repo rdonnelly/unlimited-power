@@ -105,6 +105,7 @@ export function CardListBottomSheet({
       keyboardBehavior="interactive"
       keyboardBlurBehavior="none"
       android_keyboardInputMode="adjustResize"
+      enableDynamicSizing={false}
     >
       <View style={styles.container}>
         <BottomSheetTextInput
