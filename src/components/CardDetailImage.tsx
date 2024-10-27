@@ -66,15 +66,18 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
   }, [imageUrl]);
 
   const scale = useSharedValue(1);
-  const focalX = useSharedValue(0);
-  const focalY = useSharedValue(0);
+  const isZooming = useSharedValue(false);
+  const focal = useSharedValue({ x: 0, y: 0 });
+  const offset = useSharedValue({ x: 0, y: 0 });
 
   const longPressGesture = Gesture.LongPress()
     .onBegin(() => {
-      scale.value = withTiming(1.1, {
+      scale.value = withTiming(1.05, {
         duration: 800,
         easing: Easing.bezier(0.31, 0.04, 0.03, 1.04),
       });
+
+      focal.value = { x: width / 2, y: height / 2 };
     })
     .onStart(() => {
       if (sharingIsAvailable) {
@@ -83,36 +86,77 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
     })
     .onFinalize(() => {
       scale.value = withTiming(1, {
-        duration: 250,
-        easing: Easing.bezier(0.82, 0.06, 0.42, 1.01),
+        duration: 800,
+        easing: Easing.out(Easing.exp),
       });
     });
 
-  const pinchGesture = Gesture.Pinch()
-    .onStart((event) => {
-      focalX.value = event.focalX;
-      focalY.value = event.focalY;
-    })
-    .onUpdate((event) => {
-      scale.value = clamp(event.scale, 1, 4);
-
-      // adjust the focal point, but move it slower
-      focalX.value =
-        focalX.value + (1 / (scale.value * 2)) * (event.focalX - focalX.value);
-      focalY.value =
-        focalY.value + (1 / (scale.value * 2)) * (event.focalY - focalY.value);
-    })
-    .onEnd(() => {
-      scale.value = 1;
-      focalX.value = 0;
-      focalY.value = 0;
+  const panGesture = Gesture.Pan()
+    .averageTouches(true)
+    .onUpdate((e) => {
+      if (isZooming.value) {
+        offset.value = {
+          x: e.translationX,
+          y: e.translationY,
+        };
+      }
     });
 
-  const composedGesture = Gesture.Race(pinchGesture, longPressGesture);
+  const pinchGesture = Gesture.Pinch()
+    .onStart((e) => {
+      isZooming.value = true;
+
+      focal.value = {
+        x: e.focalX,
+        y: e.focalY,
+      };
+    })
+    .onUpdate((e) => {
+      scale.value = clamp(e.scale, 0.5, 4);
+    })
+    .onEnd(() => {
+      isZooming.value = false;
+
+      scale.value = withTiming(1, {
+        duration: 400,
+        easing: Easing.out(Easing.exp),
+      });
+
+      offset.value = withTiming(
+        {
+          x: 0,
+          y: 0,
+        },
+        {
+          duration: 400,
+          easing: Easing.out(Easing.exp),
+        },
+      );
+    });
+
+  const composedGesture = Gesture.Race(
+    Gesture.Simultaneous(pinchGesture, panGesture),
+    longPressGesture,
+  );
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    zIndex: scale.value > 1 ? 1 : 0,
+    transform: [
+      // drag
+      { translateX: offset.value.x },
+      { translateY: offset.value.y },
+
+      // zoom
+      { translateX: focal.value.x },
+      { translateY: focal.value.y },
+      { translateX: -width / 2 },
+      { translateY: -height / 2 },
+      { scale: scale.value },
+      { translateX: -focal.value.x },
+      { translateY: -focal.value.y },
+      { translateX: width / 2 },
+      { translateY: height / 2 },
+    ],
+    zIndex: scale.value !== 1 ? 1 : 0,
   }));
 
   if (!imageUrl) {
