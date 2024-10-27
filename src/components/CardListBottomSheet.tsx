@@ -7,6 +7,7 @@ import debounce from 'lodash/debounce';
 import { useCallback, useEffect, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useShallow } from 'zustand/shallow';
 
 import { Chips } from '@components/Chips';
 import { ExpansionNames } from '@data/Expansion';
@@ -44,14 +45,9 @@ export function CardListBottomSheet({
     [insets.bottom],
   );
 
-  useEffect(() => {
-    bottomSheetRef.current?.collapse();
-  }, [bottomSheetRef]);
-
-  const [searchString, updateSearchString] = useSearchFilterStore((state) => [
-    state.searchString,
-    state.update,
-  ]);
+  const [searchString, updateSearchString] = useSearchFilterStore(
+    useShallow((state) => [state.searchString, state.update]),
+  );
 
   const setSearchStringDebounced = useMemo(
     () =>
@@ -76,24 +72,21 @@ export function CardListBottomSheet({
     bottomSheetRef.current?.collapse();
   }, [bottomSheetRef]);
 
-  const [aspectOptions, updateAspect] = useAspectFilterStore((state) => [
-    state.aspects,
-    state.update,
-  ]);
-
-  const [expansionOptions, updateExpansion] = useExpansionFilterStore(
-    (state) => [state.expansions, state.update],
+  const [aspectOptions, updateAspect] = useAspectFilterStore(
+    useShallow((state) => [state.aspects, state.update]),
   );
 
-  const [rarityOptions, updateRarity] = useRarityFilterStore((state) => [
-    state.rarities,
-    state.update,
-  ]);
+  const [expansionOptions, updateExpansion] = useExpansionFilterStore(
+    useShallow((state) => [state.expansions, state.update]),
+  );
 
-  const [typeOptions, updateType] = useTypeFilterStore((state) => [
-    state.types,
-    state.update,
-  ]);
+  const [rarityOptions, updateRarity] = useRarityFilterStore(
+    useShallow((state) => [state.rarities, state.update]),
+  );
+
+  const [typeOptions, updateType] = useTypeFilterStore(
+    useShallow((state) => [state.types, state.update]),
+  );
 
   return (
     <BottomSheet
