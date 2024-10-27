@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     paddingTop: 16,
+    zIndex: 1,
   },
   activity: {
     bottom: 24,

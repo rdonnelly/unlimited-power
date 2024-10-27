@@ -4,8 +4,13 @@ import { Image } from 'expo-image';
 import * as Sharing from 'expo-sharing';
 import { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
+  clamp,
   Easing,
+  runOnJS,
+  useAnimatedStyle,
+  useReducedMotion,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
@@ -25,6 +30,8 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
   const imageUrl = art?.data?.attributes.url;
+
+  const reducedMotion = useReducedMotion();
 
   const [sharingIsAvailable, setSharingIsAvailable] = useState(false);
 
@@ -59,34 +66,70 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
   }, [imageUrl]);
 
   const scale = useSharedValue(1);
+  const focalX = useSharedValue(0);
+  const focalY = useSharedValue(0);
 
-  const handlePressIn = () => {
-    scale.value = withTiming(1.1, { duration: 1000, easing: Easing.circle });
-  };
+  const longPressGesture = Gesture.LongPress()
+    .onBegin(() => {
+      scale.value = withTiming(1.1, {
+        duration: 800,
+        easing: Easing.bezier(0.31, 0.04, 0.03, 1.04),
+      });
+    })
+    .onStart(() => {
+      if (sharingIsAvailable) {
+        runOnJS(handleLongPress)();
+      }
+    })
+    .onFinalize(() => {
+      scale.value = withTiming(1, {
+        duration: 250,
+        easing: Easing.bezier(0.82, 0.06, 0.42, 1.01),
+      });
+    });
 
-  const handlePressOut = () => {
-    scale.value = withTiming(1);
-  };
+  const pinchGesture = Gesture.Pinch()
+    .onStart((event) => {
+      focalX.value = event.focalX;
+      focalY.value = event.focalY;
+    })
+    .onUpdate((event) => {
+      scale.value = clamp(event.scale, 1, 4);
+
+      // adjust the focal point, but move it slower
+      focalX.value =
+        focalX.value + (1 / (scale.value * 2)) * (event.focalX - focalX.value);
+      focalY.value =
+        focalY.value + (1 / (scale.value * 2)) * (event.focalY - focalY.value);
+    })
+    .onEnd(() => {
+      scale.value = 1;
+      focalX.value = 0;
+      focalY.value = 0;
+    });
+
+  const composedGesture = Gesture.Race(pinchGesture, longPressGesture);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    zIndex: scale.value > 1 ? 1 : 0,
+  }));
 
   if (!imageUrl) {
     return null;
   }
 
   return (
-    <AnimatedPressable
-      onLongPress={() => sharingIsAvailable && handleLongPress()}
-      delayLongPress={400}
-      onPressIn={handlePressIn}
-      onPressOut={handlePressOut}
-      style={{ transform: [{ scale }] }}
-    >
-      <Image
-        style={[styles.image, { height, width }]}
-        source={`${imageUrl}`}
-        placeholder={blurhash}
-        contentFit="contain"
-      />
-    </AnimatedPressable>
+    <GestureDetector gesture={composedGesture}>
+      <AnimatedPressable style={[!reducedMotion && animatedStyle]}>
+        <Image
+          style={[styles.image, { height, width }]}
+          source={`${imageUrl}`}
+          placeholder={blurhash}
+          contentFit="contain"
+        />
+      </AnimatedPressable>
+    </GestureDetector>
   );
 }
 
