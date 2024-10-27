@@ -1,8 +1,9 @@
 import debounce from 'lodash/debounce';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { Chip } from '@components/Chip';
+import { PressableScale } from '@components/PressableScale';
 import { useTheme } from '@hooks/useTheme';
 
 type ChipsProps<T> = {
@@ -108,7 +109,7 @@ export function Chips<T>({
         <Text style={[styles.headingText, themeStyles.color]}>{heading}</Text>
         {showHeaderControls ? (
           <View style={styles.headingControls}>
-            <Pressable onPress={() => handlePressAll && handlePressAll()}>
+            <PressableScale onPress={() => handlePressAll && handlePressAll()}>
               {({ pressed }) => (
                 <View
                   style={[
@@ -121,8 +122,10 @@ export function Chips<T>({
                   <Text style={[themeStyles.chipText]}>All</Text>
                 </View>
               )}
-            </Pressable>
-            <Pressable onPress={() => handlePressNone && handlePressNone()}>
+            </PressableScale>
+            <PressableScale
+              onPress={() => handlePressNone && handlePressNone()}
+            >
               {({ pressed }) => (
                 <View
                   style={[
@@ -135,7 +138,7 @@ export function Chips<T>({
                   <Text style={[themeStyles.chipText]}>None</Text>
                 </View>
               )}
-            </Pressable>
+            </PressableScale>
           </View>
         ) : null}
       </View>

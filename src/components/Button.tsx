@@ -1,6 +1,7 @@
 import type { PropsWithChildren } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
+import { PressableScale } from '@components/PressableScale';
 import { useTheme } from '@hooks/useTheme';
 
 export type ButtonProps = {
@@ -20,7 +21,7 @@ export function Button({
   const { themeStyles } = useTheme();
 
   return (
-    <Pressable
+    <PressableScale
       style={styles.container}
       onPress={() => handlePress && handlePress()}
       onLongPress={() => handleLongPress && handleLongPress()}
@@ -49,7 +50,7 @@ export function Button({
           </Text>
         </View>
       )}
-    </Pressable>
+    </PressableScale>
   );
 }
 

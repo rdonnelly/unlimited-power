@@ -1,7 +1,8 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import * as Haptics from 'expo-haptics';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
+import { PressableScale } from '@components/PressableScale';
 import { useTheme } from '@hooks/useTheme';
 
 type ChipProps<T> = {
@@ -22,7 +23,7 @@ export function Chip<T>({
   const { theme, themeStyles } = useTheme();
 
   return (
-    <Pressable
+    <PressableScale
       style={styles.container}
       onPress={() => {
         Haptics.selectionAsync();
@@ -63,7 +64,7 @@ export function Chip<T>({
           </Text>
         </View>
       )}
-    </Pressable>
+    </PressableScale>
   );
 }
 
