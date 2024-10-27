@@ -11,7 +11,8 @@
     "build:ios:dev": "npx eas-cli@latest build --platform ios --profile development",
     "build:ios:simulator": "npx eas-cli@latest build --platform ios --profile development-simulator",
     "push:android": "npx eas-cli@latest build --platform android --auto-submit",
-    "push:ios": "npx eas-cli@latest build --platform ios --auto-submit"
+    "push:ios": "npx eas-cli@latest build --platform ios --auto-submit",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@bugsnag/expo": "^51.0.0",
@@ -64,6 +65,7 @@
     "@types/react": "~18.2.45",
     "eslint": "^8.56.0",
     "eslint-config-universe": "^12.0.0",
+    "patch-package": "^8.0.0",
     "prettier": "^3.3.3",
     "typescript": "~5.3.3"
   },
