@@ -12,7 +12,7 @@ import {
   VariantAttributeSchema,
 } from '@data/Shared';
 
-const BaseCardAttributesSchema = z.object({
+export const BaseCardAttributesSchema = z.object({
   cardNumber: z.number(),
   title: z.string(),
   subtitle: z.nullable(z.string()),
@@ -53,8 +53,6 @@ const BaseCardAttributesSchema = z.object({
   artFrontHorizontal: z.nullable(z.boolean()),
   artThumbnail: ArtThumbnailSchema,
 
-  variantTypes: z.nullable(VariantAttributeSchema),
-
   // probably don't need these for now
   // cardId: z.nullable(z.string()),
   // cardCount: z.number(),
@@ -64,6 +62,7 @@ const BaseCardAttributesSchema = z.object({
   // locale: LocaleSchema,
   // localizations: LocalizationsSchema,
 });
+export type BaseCardAttributes = z.infer<typeof BaseCardAttributesSchema>;
 
 export const CardAttributesSchema = BaseCardAttributesSchema.extend({
   variants: z.optional(
@@ -85,6 +84,8 @@ export const CardAttributesSchema = BaseCardAttributesSchema.extend({
         ),
       ),
   ),
+
+  variantTypes: z.nullable(VariantAttributeSchema),
 });
 export type CardAttributes = z.infer<typeof CardAttributesSchema>;
 

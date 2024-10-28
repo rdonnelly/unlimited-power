@@ -14,7 +14,7 @@ type CardDetailProps = {
 
 function CardDetail({ id }: CardDetailProps) {
   const { theme } = useTheme();
-  const { data, isLoading, isError, isFetching, refetch } = useCardDetails(id);
+  const { data, isLoading, isError, refetch } = useCardDetails(id);
 
   if (isError) {
     return <Error labelPrimary="Retry" onPrimary={() => refetch()} />;
@@ -33,10 +33,7 @@ function CardDetail({ id }: CardDetailProps) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <CardDetailImages
-          cardAttributes={data.attributes}
-          isFetching={isFetching}
-        />
+        <CardDetailImages cardId={id} />
       </View>
       <CardDetailRulesClarifications cardAttributes={data.attributes} />
       <CardDetailLinks cardAttributes={data.attributes} />

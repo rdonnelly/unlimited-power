@@ -19,7 +19,7 @@ const fetchCardPrintings = async (id: number) => {
 
   const body = (await response.json()) as CardPrintingsResponse;
 
-  return body.data.original;
+  return body.data;
 };
 
 export function useCardPrintings(cardId: number) {
@@ -27,7 +27,7 @@ export function useCardPrintings(cardId: number) {
 
   const queryClient = useQueryClient();
   return useQuery({
-    queryKey: ['card', cardId],
+    queryKey: ['card-printing', cardId],
     queryFn: () => fetchCardPrintings(cardId),
     enabled: !!cardId,
     placeholderData: () => {
@@ -38,7 +38,15 @@ export function useCardPrintings(cardId: number) {
         .map((page) => page.data.find((card) => card.id === cardId))
         .find(Boolean);
 
-      return card?.attributes;
+      return card?.attributes
+        ? {
+            original: {
+              ...card.attributes,
+              id: card.id,
+              variantTypes: null,
+            },
+          }
+        : undefined;
     },
   });
 }

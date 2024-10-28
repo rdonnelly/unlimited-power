@@ -1,144 +1,91 @@
 import { useCallback, useMemo, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { CardDetailImage } from '@components/CardDetailImage';
 import { Chips } from '@components/Chips';
-import type { CardAttributes } from '@data/Card';
+import { useCardDetails } from '@data/hooks/useCardDetails';
+import { useCardPrintings } from '@data/hooks/useCardPrintings';
 import { useCardImages } from '@hooks/useCardImages';
 import { useTheme } from '@hooks/useTheme';
 
 export type CardDetailImagesProps = {
-  cardAttributes: CardAttributes;
-  isFetching: boolean;
+  cardId: number;
 };
 
-export function CardDetailImages({
-  cardAttributes,
-  isFetching,
-}: CardDetailImagesProps) {
-  const { themeStyles } = useTheme();
+export function CardDetailImages({ cardId }: CardDetailImagesProps) {
+  const { theme, themeStyles } = useTheme();
+
+  const { data: printingsData, isFetching: isFetchingPrintings } =
+    useCardPrintings(cardId);
+
+  const [variantKey, setVariantKey] = useState<string>('Standard');
 
   const variants = useMemo(() => {
-    const v: Record<string, number | null> = { Original: null };
+    const v: Record<string, number> = {};
 
-    if (!isFetching && cardAttributes.variants) {
-      let variantData = [];
+    if (printingsData?.original) {
+      v.Standard = cardId;
+    }
 
-      if (Array.isArray(cardAttributes.variants)) {
-        variantData = cardAttributes.variants;
-      } else {
-        variantData = cardAttributes.variants.data;
-      }
-
-      variantData.map((variantCardAttributes, i) => {
-        switch (true) {
-          case variantCardAttributes.attributes.hyperspace:
-            v.Hyperspace = i;
-            break;
-          case variantCardAttributes.attributes.showcase:
-            v.Showcase = i;
-            break;
-          default:
-            if (
-              variantCardAttributes.attributes.variantTypes?.data[0]?.attributes
-                .name
-            ) {
-              v[
-                variantCardAttributes.attributes.variantTypes?.data[0].attributes.name
-              ] = i;
-            }
+    if (!isFetchingPrintings && printingsData?.printings) {
+      printingsData.printings.forEach((printing) => {
+        const variantName = printing.variantTypes?.[0]?.name;
+        if (variantName && !variantName.endsWith('Foil')) {
+          v[variantName] = printing.id;
         }
       });
     }
 
     return v;
-  }, [cardAttributes, isFetching]);
+  }, [
+    cardId,
+    printingsData?.original,
+    printingsData?.printings,
+    isFetchingPrintings,
+  ]);
 
-  const [variantKey, setVariantKey] = useState<string>('Original');
-
-  const selectedCardAttributes = useMemo(() => {
-    const variantIndex = variantKey
-      ? (variants[variantKey] ?? undefined)
-      : undefined;
-
-    if (typeof variantIndex === 'number' && cardAttributes.variants) {
-      if (Array.isArray(cardAttributes.variants)) {
-        return (
-          cardAttributes.variants[variantIndex]?.attributes ?? cardAttributes
-        );
-      } else {
-        return (
-          cardAttributes.variants.data[variantIndex]?.attributes ??
-          cardAttributes
-        );
-      }
-    }
-
-    return cardAttributes;
-  }, [cardAttributes, variants, variantKey]);
+  const { data: selectedCard } = useCardDetails(variants[variantKey] || cardId);
 
   const variantSelections = useMemo(() => {
     return [variantKey];
   }, [variantKey]);
 
   const variantOptions = useMemo(() => {
-    const { Original, Hyperspace, Showcase, ...otherVariants } = variants;
-
-    const options = [
-      {
-        value: 'Original',
-        label: 'Original',
-      },
-      ...(Hyperspace !== undefined
-        ? [
-            {
-              value: 'Hyperspace',
-              label: 'Hyperspace',
-            },
-          ]
-        : []),
-      ...(Showcase !== undefined
-        ? [
-            {
-              value: 'Showcase',
-              label: 'Showcase',
-            },
-          ]
-        : []),
-      ...Object.keys(otherVariants).map((value) => ({
-        value,
-        label: value,
-      })),
-    ];
+    const options = Object.keys(variants).map((key) => ({
+      label: key,
+      value: key,
+    }));
 
     return options;
   }, [variants]);
 
   const handleVariantSelection = useCallback((selection: string[]) => {
     const selectedVariantKey = selection.at(0);
+
     selectedVariantKey && setVariantKey(selectedVariantKey);
   }, []);
 
-  const cardImages = useCardImages(selectedCardAttributes);
-
-  if (
-    !selectedCardAttributes ||
-    (!selectedCardAttributes.artFront.data?.attributes &&
-      !selectedCardAttributes.artBack.data?.attributes)
-  ) {
-    return null;
-  }
+  const cardImages = useCardImages(selectedCard?.attributes);
 
   return (
     <View style={styles.container}>
       <View style={[styles.inner, themeStyles.background200]}>
-        <Chips
-          heading="Variants"
-          options={variantOptions}
-          selections={variantSelections}
-          onChange={handleVariantSelection}
-          single
-        />
+        <View style={styles.variantSelector}>
+          <View style={styles.variantSelectorChips}>
+            <Chips
+              heading="Variants"
+              options={variantOptions}
+              selections={variantSelections}
+              onChange={handleVariantSelection}
+              single
+            />
+          </View>
+          {isFetchingPrintings && (
+            <View style={styles.variantLoading}>
+              <ActivityIndicator color={theme.tintSubdued} />
+            </View>
+          )}
+        </View>
         <View style={styles.images}>
           {cardImages.map((cardImageProps) => (
             <CardDetailImage {...cardImageProps} />
@@ -167,8 +114,13 @@ const styles = StyleSheet.create({
   },
   variantSelector: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    width: '100%',
+    alignItems: 'flex-end',
+  },
+  variantSelectorChips: {
+    flex: 1,
+  },
+  variantLoading: {
+    paddingBottom: 24,
   },
   images: {
     alignItems: 'center',

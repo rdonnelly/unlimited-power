@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-import { CardAttributesSchema, CardSchema } from '@data/Card';
+import { BaseCardAttributesSchema, CardSchema } from '@data/Card';
 
 export const PaginationSchema = z.object({
   page: z.number(),
@@ -22,9 +22,23 @@ export const CardResponseSchema = z.object({
 });
 export type CardResponse = z.infer<typeof CardResponseSchema>;
 
+const CardPrintingAttributesSchema = BaseCardAttributesSchema.extend({
+  id: z.number(),
+  variantTypes: z.nullable(
+    z.array(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        // lots of other fields
+      }),
+    ),
+  ),
+});
+
 export const CardPrintingsResponseSchema = z.object({
   data: z.object({
-    original: CardAttributesSchema,
+    original: CardPrintingAttributesSchema,
+    printings: z.optional(z.array(CardPrintingAttributesSchema)),
   }),
 });
 export type CardPrintingsResponse = z.infer<typeof CardPrintingsResponseSchema>;

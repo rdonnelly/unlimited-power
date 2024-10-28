@@ -159,16 +159,12 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
     zIndex: scale.value !== 1 ? 1 : 0,
   }));
 
-  if (!imageUrl) {
-    return null;
-  }
-
   return (
     <GestureDetector gesture={composedGesture}>
       <AnimatedPressable style={[!reducedMotion && animatedStyle]}>
         <Image
           style={[styles.image, { height, width }]}
-          source={`${imageUrl}`}
+          source={imageUrl}
           placeholder={blurhash}
           contentFit="contain"
         />

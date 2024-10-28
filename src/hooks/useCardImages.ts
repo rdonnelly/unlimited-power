@@ -1,10 +1,10 @@
 import { useWindowDimensions } from 'react-native';
 
 import type { CardDetailImageProps } from '@components/CardDetailImage';
-import type { CardAttributes } from '@data/Card';
+import type { BaseCardAttributes } from '@data/Card';
 
 export function useCardImages(
-  cardAttributes?: CardAttributes,
+  cardAttributes?: BaseCardAttributes,
 ): CardDetailImageProps[] {
   const { width: windowWidth } = useWindowDimensions();
 
