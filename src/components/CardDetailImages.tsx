@@ -10,21 +10,25 @@ import { useTheme } from '@hooks/useTheme';
 
 export type CardDetailImagesProps = {
   cardId: number;
+  variantName: string;
 };
 
-export function CardDetailImages({ cardId }: CardDetailImagesProps) {
+export function CardDetailImages({
+  cardId,
+  variantName,
+}: CardDetailImagesProps) {
   const { theme, themeStyles } = useTheme();
 
   const { data: printingsData, isFetching: isFetchingPrintings } =
     useCardPrintings(cardId);
 
-  const [variantKey, setVariantKey] = useState<string>('Standard');
+  const [variantKey, setVariantKey] = useState<string>(variantName);
 
   const variants = useMemo(() => {
     const v: Record<string, number> = {};
 
     if (printingsData?.original) {
-      v.Standard = cardId;
+      v.Standard = printingsData?.original.id;
     }
 
     if (!isFetchingPrintings && printingsData?.printings) {
@@ -37,12 +41,7 @@ export function CardDetailImages({ cardId }: CardDetailImagesProps) {
     }
 
     return v;
-  }, [
-    cardId,
-    printingsData?.original,
-    printingsData?.printings,
-    isFetchingPrintings,
-  ]);
+  }, [printingsData?.original, printingsData?.printings, isFetchingPrintings]);
 
   const { data: selectedCard } = useCardDetails(variants[variantKey] || cardId);
 

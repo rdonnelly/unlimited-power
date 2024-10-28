@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { CardDetailImages } from '@components/CardDetailImages';
@@ -15,6 +15,12 @@ type CardDetailProps = {
 function CardDetail({ id }: CardDetailProps) {
   const { theme } = useTheme();
   const { data, isLoading, isError, refetch } = useCardDetails(id);
+
+  const variantName = useMemo(() => {
+    return (
+      data?.attributes.variantTypes?.data[0]?.attributes.name || 'Standard'
+    );
+  }, [data]);
 
   if (isError) {
     return <Error labelPrimary="Retry" onPrimary={() => refetch()} />;
@@ -33,7 +39,7 @@ function CardDetail({ id }: CardDetailProps) {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <CardDetailImages cardId={id} />
+        <CardDetailImages cardId={id} variantName={variantName} />
       </View>
       <CardDetailRulesClarifications cardAttributes={data.attributes} />
       <CardDetailLinks cardAttributes={data.attributes} />
