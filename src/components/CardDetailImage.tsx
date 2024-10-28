@@ -92,6 +92,7 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
     });
 
   const panGesture = Gesture.Pan()
+    .minPointers(2)
     .averageTouches(true)
     .onUpdate((e) => {
       if (isZooming.value) {
@@ -103,9 +104,10 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
     });
 
   const pinchGesture = Gesture.Pinch()
-    .onStart((e) => {
+    .onBegin(() => {
       isZooming.value = true;
-
+    })
+    .onStart((e) => {
       focal.value = {
         x: e.focalX,
         y: e.focalY,
@@ -115,8 +117,6 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
       scale.value = clamp(e.scale, 0.5, 4);
     })
     .onEnd(() => {
-      isZooming.value = false;
-
       scale.value = withTiming(1, {
         duration: 400,
         easing: Easing.out(Easing.exp),
@@ -132,6 +132,9 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
           easing: Easing.out(Easing.exp),
         },
       );
+    })
+    .onFinalize(() => {
+      isZooming.value = false;
     });
 
   const composedGesture = Gesture.Race(
