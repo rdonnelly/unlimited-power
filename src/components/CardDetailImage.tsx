@@ -108,10 +108,12 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
       isZooming.value = true;
     })
     .onStart((e) => {
-      focal.value = {
-        x: e.focalX,
-        y: e.focalY,
-      };
+      if (!isNaN(e.focalX) && !isNaN(e.focalY)) {
+        focal.value = {
+          x: e.focalX,
+          y: e.focalY,
+        };
+      }
     })
     .onUpdate((e) => {
       scale.value = clamp(e.scale, 0.5, 4);
@@ -149,15 +151,15 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
       { translateY: offset.value.y },
 
       // zoom
-      { translateX: focal.value.x },
-      { translateY: focal.value.y },
-      { translateX: -width / 2 },
-      { translateY: -height / 2 },
-      { scale: scale.value },
-      { translateX: -focal.value.x },
-      { translateY: -focal.value.y },
-      { translateX: width / 2 },
-      { translateY: height / 2 },
+      // { translateX: focal.value.x },
+      // { translateY: focal.value.y },
+      // { translateX: -width / 2 },
+      // { translateY: -height / 2 },
+      // { scale: scale.value },
+      // { translateX: -focal.value.x },
+      // { translateY: -focal.value.y },
+      // { translateX: width / 2 },
+      // { translateY: height / 2 },
     ],
     zIndex: scale.value !== 1 ? 1 : 0,
   }));
