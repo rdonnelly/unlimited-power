@@ -1,8 +1,7 @@
 import * as Application from 'expo-application';
-import * as Linking from 'expo-linking';
-import { useCallback } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { openURL } from 'src/utils/OpenURL';
 
 import { LinkButton } from '@components/LinkButton';
 import { useTheme } from '@hooks/useTheme';
@@ -11,16 +10,6 @@ import type { InfoScreenProps } from '@navigation/types';
 export function InfoScreen({ navigation }: InfoScreenProps) {
   const { themeStyles } = useTheme();
   const insets = useSafeAreaInsets();
-
-  const openUrl = useCallback((url: string) => {
-    try {
-      Linking.openURL(url);
-    } catch {
-      Alert.alert('Karabast!', 'The URL could not be opened, sorry!', [
-        { text: 'OK' },
-      ]);
-    }
-  }, []);
 
   return (
     <View
@@ -38,36 +27,36 @@ export function InfoScreen({ navigation }: InfoScreenProps) {
       <View style={styles.links}>
         <LinkButton
           size="small"
-          onPress={() => openUrl('https://starwarsunlimited.com/')}
+          onPress={() => openURL('https://starwarsunlimited.com/')}
         >
           Star Wars: Unlimited Website
         </LinkButton>
         <LinkButton
           size="small"
           onPress={() =>
-            openUrl('https://starwarsunlimited.com/how-to-play?chapter=rules')
+            openURL('https://starwarsunlimited.com/how-to-play?chapter=rules')
           }
         >
           Rules and How to Play
         </LinkButton>
         <LinkButton
           size="small"
-          onPress={() => openUrl('https://starwarsunlimited.com/cards')}
+          onPress={() => openURL('https://starwarsunlimited.com/cards')}
         >
           Official Card Database
         </LinkButton>
-        <LinkButton size="small" onPress={() => openUrl('https://swudb.com/')}>
+        <LinkButton size="small" onPress={() => openURL('https://swudb.com/')}>
           SWUDB.com
         </LinkButton>
         <LinkButton
           size="small"
-          onPress={() => openUrl('https://sw-unlimited-db.com')}
+          onPress={() => openURL('https://sw-unlimited-db.com')}
         >
           SW-Unlimited-db.com
         </LinkButton>
         <LinkButton
           size="small"
-          onPress={() => openUrl('https://rdonnelly.com/unlimited-power')}
+          onPress={() => openURL('https://rdonnelly.com/unlimited-power')}
         >
           Unlimited Power Website
         </LinkButton>

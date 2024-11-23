@@ -1,6 +1,6 @@
-import * as Linking from 'expo-linking';
-import { memo, useCallback } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { memo } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { openURL } from 'src/utils/OpenURL';
 
 import { LinkButton } from '@components/LinkButton';
 import type { CardAttributes } from '@data/Card';
@@ -10,22 +10,12 @@ type CardDetailLinksProps = {
 };
 
 function CardDetailLinks({ cardAttributes }: CardDetailLinksProps) {
-  const openUrl = useCallback((url: string) => {
-    try {
-      Linking.openURL(url);
-    } catch {
-      Alert.alert('Karabast!', 'The URL could not be opened, sorry!', [
-        { text: 'OK' },
-      ]);
-    }
-  }, []);
-
   return (
     <View style={styles.container}>
       <LinkButton
         size="small"
         onPress={() =>
-          openUrl(
+          openURL(
             `https://starwarsunlimited.com/cards?cid=${cardAttributes.cardUid}`,
           )
         }
@@ -35,7 +25,7 @@ function CardDetailLinks({ cardAttributes }: CardDetailLinksProps) {
       <LinkButton
         size="small"
         onPress={() =>
-          openUrl(
+          openURL(
             `https://swudb.com/card/${cardAttributes.expansion.data?.attributes.code}/${String(cardAttributes.cardNumber).padStart(3, '0')}/`,
           )
         }
@@ -45,7 +35,7 @@ function CardDetailLinks({ cardAttributes }: CardDetailLinksProps) {
       <LinkButton
         size="small"
         onPress={() =>
-          openUrl(
+          openURL(
             `https://sw-unlimited-db.com/cards/${cardAttributes.expansion.data?.attributes.code.toLowerCase()}/${[cardAttributes.title.toLowerCase().replaceAll(' ', '-'), ...(cardAttributes.subtitle ? [cardAttributes.subtitle.toLowerCase().replaceAll(' ', '-')] : [])].join('-')}`,
           )
         }
