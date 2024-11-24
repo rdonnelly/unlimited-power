@@ -67,7 +67,7 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
 
   const scale = useSharedValue(1);
   const isZooming = useSharedValue(false);
-  const focal = useSharedValue({ x: 0, y: 0 });
+  const focal = useSharedValue({ x: width / 2, y: height / 2 });
   const offset = useSharedValue({ x: 0, y: 0 });
 
   const longPressGesture = Gesture.LongPress()
