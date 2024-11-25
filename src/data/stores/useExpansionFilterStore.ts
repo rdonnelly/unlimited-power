@@ -42,3 +42,10 @@ export const useExpansionFilterStore = create<State & Action>((set) => ({
   selectAll: () => set({ expansions: [...expansionFilterOptions] }),
   selectNone: () => set({ expansions: [] }),
 }));
+
+export const isExpansionActiveSelector = (state: State & Action) => ({
+  isActive: !expansionFilterOptions.every((selection) =>
+    state.expansions.includes(selection),
+  ),
+  reset: state.selectAll,
+});

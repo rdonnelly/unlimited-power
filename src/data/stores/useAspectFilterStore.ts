@@ -38,3 +38,10 @@ export const useAspectFilterStore = create<State & Action>((set) => ({
   selectAll: () => set({ aspects: [...aspectFilterOptions] }),
   selectNone: () => set({ aspects: [] }),
 }));
+
+export const isAspectActiveSelector = (state: State & Action) => ({
+  isActive: !aspectFilterOptions.every((selection) =>
+    state.aspects.includes(selection),
+  ),
+  reset: state.selectAll,
+});

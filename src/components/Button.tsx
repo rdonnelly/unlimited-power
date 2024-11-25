@@ -5,7 +5,7 @@ import { PressableScale } from '@components/PressableScale';
 import { useTheme } from '@hooks/useTheme';
 
 export type ButtonProps = {
-  size?: 'small';
+  size?: 'small' | 'tiny';
   variant?: 'bold';
   onPress?: () => void;
   onLongPress?: () => void;
@@ -32,7 +32,11 @@ export function Button({
             styles.inner,
             themeStyles.buttonContainer,
             themeStyles.buttonBorder,
-            size === 'small' ? styles.inner__small : undefined,
+            size === 'small'
+              ? styles.inner__small
+              : size === 'tiny'
+                ? styles.inner__tiny
+                : undefined,
             variant === 'bold' ? themeStyles.buttonContainerBold : undefined,
             variant === 'bold' ? themeStyles.buttonBorderBold : undefined,
             pressed ? styles.innerPressed : undefined,
@@ -42,7 +46,11 @@ export function Button({
             style={[
               styles.innerText,
               themeStyles.buttonText,
-              size === 'small' ? styles.innerText__small : undefined,
+              size === 'small'
+                ? styles.innerText__small
+                : size === 'tiny'
+                  ? styles.innerText__tiny
+                  : undefined,
               variant === 'bold' ? themeStyles.buttonTextBold : undefined,
             ]}
           >
@@ -67,6 +75,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
+  inner__tiny: {
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+  },
   innerPressed: {
     opacity: 0.5,
   },
@@ -78,5 +91,9 @@ const styles = StyleSheet.create({
   innerText__small: {
     fontSize: 14,
     lineHeight: 20,
+  },
+  innerText__tiny: {
+    fontSize: 12,
+    lineHeight: 16,
   },
 });

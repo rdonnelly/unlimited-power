@@ -20,3 +20,8 @@ export const useSearchFilterStore = create<State & Action>((set) => ({
       searchString: undefined,
     })),
 }));
+
+export const isSearchActiveSelector = (state: State & Action) => ({
+  isActive: state.searchString !== undefined,
+  reset: state.reset,
+});

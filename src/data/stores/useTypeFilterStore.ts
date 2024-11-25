@@ -40,3 +40,10 @@ export const useTypeFilterStore = create<State & Action>((set) => ({
   selectAll: () => set({ types: [...typeFilterOptions] }),
   selectNone: () => set({ types: [] }),
 }));
+
+export const isTypeActiveSelector = (state: State & Action) => ({
+  isActive: !typeFilterOptions.every((selection) =>
+    state.types.includes(selection),
+  ),
+  reset: state.selectAll,
+});

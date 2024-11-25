@@ -1,4 +1,4 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import Entypo from '@expo/vector-icons/Entypo';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-fast-text';
 
@@ -95,8 +95,8 @@ export const CardListItem = ({
             </View>
           </View>
           <CardListAspects card={card.attributes} />
-          <Ionicons
-            name="chevron-forward"
+          <Entypo
+            name="chevron-right"
             size={24}
             color={theme.tintSubdued}
             style={styles.innerChevron}
@@ -150,7 +150,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   innerChevron: {
-    marginRight: -4,
-    width: 16,
+    marginRight: -6,
   },
 });

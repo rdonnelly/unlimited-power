@@ -8,6 +8,8 @@ import { useCards } from '@data/hooks/useCards';
 import { useFilters } from '@hooks/useFilters';
 import { useTheme } from '@hooks/useTheme';
 
+import { Button } from './Button';
+
 type CardListProps = {
   onPressItem: (
     id: number,
@@ -54,10 +56,17 @@ export function CardList({
     collapseBottomSheet();
   }, [collapseBottomSheet]);
 
-  const { reset: resetFilters } = useFilters();
+  const { numFiltersApplied, reset: resetFilters } = useFilters();
 
   if (isError) {
-    return <Error labelPrimary="Retry" onPrimary={() => refetch()} />;
+    return (
+      <Error
+        labelPrimary="Retry"
+        onPrimary={() => refetch()}
+        labelSecondary="Reset Filters"
+        onSecondary={() => resetFilters()}
+      />
+    );
   }
 
   if (isPaused) {
@@ -105,6 +114,16 @@ export function CardList({
 
   return (
     <View style={styles.container}>
+      {numFiltersApplied ? (
+        <View style={[styles.filterBanner, themeStyles.background200]}>
+          <Text style={[styles.filterText, themeStyles.colorSubdued]}>
+            {`${numFiltersApplied} Filter${numFiltersApplied !== 1 ? 's' : ''} Applied`}
+          </Text>
+          <Button size="tiny" onPress={resetFilters}>
+            Clear Filters
+          </Button>
+        </View>
+      ) : null}
       <View style={[styles.listContainer, themeStyles.background0]}>
         <FlashList
           data={cards}
@@ -158,6 +177,21 @@ const styles = StyleSheet.create({
   errorInfoText: {
     fontSize: 16,
     textAlign: 'center',
+  },
+  filterBanner: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    width: '100%',
+  },
+  filterText: {
+    fontSize: 16,
+  },
+  clearFilters: {
+    fontSize: 16,
+    fontWeight: '700',
   },
   listContainer: {
     flex: 1,

@@ -27,9 +27,6 @@ export function useTheme() {
     background400: {
       backgroundColor: theme.background400,
     },
-    primaryBackground100: {
-      backgroundColor: theme.secondary100,
-    },
 
     // COLOR
     color: {

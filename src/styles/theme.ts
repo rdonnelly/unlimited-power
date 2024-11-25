@@ -5,7 +5,6 @@ export const LIGHT_THEME = {
 
   // BRAND
   primary100: colors.purple100,
-  secondary100: colors.teal50,
 
   // BACKGROUND
   background0: colors.white,
@@ -14,6 +13,8 @@ export const LIGHT_THEME = {
   background200: colors.stone200,
   background300: colors.stone300,
   background400: colors.stone400,
+  background500: colors.stone500,
+  background600: colors.stone600,
 
   // TINT
   tint: colors.stone950,
@@ -45,7 +46,6 @@ export const DARK_THEME = {
 
   // BRAND
   primary100: colors.purple900,
-  secondary100: colors.teal900,
 
   // BACKGROUND
   background0: colors.black,
@@ -54,6 +54,8 @@ export const DARK_THEME = {
   background200: colors.stone800,
   background300: colors.stone700,
   background400: colors.stone600,
+  background500: colors.stone500,
+  background600: colors.stone400,
 
   // TINT
   tint: colors.stone50,

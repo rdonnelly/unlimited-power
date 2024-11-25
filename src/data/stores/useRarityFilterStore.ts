@@ -40,3 +40,10 @@ export const useRarityFilterStore = create<State & Action>((set) => ({
   selectAll: () => set({ rarities: [...rarityFilterOptions] }),
   selectNone: () => set({ rarities: [] }),
 }));
+
+export const isRarityActiveSelector = (state: State & Action) => ({
+  isActive: !rarityFilterOptions.every((selection) =>
+    state.rarities.includes(selection),
+  ),
+  reset: state.selectAll,
+});
