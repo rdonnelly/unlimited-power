@@ -87,7 +87,10 @@ export function CardDetailImages({
         </View>
         <View style={styles.images}>
           {cardImages.map((cardImageProps) => (
-            <CardDetailImage {...cardImageProps} />
+            <CardDetailImage
+              key={`card-detail-image-${cardId}-${variantName}`}
+              {...cardImageProps}
+            />
           ))}
         </View>
       </View>
