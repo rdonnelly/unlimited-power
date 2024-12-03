@@ -1,6 +1,6 @@
 import * as FileSystem from 'expo-file-system';
 import * as Haptics from 'expo-haptics';
-import { Image } from 'expo-image';
+import { Image, useImage } from 'expo-image';
 import * as Sharing from 'expo-sharing';
 import { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
@@ -30,6 +30,8 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
   const imageUrl = art?.data?.attributes.url;
+
+  const imageSource = useImage(imageUrl ?? '');
 
   const reducedMotion = useReducedMotion();
 
@@ -169,7 +171,7 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
       <AnimatedPressable style={[!reducedMotion && animatedStyle]}>
         <Image
           style={[styles.image, { height, width }]}
-          source={imageUrl}
+          source={imageSource}
           placeholder={blurhash}
           contentFit="contain"
         />

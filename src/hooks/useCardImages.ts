@@ -35,7 +35,6 @@ export function useCardImages(
       art: cardAttributes.artFront,
       height: frontHeight * ratio,
       width: frontWidth * ratio,
-      key: `card-image-${cardAttributes.cardNumber}-front`,
     });
   }
 
@@ -46,7 +45,6 @@ export function useCardImages(
       art: cardAttributes.artBack,
       height: backHeight * ratio,
       width: backWidth * ratio,
-      key: `card-image-${cardAttributes.cardNumber}-back`,
     });
   }
 
