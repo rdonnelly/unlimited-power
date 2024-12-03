@@ -1,6 +1,5 @@
 import Entypo from '@expo/vector-icons/Entypo';
-import { Pressable, StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-fast-text';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { CardListAspects } from '@components/CardListAspects';
 import { CardListRarity } from '@components/CardListRarity';
@@ -131,6 +130,7 @@ const styles = StyleSheet.create({
   },
   innerDetails: {
     flex: 1,
+    gap: 2,
   },
   innerDetailsTitle: {
     alignItems: 'center',
