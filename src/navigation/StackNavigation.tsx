@@ -98,7 +98,7 @@ export const StackNavigator = () => {
           options={{
             title: '',
             headerTitle: '',
-            headerBackTitleVisible: false,
+            headerBackButtonDisplayMode: 'minimal',
           }}
         />
       </Stack.Group>
