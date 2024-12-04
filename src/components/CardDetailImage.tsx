@@ -1,9 +1,9 @@
 import * as FileSystem from 'expo-file-system';
 import * as Haptics from 'expo-haptics';
-import { Image, useImage } from 'expo-image';
+import { Image } from 'expo-image';
 import * as Sharing from 'expo-sharing';
 import { useCallback, useEffect, useState } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   clamp,
@@ -16,6 +16,7 @@ import Animated, {
 } from 'react-native-reanimated';
 
 import type { Art } from '@data/CardArt';
+import { useTheme } from '@hooks/useTheme';
 
 export type CardDetailImageProps = {
   art?: Art;
@@ -31,7 +32,7 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
   const imageUrl = art?.data?.attributes.url;
 
-  const imageSource = useImage(imageUrl ?? '');
+  const { theme, themeStyles } = useTheme();
 
   const reducedMotion = useReducedMotion();
 
@@ -167,22 +168,34 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
   }));
 
   return (
-    <GestureDetector gesture={composedGesture}>
-      <AnimatedPressable style={[!reducedMotion && animatedStyle]}>
-        <Image
-          style={[styles.image, { height, width }]}
-          source={imageSource}
-          placeholder={blurhash}
-          contentFit="contain"
-        />
-      </AnimatedPressable>
-    </GestureDetector>
+    <View
+      style={[styles.container, themeStyles.background300, { height, width }]}
+    >
+      {imageUrl ? (
+        <GestureDetector gesture={composedGesture}>
+          <AnimatedPressable style={[!reducedMotion && animatedStyle]}>
+            <Image
+              style={[styles.image, { height, width }]}
+              source={imageUrl}
+              placeholder={blurhash}
+              contentFit="contain"
+            />
+          </AnimatedPressable>
+        </GestureDetector>
+      ) : (
+        <ActivityIndicator color={theme.tintSubdued} />
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'blue',
+    borderRadius: 16,
+    justifyContent: 'center',
+  },
   image: {
-    backgroundColor: '#000000',
     borderRadius: 16,
   },
 });

@@ -1,11 +1,10 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { CardDetailImage } from '@components/CardDetailImage';
 import { Chips } from '@components/Chips';
 import { useCardDetails } from '@data/hooks/useCardDetails';
-import { useCardPrintings } from '@data/hooks/useCardPrintings';
-import { type Variant, VariantRank } from '@data/Variant';
+import { useCardVariants } from '@data/hooks/useCardVariants';
 import { useCardImages } from '@hooks/useCardImages';
 import { useTheme } from '@hooks/useTheme';
 
@@ -20,46 +19,14 @@ export function CardDetailImages({
 }: CardDetailImagesProps) {
   const { theme, themeStyles } = useTheme();
 
-  const { data: printingsData, isFetching: isFetchingPrintings } =
-    useCardPrintings(cardId);
+  const { data: standardVariantCard } = useCardDetails(cardId);
 
-  const [variantKey, setVariantKey] = useState<string>(variantName);
+  const { variants, variantKey, handleVariantSelection, isFetchingPrintings } =
+    useCardVariants(cardId, variantName);
 
-  const variants = useMemo(() => {
-    const v: Record<string, number> = {};
-
-    if (printingsData?.original) {
-      v.Standard = printingsData?.original.id;
-    }
-
-    if (!isFetchingPrintings && printingsData?.printings) {
-      printingsData.printings
-        .sort((a, b) => {
-          const variantNameA = a.variantTypes?.[0]?.name as Variant;
-          const variantRankA = variantNameA ? VariantRank[variantNameA] : 9999;
-          const variantNameB = b.variantTypes?.[0]?.name as Variant;
-          const variantRankB = variantNameB ? VariantRank[variantNameB] : 9999;
-
-          if (variantRankA > variantRankB) {
-            return 1;
-          }
-          if (variantRankB > variantRankA) {
-            return -1;
-          }
-          return 0;
-        })
-        .forEach((printing) => {
-          const variantName = printing.variantTypes?.[0]?.name;
-          if (variantName && !variantName.endsWith('Foil')) {
-            v[variantName] = printing.id;
-          }
-        });
-    }
-
-    return v;
-  }, [printingsData?.original, printingsData?.printings, isFetchingPrintings]);
-
-  const { data: selectedCard } = useCardDetails(variants[variantKey] || cardId);
+  const { data: selectedVariantCard } = useCardDetails(
+    variants[variantKey] || cardId,
+  );
 
   const variantSelections = useMemo(() => {
     return [variantKey];
@@ -74,13 +41,10 @@ export function CardDetailImages({
     return options;
   }, [variants]);
 
-  const handleVariantSelection = useCallback((selection: string[]) => {
-    const selectedVariantKey = selection.at(0);
-
-    selectedVariantKey && setVariantKey(selectedVariantKey);
-  }, []);
-
-  const cardImages = useCardImages(selectedCard?.attributes);
+  const cardImages = useCardImages(
+    selectedVariantCard?.attributes,
+    standardVariantCard?.attributes,
+  );
 
   return (
     <View style={styles.container}>
@@ -102,10 +66,10 @@ export function CardDetailImages({
           )}
         </View>
         <View style={styles.images}>
-          {cardImages.map((cardImageProps) => (
+          {cardImages.map((cardImageProps, i) => (
             <CardDetailImage
               {...cardImageProps}
-              key={`card-detail-image-${cardId}-${variantName}-${cardImageProps.art?.data?.id}`}
+              key={`card-detail-image-${cardId}-${variantName}-${i}`}
             />
           ))}
         </View>
