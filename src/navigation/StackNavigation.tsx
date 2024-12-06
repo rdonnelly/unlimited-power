@@ -87,7 +87,7 @@ export const StackNavigator = () => {
                 </View>
               );
             },
-            headerBackTitleVisible: false,
+            headerBackButtonDisplayMode: 'minimal',
           })}
         />
       </Stack.Group>
