@@ -2,16 +2,11 @@
   "expo": {
     "name": "Unlimited Power",
     "slug": "unlimited-power",
-    "version": "1.4.0",
+    "version": "1.4.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#faf5ff"
-    },
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
@@ -27,9 +22,21 @@
       },
       "package": "com.rdonnelly.unlimitedpower"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#fafaf9",
+          "dark": {
+            "image": "./assets/images/splash.png",
+            "backgroundColor": "#0c0a09"
+          }
+        }
+      ]
+    ],
     "extra": {
       "eas": {
         "projectId": "74b83394-1cd7-4ce4-a38a-fb908aedfab6"
