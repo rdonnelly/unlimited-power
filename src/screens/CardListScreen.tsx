@@ -1,4 +1,4 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import type BottomSheet from '@gorhom/bottom-sheet';
 import { useCallback, useEffect, useRef } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -19,9 +19,9 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
             }}
           >
             {({ pressed }) => (
-              <Ionicons
-                name="information-circle-outline"
-                size={24}
+              <FontAwesome6
+                name="question-circle"
+                size={20}
                 color={tintColor}
                 style={{ opacity: pressed ? 0.5 : 1 }}
               />

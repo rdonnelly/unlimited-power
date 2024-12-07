@@ -1,4 +1,4 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import * as Haptics from 'expo-haptics';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -47,9 +47,9 @@ export function Chip<T>({
           ]}
         >
           {isSelected ? (
-            <Ionicons
-              name="checkmark-circle-outline"
-              size={16}
+            <FontAwesome6
+              name="check-circle"
+              size={12}
               color={isSelected ? theme.chipSelectedTint : theme.chipTint}
             />
           ) : null}

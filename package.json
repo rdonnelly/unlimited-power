@@ -3,6 +3,7 @@
   "version": "1.4.1",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
+    "start": "npx expo start --dev-client",
     "dev": "npx expo start --dev-client",
     "check:deps": "npx expo install --check",
     "check:lint": "eslint .",

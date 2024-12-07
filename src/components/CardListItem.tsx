@@ -1,4 +1,4 @@
-import Entypo from '@expo/vector-icons/Entypo';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { CardListAspects } from '@components/CardListAspects';
@@ -94,11 +94,10 @@ export const CardListItem = ({
             </View>
           </View>
           <CardListAspects card={card.attributes} />
-          <Entypo
+          <FontAwesome6
             name="chevron-right"
-            size={24}
+            size={16}
             color={theme.tintSubdued}
-            style={styles.innerChevron}
           />
         </View>
       )}
@@ -120,7 +119,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     flexDirection: 'row',
-    gap: 4,
+    gap: 8,
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     width: '100%',
@@ -148,8 +147,5 @@ const styles = StyleSheet.create({
   },
   cardInfo: {
     fontSize: 13,
-  },
-  innerChevron: {
-    marginRight: -6,
   },
 });

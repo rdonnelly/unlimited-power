@@ -1,4 +1,4 @@
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Text, View } from 'react-native';
 
@@ -27,8 +27,8 @@ export const StackNavigator = () => {
                     gap: 16,
                   }}
                 >
-                  <FontAwesome5
-                    name="bolt"
+                  <FontAwesome6
+                    name="bolt-lightning"
                     size={16}
                     color={tintColor}
                     style={{
@@ -46,7 +46,11 @@ export const StackNavigator = () => {
                   >
                     Unlimited Power
                   </Text>
-                  <FontAwesome5 name="bolt" size={16} color={tintColor} />
+                  <FontAwesome6
+                    name="bolt-lightning"
+                    size={16}
+                    color={tintColor}
+                  />
                 </View>
               );
             },

@@ -2,7 +2,7 @@ import { Image } from 'expo-image';
 import { StyleSheet, View } from 'react-native';
 import { getSortedAspects } from 'src/utils/CardUtils';
 
-import { ASPECT_IMAGES } from '@components/CardAspectImage';
+import { ASPECT_IMAGES } from '@components/CardIconAspect';
 import type { CardAttributes } from '@data/Card';
 
 export type CardListAspectsProps = {

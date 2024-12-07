@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
 import { StyleSheet, View } from 'react-native';
 
-import { RARITY_IMAGES } from '@components/CardRarityImage';
+import { RARITY_IMAGES } from '@components/CardIconRarity';
 import type { CardAttributes } from '@data/Card';
 
 export type CardListRarityProps = {

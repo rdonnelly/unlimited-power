@@ -4,6 +4,7 @@ import Bugsnag from '@bugsnag/expo';
 import { useAsyncStorageDevTools } from '@dev-plugins/async-storage';
 import { useReactNavigationDevTools } from '@dev-plugins/react-navigation';
 // import { useReactQueryDevTools } from '@dev-plugins/react-query';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigationContainerRef } from '@react-navigation/native';
 import {
@@ -15,8 +16,10 @@ import {
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { focusManager, QueryClient } from '@tanstack/react-query';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import * as Font from 'expo-font';
+import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { type AppStateStatus, Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -24,6 +27,8 @@ import { useAppState } from '@hooks/useAppState';
 import { useOnlineManager } from '@hooks/useOnlineManager';
 import { useTheme } from '@hooks/useTheme';
 import { StackNavigator } from '@navigation/StackNavigation';
+
+SplashScreen.preventAutoHideAsync();
 
 if (!__DEV__) {
   Bugsnag.start();
@@ -77,8 +82,35 @@ export default function App() {
     } satisfies Theme;
   }, [theme]);
 
+  const [appIsReady, setAppIsReady] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await Font.loadAsync(FontAwesome6.font);
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        // Tell the application to render
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(() => {
+    if (appIsReady) {
+      SplashScreen.hide();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
+  }
+
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <PersistQueryClientProvider
         client={queryClient}
         persistOptions={{
