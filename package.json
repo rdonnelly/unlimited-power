@@ -33,11 +33,11 @@
     "@tanstack/react-query-persist-client": "^5.62.0",
     "babel-plugin-module-resolver": "^5.0.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
-    "expo": "~52.0.17",
+    "expo": "~52.0.18",
     "expo-application": "~6.0.1",
     "expo-constants": "~17.0.3",
     "expo-crypto": "~14.0.1",
-    "expo-dev-client": "~5.0.5",
+    "expo-dev-client": "~5.0.6",
     "expo-device": "~7.0.1",
     "expo-file-system": "~18.0.4",
     "expo-haptics": "~14.0.0",
@@ -49,7 +49,7 @@
     "lodash": "^4.17.21",
     "qs": "^6.13.1",
     "react": "18.3.1",
-    "react-native": "0.76.3",
+    "react-native": "0.76.5",
     "react-native-gesture-handler": "~2.20.2",
     "react-native-reanimated": "~3.16.1",
     "react-native-render-html": "^6.3.4",
@@ -57,7 +57,7 @@
     "react-native-screens": "~4.1.0",
     "zod": "^3.23.8",
     "zustand": "^5.0.1",
-    "expo-splash-screen": "~0.29.16"
+    "expo-splash-screen": "~0.29.18"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
