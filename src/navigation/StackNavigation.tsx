@@ -12,7 +12,7 @@ const Stack = createNativeStackNavigator<StackParamList>();
 export const StackNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Group>
+      <Stack.Group screenOptions={{ headerShadowVisible: false }}>
         <Stack.Screen
           name="StackCardListScreen"
           component={CardListScreen}
@@ -27,14 +27,17 @@ export const StackNavigator = () => {
                     gap: 16,
                   }}
                 >
-                  <FontAwesome6
-                    name="bolt-lightning"
-                    size={16}
-                    color={tintColor}
+                  <View
                     style={{
                       transform: [{ scaleX: -1 }],
                     }}
-                  />
+                  >
+                    <FontAwesome6
+                      name="bolt-lightning"
+                      size={16}
+                      color={tintColor}
+                    />
+                  </View>
                   <Text
                     style={{
                       color: tintColor,
@@ -46,11 +49,13 @@ export const StackNavigator = () => {
                   >
                     Unlimited Power
                   </Text>
-                  <FontAwesome6
-                    name="bolt-lightning"
-                    size={16}
-                    color={tintColor}
-                  />
+                  <View>
+                    <FontAwesome6
+                      name="bolt-lightning"
+                      size={16}
+                      color={tintColor}
+                    />
+                  </View>
                 </View>
               );
             },
@@ -95,14 +100,13 @@ export const StackNavigator = () => {
           })}
         />
       </Stack.Group>
+
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen
           name="StackInfoScreen"
           component={InfoScreen}
           options={{
             title: '',
-            headerTitle: '',
-            headerBackButtonDisplayMode: 'minimal',
           }}
         />
       </Stack.Group>

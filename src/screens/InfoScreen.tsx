@@ -1,19 +1,24 @@
 import * as Application from 'expo-application';
 import { StyleSheet, Text, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { openURL } from 'src/utils/OpenURL';
 
 import { LinkButton } from '@components/LinkButton';
 import { useTheme } from '@hooks/useTheme';
 import type { InfoScreenProps } from '@navigation/types';
 
-export function InfoScreen({ navigation }: InfoScreenProps) {
+export function InfoScreen(_: InfoScreenProps) {
   const { themeStyles } = useTheme();
-  const insets = useSafeAreaInsets();
 
   return (
-    <View
-      style={[styles.container, { paddingBottom: Math.max(32, insets.bottom) }]}
+    <SafeAreaView
+      edges={{
+        top: 'off',
+        right: 'additive',
+        bottom: 'maximum',
+        left: 'additive',
+      }}
+      style={[styles.container]}
     >
       <View style={styles.disclaimer}>
         <Text style={[styles.disclaimerText, themeStyles.color]}>
@@ -56,6 +61,12 @@ export function InfoScreen({ navigation }: InfoScreenProps) {
         </LinkButton>
         <LinkButton
           size="small"
+          onPress={() => openURL('https://www.swu-competitivehub.com')}
+        >
+          Star Wars Unlimited Competitive Hub
+        </LinkButton>
+        <LinkButton
+          size="small"
           onPress={() => openURL('https://rdonnelly.com/unlimited-power')}
         >
           Unlimited Power Website
@@ -68,7 +79,7 @@ export function InfoScreen({ navigation }: InfoScreenProps) {
           {Application.nativeBuildVersion})
         </Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -78,7 +89,7 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 32,
     justifyContent: 'space-between',
-    paddingVertical: 16,
+    paddingTop: 32,
   },
   disclaimer: {
     flex: 1,
