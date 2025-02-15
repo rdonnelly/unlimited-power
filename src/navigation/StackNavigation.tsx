@@ -1,6 +1,6 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Text, View } from 'react-native';
+import { Platform, Text, View } from 'react-native';
 
 import type { StackParamList } from '@navigation/types';
 import { CardDetailScreen } from '@screens/CardDetailScreen';
@@ -74,7 +74,8 @@ export const StackNavigator = () => {
                       color: tintColor,
                       fontSize: 16,
                       fontWeight: '700',
-                      textAlign: 'center',
+                      lineHeight: 16,
+                      textAlign: Platform.OS === 'android' ? 'auto' : 'center',
                       textTransform: 'uppercase',
                     }}
                   >
@@ -85,9 +86,10 @@ export const StackNavigator = () => {
                       style={{
                         color: tintColor,
                         fontSize: 13,
+                        lineHeight: 15,
                         opacity: 0.6,
-                        textAlign: 'center',
-                        marginTop: -2,
+                        textAlign:
+                          Platform.OS === 'android' ? 'auto' : 'center',
                       }}
                     >
                       {route.params.caption}
