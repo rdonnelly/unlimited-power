@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 32,
     justifyContent: 'space-between',
-    paddingTop: 32,
+    paddingVertical: 16,
   },
   disclaimer: {
     flex: 1,
