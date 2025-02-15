@@ -8,6 +8,7 @@ node_modules/
 dist/
 web-build/
 build*.tar.gz
+build*.apk
 
 # Native
 *.orig.*
