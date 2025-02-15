@@ -1,6 +1,6 @@
 {
   "name": "unlimited-power",
-  "version": "1.4.1",
+  "version": "1.4.3",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "npx expo start --dev-client",
@@ -9,6 +9,7 @@
     "check:lint": "eslint .",
     "check:ts": "tsc",
     "build:android:dev": "npx eas-cli@latest build --platform android --profile development",
+    "build:android:dev:local": "npx eas-cli@latest build --platform android --profile development --local",
     "build:ios:dev": "npx eas-cli@latest build --platform ios --profile development",
     "build:ios:simulator": "npx eas-cli@latest build --platform ios --profile development-simulator",
     "build:ios:simulator:local": "npx eas-cli@latest build --platform ios --profile development-simulator --local",
@@ -33,7 +34,7 @@
     "@tanstack/react-query-persist-client": "^5.62.0",
     "babel-plugin-module-resolver": "^5.0.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
-    "expo": "~52.0.32",
+    "expo": "~52.0.35",
     "expo-application": "~6.0.2",
     "expo-constants": "~17.0.3",
     "expo-crypto": "~14.0.2",
@@ -44,7 +45,7 @@
     "expo-image": "~2.0.5",
     "expo-linking": "~7.0.5",
     "expo-sharing": "~13.0.1",
-    "expo-splash-screen": "~0.29.21",
+    "expo-splash-screen": "~0.29.22",
     "expo-status-bar": "~2.0.1",
     "expo-web-browser": "~14.0.2",
     "lodash": "^4.17.21",
