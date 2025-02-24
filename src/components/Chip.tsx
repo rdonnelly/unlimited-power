@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     flexDirection: 'row',
     gap: 4,
-    paddingHorizontal: 26,
+    paddingHorizontal: 24,
     paddingVertical: 10,
   },
   innerPressed: {
