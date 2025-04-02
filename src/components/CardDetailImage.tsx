@@ -3,7 +3,13 @@ import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import * as Sharing from 'expo-sharing';
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   clamp,
@@ -49,22 +55,30 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
 
   const handleLongPress = useCallback(async () => {
     if (imageUrl) {
-      const directory = `${FileSystem.cacheDirectory}cards`;
-      const filename = imageUrl.split('/').pop();
-      const downloadPath = `${directory}${filename}`;
-
-      await FileSystem.makeDirectoryAsync(directory, {
-        intermediates: true,
-      });
-
-      const { uri: localUrl } = await FileSystem.downloadAsync(
-        imageUrl,
-        downloadPath,
-      );
-
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
-      await Sharing.shareAsync(localUrl);
+      try {
+        const directory = `${FileSystem.cacheDirectory}cards`;
+        const filename = imageUrl.split('/').pop();
+        const downloadPath = `${directory}${filename}`;
+
+        await FileSystem.makeDirectoryAsync(directory, {
+          intermediates: true,
+        });
+
+        const { uri: localUrl } = await FileSystem.downloadAsync(
+          imageUrl,
+          downloadPath,
+        );
+
+        await Sharing.shareAsync(localUrl);
+      } catch {
+        Alert.alert(
+          'Karabast!',
+          'The image could not be shared, please try again!',
+          [{ text: 'OK' }],
+        );
+      }
     }
   }, [imageUrl]);
 
