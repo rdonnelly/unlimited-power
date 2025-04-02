@@ -34,7 +34,7 @@ export function useCardVariants(cardId: number, variantName: string) {
         })
         .forEach((printing) => {
           const variantName = printing.variantTypes?.[0]?.name;
-          if (variantName && !variantName.endsWith('Foil')) {
+          if (variantName && !variantName.includes('Foil')) {
             v[variantName] = printing.id;
           }
         });
