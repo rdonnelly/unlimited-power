@@ -103,7 +103,10 @@ export function useCardsQueryKey() {
         expansionFilters.includes(cur) ? acc.concat(ExpansionCodes[cur]) : acc,
       [] as number[],
     );
-    if (expansionInclusions.length) {
+    if (
+      expansionInclusions.length &&
+      expansionInclusions.length < expansionFilterOptions.length
+    ) {
       filters.push({
         expansion: {
           id: {
