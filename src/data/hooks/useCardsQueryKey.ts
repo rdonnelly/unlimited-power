@@ -98,16 +98,16 @@ export function useCardsQueryKey() {
       }
     }
 
-    const expansionExclusions = expansionFilterOptions.reduce(
+    const expansionInclusions = expansionFilterOptions.reduce(
       (acc, cur) =>
-        !expansionFilters.includes(cur) ? acc.concat(ExpansionCodes[cur]) : acc,
+        expansionFilters.includes(cur) ? acc.concat(ExpansionCodes[cur]) : acc,
       [] as number[],
     );
-    if (expansionExclusions.length) {
+    if (expansionInclusions.length) {
       filters.push({
         expansion: {
           id: {
-            $notIn: expansionExclusions,
+            $in: expansionInclusions,
           },
         },
       });
