@@ -6,6 +6,7 @@ const VALUES = [
   'TWI', // 18, Twilight of the Republic
   'JTL', // 23, Jump to Lightspeed
   'LOF', // 53, Legends of the Force
+  'IBH', // 68, Intro Battle: Hoth
 
   'C24', // 13, 2024 Convention Exclusive
   'J24', // 28, 2024 Judge Program
@@ -21,11 +22,12 @@ export const ExpansionRank: Record<Expansion, number> = {
   TWI: 3,
   JTL: 4,
   LOF: 5,
+  IBH: 6,
 
-  C24: 6,
-  J24: 7,
-  J25: 8,
-  P25: 9,
+  C24: 7,
+  J24: 8,
+  J25: 9,
+  P25: 10,
 } as const;
 
 export const ExpansionCodes: Record<Expansion, number> = {
@@ -34,6 +36,7 @@ export const ExpansionCodes: Record<Expansion, number> = {
   TWI: 18,
   JTL: 23,
   LOF: 53,
+  IBH: 68,
 
   C24: 13,
   J24: 28,
@@ -47,6 +50,7 @@ export const ExpansionNames: Record<Expansion, string> = {
   TWI: 'Twilight of the Republic',
   JTL: 'Jump to Lightspeed',
   LOF: 'Legends of the Force',
+  IBH: 'Intro Battle: Hoth',
 
   C24: '2024 Convention Exclusive',
   J24: '2024 Judge Program',
