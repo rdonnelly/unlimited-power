@@ -1,9 +1,6 @@
 import 'expo-dev-client';
 
 import Bugsnag from '@bugsnag/expo';
-import { useAsyncStorageDevTools } from '@dev-plugins/async-storage';
-import { useReactNavigationDevTools } from '@dev-plugins/react-navigation';
-// import { useReactQueryDevTools } from '@dev-plugins/react-query';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigationContainerRef } from '@react-navigation/native';
@@ -54,10 +51,7 @@ function onAppStateChange(status: AppStateStatus) {
 }
 
 export default function App() {
-  useAsyncStorageDevTools();
-  // useReactQueryDevTools(queryClient);
   const navigationRef = useNavigationContainerRef();
-  useReactNavigationDevTools(navigationRef);
 
   useOnlineManager();
 
