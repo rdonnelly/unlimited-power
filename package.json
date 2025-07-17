@@ -34,7 +34,7 @@
     "@tanstack/react-query-persist-client": "^5.62.0",
     "babel-plugin-module-resolver": "^5.0.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
-    "expo": "~52.0.46",
+    "expo": "~52.0.47",
     "expo-application": "~6.0.2",
     "expo-constants": "~17.0.3",
     "expo-crypto": "~14.0.2",
