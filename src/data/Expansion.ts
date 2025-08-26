@@ -7,11 +7,13 @@ const VALUES = [
   'JTL', // 23, Jump to Lightspeed
   'LOF', // 53, Legends of the Force
   'IBH', // 68, Intro Battle: Hoth
+  'SEC', // 73, Secrets of Power
 
   'C24', // 13, 2024 Convention Exclusive
   'J24', // 28, 2024 Judge Program
   'J25', // 33, 2025 Judge Program
   'P25', // 38, 2025 Promo
+  'C25', // 63, 2025 Convention Exclusive
 ] as const;
 export const ExpansionEnum = z.enum(VALUES);
 export type Expansion = z.infer<typeof ExpansionEnum>;
@@ -23,11 +25,13 @@ export const ExpansionRank: Record<Expansion, number> = {
   JTL: 4,
   LOF: 5,
   IBH: 6,
+  SEC: 6,
 
   C24: 7,
   J24: 8,
   J25: 9,
   P25: 10,
+  C25: 10,
 } as const;
 
 export const ExpansionCodes: Record<Expansion, number> = {
@@ -37,11 +41,13 @@ export const ExpansionCodes: Record<Expansion, number> = {
   JTL: 23,
   LOF: 53,
   IBH: 68,
+  SEC: 73,
 
   C24: 13,
   J24: 28,
   J25: 33,
   P25: 38,
+  C25: 63,
 } as const;
 
 export const ExpansionNames: Record<Expansion, string> = {
@@ -51,9 +57,11 @@ export const ExpansionNames: Record<Expansion, string> = {
   JTL: 'Jump to Lightspeed',
   LOF: 'Legends of the Force',
   IBH: 'Intro Battle: Hoth',
+  SEC: 'Secrets of Power',
 
   C24: '2024 Convention Exclusive',
   J24: '2024 Judge Program',
   J25: '2025 Judge Program',
   P25: '2025 Promo',
+  C25: '2025 Convention Exclusive',
 } as const;
