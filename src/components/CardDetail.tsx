@@ -56,10 +56,6 @@ const styles = StyleSheet.create({
     maxWidth: 768,
     width: '100%',
   },
-  scrollContainer: {
-    flex: 1,
-    width: '100%',
-  },
   content: {
     alignItems: 'center',
     flex: 1,

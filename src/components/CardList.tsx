@@ -1,14 +1,13 @@
-import { FlashList } from '@shopify/flash-list';
+import { FlashList, useMappingHelper } from '@shopify/flash-list';
 import { useCallback, useMemo } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
-import { CardListItem, ITEM_HEIGHT } from '@components/CardListItem';
+import { Button } from '@components/Button';
+import { CardListItem } from '@components/CardListItem';
 import { Error } from '@components/Error';
 import { useCards } from '@data/hooks/useCards';
 import { useFilters } from '@hooks/useFilters';
 import { useTheme } from '@hooks/useTheme';
-
-import { Button } from './Button';
 
 type CardListProps = {
   onPressItem: (
@@ -17,12 +16,12 @@ type CardListProps = {
     title: string,
     caption?: string,
   ) => void;
-  collapseBottomSheet: () => void;
+  onScrollBeginDrag?: () => void;
 };
 
 export function CardList({
   onPressItem: handlePressItem,
-  collapseBottomSheet,
+  onScrollBeginDrag,
 }: CardListProps) {
   const { theme, themeStyles } = useTheme();
 
@@ -53,10 +52,12 @@ export function CardList({
   }, [hasNextPage, fetchNextPage]);
 
   const handleScrollBeginDrag = useCallback(() => {
-    collapseBottomSheet();
-  }, [collapseBottomSheet]);
+    onScrollBeginDrag?.();
+  }, [onScrollBeginDrag]);
 
   const { numFiltersApplied, reset: resetFilters } = useFilters();
+
+  const { getMappingKey } = useMappingHelper();
 
   if (isError) {
     return (
@@ -128,23 +129,16 @@ export function CardList({
         <FlashList
           data={cards}
           renderItem={({ item: card, index }) => (
-            <CardListItem card={card} index={index} onPress={handlePressItem} />
+            <CardListItem
+              key={getMappingKey(card.id, index)}
+              card={card}
+              index={index}
+              onPress={handlePressItem}
+            />
           )}
-          estimatedItemSize={ITEM_HEIGHT}
           onEndReached={loadNextPage}
           onEndReachedThreshold={1.5}
           onScrollBeginDrag={handleScrollBeginDrag}
-          ListFooterComponent={
-            <View style={[styles.listFooter, themeStyles.background0]}>
-              {isLoading || isFetching || hasNextPage || cardCount == null ? (
-                <ActivityIndicator color={theme.tintSubdued} />
-              ) : (
-                <Text style={[styles.listFooterText, themeStyles.colorSubdued]}>
-                  {cardCount} Cards Found
-                </Text>
-              )}
-            </View>
-          }
         />
       </View>
     </View>
@@ -162,22 +156,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 96,
   },
-  error: {
-    maxWidth: 240,
-    paddingTop: 96,
-  },
-  errorInfo: {
-    marginBottom: 64,
-  },
-  errorInfoHeading: {
-    fontSize: 22,
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-  errorInfoText: {
-    fontSize: 16,
-    textAlign: 'center',
-  },
   filterBanner: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -188,10 +166,6 @@ const styles = StyleSheet.create({
   },
   filterText: {
     fontSize: 16,
-  },
-  clearFilters: {
-    fontSize: 16,
-    fontWeight: '700',
   },
   listContainer: {
     flex: 1,

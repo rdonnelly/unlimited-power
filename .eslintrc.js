@@ -5,12 +5,14 @@ module.exports = {
     'plugin:react-hooks/recommended',
     'plugin:@tanstack/eslint-plugin-query/recommended',
   ],
-  plugins: ['simple-import-sort'],
+  plugins: ['simple-import-sort', 'react-native'],
   rules: {
     'import/order': 'off',
     'react/react-in-jsx-scope': 'off',
     'simple-import-sort/exports': 'error',
     'simple-import-sort/imports': 'error',
+    'react-native/no-unused-styles': 'warn',
+    'react-native/no-inline-styles': 'warn',
   },
   overrides: [
     {

@@ -41,7 +41,7 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
   const navigateToCardDetails = useCallback(
     (id: number, index: number, title: string, caption?: string) => {
       if (navigation) {
-        collapseBottomSheet();
+        bottomSheetRef.current?.collapse();
         navigation.push('StackCardDetailScreen', {
           id,
           index,
@@ -50,14 +50,14 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
         });
       }
     },
-    [navigation, collapseBottomSheet],
+    [navigation],
   );
 
   return (
     <View style={styles.container}>
       <CardList
         onPressItem={navigateToCardDetails}
-        collapseBottomSheet={collapseBottomSheet}
+        onScrollBeginDrag={collapseBottomSheet}
       />
       <CardListBottomSheet bottomSheetRef={bottomSheetRef} />
     </View>
@@ -66,8 +66,7 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
     flex: 1,
-    justifyContent: 'center',
+    width: '100%',
   },
 });
