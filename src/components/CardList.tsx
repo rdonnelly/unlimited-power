@@ -70,9 +70,7 @@ export function CardList({
     return (props: any) => {
       return (
         <ScrollView
-          automaticallyAdjustContentInsets={false}
           automaticallyAdjustsScrollIndicatorInsets={false}
-          contentInsetAdjustmentBehavior="always"
           {...props}
         />
       );
