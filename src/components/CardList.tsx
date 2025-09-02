@@ -1,6 +1,12 @@
 import { FlashList, useMappingHelper } from '@shopify/flash-list';
 import { useCallback, useMemo } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 import { Button } from '@components/Button';
 import { CardListItem } from '@components/CardListItem';
@@ -58,6 +64,18 @@ export function CardList({
   const { numFiltersApplied, reset: resetFilters } = useFilters();
 
   const { getMappingKey } = useMappingHelper();
+
+  const renderScrollComponent = useMemo(() => {
+    // eslint-disable-next-line react/display-name
+    return (props: any) => {
+      return (
+        <ScrollView
+          automaticallyAdjustsScrollIndicatorInsets={false}
+          {...props}
+        />
+      );
+    };
+  }, []);
 
   if (isError) {
     return (
@@ -139,6 +157,7 @@ export function CardList({
           onEndReached={loadNextPage}
           onEndReachedThreshold={1.5}
           onScrollBeginDrag={handleScrollBeginDrag}
+          renderScrollComponent={renderScrollComponent}
         />
       </View>
     </View>
