@@ -70,7 +70,9 @@ export function CardList({
     return (props: any) => {
       return (
         <ScrollView
+          automaticallyAdjustContentInsets={false}
           automaticallyAdjustsScrollIndicatorInsets={false}
+          contentInsetAdjustmentBehavior="always"
           {...props}
         />
       );
@@ -158,6 +160,17 @@ export function CardList({
           onEndReachedThreshold={1.5}
           onScrollBeginDrag={handleScrollBeginDrag}
           renderScrollComponent={renderScrollComponent}
+          ListFooterComponent={
+            <View style={[styles.listFooter, themeStyles.background0]}>
+              {isLoading || isFetching || hasNextPage || cardCount == null ? (
+                <ActivityIndicator color={theme.tintSubdued} />
+              ) : (
+                <Text style={[styles.listFooterText, themeStyles.colorSubdued]}>
+                  {cardCount} Cards Found
+                </Text>
+              )}
+            </View>
+          }
         />
       </View>
     </View>
