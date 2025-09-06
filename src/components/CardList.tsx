@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@components/Button';
 import { CardListItem } from '@components/CardListItem';
@@ -65,17 +66,23 @@ export function CardList({
 
   const { getMappingKey } = useMappingHelper();
 
+  const insets = useSafeAreaInsets();
+
   const renderScrollComponent = useMemo(() => {
     // eslint-disable-next-line react/display-name
     return (props: any) => {
       return (
         <ScrollView
           automaticallyAdjustsScrollIndicatorInsets={false}
+          scrollIndicatorInsets={{
+            top: 0,
+            bottom: 72 + Math.max(16, insets.bottom),
+          }}
           {...props}
         />
       );
     };
-  }, []);
+  }, [insets.bottom]);
 
   if (isError) {
     return (
