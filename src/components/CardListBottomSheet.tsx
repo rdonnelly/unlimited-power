@@ -120,11 +120,17 @@ export function CardListBottomSheet({
         />
 
         <BottomSheetScrollView
-          style={[styles.scrollContainer, themeStyles.borderSubdued]}
+          style={styles.scrollContainer}
           contentContainerStyle={[
             styles.scrollContainerContent,
+            themeStyles.borderSubdued,
             { paddingBottom: insets.bottom },
           ]}
+          automaticallyAdjustsScrollIndicatorInsets={false}
+          scrollIndicatorInsets={{
+            top: 0,
+            bottom: Math.max(24, insets.bottom) + 16,
+          }}
         >
           <Chips
             heading="Aspects"
@@ -191,12 +197,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
     padding: 12,
   },
-  scrollContainer: {
-    borderTopWidth: StyleSheet.hairlineWidth,
-    marginHorizontal: 16,
-  },
+  scrollContainer: {},
   scrollContainerContent: {
+    borderTopWidth: StyleSheet.hairlineWidth,
     gap: 16,
-    paddingTop: 16,
+    paddingTop: 32,
+    marginHorizontal: 16,
   },
 });
