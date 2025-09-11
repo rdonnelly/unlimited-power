@@ -1,4 +1,4 @@
-import * as FileSystem from 'expo-file-system';
+import { Directory, File, Paths } from 'expo-file-system';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
 import * as Sharing from 'expo-sharing';
@@ -14,12 +14,12 @@ import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   clamp,
   Easing,
-  runOnJS,
   useAnimatedStyle,
   useReducedMotion,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { scheduleOnRN } from 'react-native-worklets';
 
 import type { Art } from '@data/CardArt';
 import { useTheme } from '@hooks/useTheme';
@@ -58,21 +58,17 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
 
       try {
-        const directory = `${FileSystem.cacheDirectory}cards`;
-        const filename = imageUrl.split('/').pop();
-        const downloadPath = `${directory}${filename}`;
+        const destination = new Directory(Paths.cache, 'cards');
+        destination.create({ idempotent: true });
 
-        await FileSystem.makeDirectoryAsync(directory, {
-          intermediates: true,
-        });
-
-        const { uri: localUrl } = await FileSystem.downloadAsync(
+        const { uri: localUrl } = await File.downloadFileAsync(
           imageUrl,
-          downloadPath,
+          destination,
         );
 
         await Sharing.shareAsync(localUrl);
-      } catch {
+      } catch (error) {
+        console.error(error);
         Alert.alert(
           'Karabast!',
           'The image could not be shared, please try again!',
@@ -98,7 +94,7 @@ export function CardDetailImage({ art, height, width }: CardDetailImageProps) {
     })
     .onStart(() => {
       if (sharingIsAvailable) {
-        runOnJS(handleLongPress)();
+        scheduleOnRN(handleLongPress);
       }
     })
     .onFinalize(() => {

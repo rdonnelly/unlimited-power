@@ -23,6 +23,8 @@
       "package": "com.rdonnelly.unlimitedpower"
     },
     "plugins": [
+      "expo-asset",
+      "expo-font",
       [
         "expo-splash-screen",
         {
@@ -34,7 +36,8 @@
           },
           "imageWidth": 200
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "extra": {
       "eas": {

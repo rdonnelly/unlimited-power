@@ -110,10 +110,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'justify',
   },
-  credit: {
-    paddingHorizontal: 16,
-  },
-  creditText: {
-    textAlign: 'center',
-  },
 });
