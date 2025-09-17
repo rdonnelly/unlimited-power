@@ -5,7 +5,7 @@ import BottomSheet, {
 import type { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import debounce from 'lodash/debounce';
 import { useCallback, useMemo } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useShallow } from 'zustand/shallow';
 
@@ -41,7 +41,7 @@ export function CardListBottomSheet({
   const insets = useSafeAreaInsets();
 
   const snapPoints = useMemo(
-    () => [72 + Math.max(16, insets.bottom), 400, '100%'],
+    () => [72 + Math.max(16, insets.bottom), '70%'],
     [insets.bottom],
   );
 
@@ -100,94 +100,89 @@ export function CardListBottomSheet({
       android_keyboardInputMode="adjustResize"
       enableDynamicSizing={false}
     >
-      <View style={styles.container}>
-        <BottomSheetTextInput
-          style={[
-            styles.input,
-            themeStyles.background300,
-            themeStyles.color,
-            { marginBottom: Math.max(24, insets.bottom) },
-          ]}
-          autoCapitalize="none"
-          autoCorrect={false}
-          clearButtonMode="always"
-          placeholder="Search by Title, Trait, or Keyword"
-          placeholderTextColor={theme.textSubdued}
-          returnKeyType="search"
-          onChangeText={handleChangeText}
-          onSubmitEditing={handleSubmitEditing}
-          defaultValue={searchString ?? ''}
+      <BottomSheetTextInput
+        style={[
+          styles.input,
+          themeStyles.background300,
+          themeStyles.color,
+          { marginBottom: Math.max(24, insets.bottom) },
+        ]}
+        autoCapitalize="none"
+        autoCorrect={false}
+        clearButtonMode="always"
+        placeholder="Search by Title, Trait, or Keyword"
+        placeholderTextColor={theme.textSubdued}
+        returnKeyType="search"
+        onChangeText={handleChangeText}
+        onSubmitEditing={handleSubmitEditing}
+        defaultValue={searchString ?? ''}
+      />
+
+      <BottomSheetScrollView
+        style={styles.scrollContainer}
+        contentContainerStyle={[
+          styles.scrollContainerContent,
+          themeStyles.borderSubdued,
+          { paddingBottom: Math.max(24, insets.bottom) + 16 },
+        ]}
+        automaticallyAdjustsScrollIndicatorInsets={false}
+        scrollIndicatorInsets={{
+          top: 0,
+          bottom: Math.max(24, insets.bottom) + 16,
+        }}
+      >
+        <Chips
+          heading="Aspects"
+          showHeaderControls
+          options={aspectFilterOptions.map((aspect) => ({
+            value: aspect,
+            label: aspect,
+          }))}
+          selections={aspectOptions}
+          onChange={updateAspect}
+          delay={1000}
         />
 
-        <BottomSheetScrollView
-          style={styles.scrollContainer}
-          contentContainerStyle={[
-            styles.scrollContainerContent,
-            themeStyles.borderSubdued,
-            { paddingBottom: insets.bottom },
-          ]}
-          automaticallyAdjustsScrollIndicatorInsets={false}
-          scrollIndicatorInsets={{
-            top: 0,
-            bottom: Math.max(24, insets.bottom) + 16,
-          }}
-        >
-          <Chips
-            heading="Aspects"
-            showHeaderControls
-            options={aspectFilterOptions.map((aspect) => ({
-              value: aspect,
-              label: aspect,
-            }))}
-            selections={aspectOptions}
-            onChange={updateAspect}
-            delay={1000}
-          />
+        <Chips
+          heading="Sets"
+          showHeaderControls
+          options={expansionFilterOptions.map((expansion) => ({
+            value: expansion,
+            label: ExpansionNames[expansion],
+          }))}
+          selections={expansionOptions}
+          onChange={updateExpansion}
+          delay={1000}
+        />
 
-          <Chips
-            heading="Sets"
-            showHeaderControls
-            options={expansionFilterOptions.map((expansion) => ({
-              value: expansion,
-              label: ExpansionNames[expansion],
-            }))}
-            selections={expansionOptions}
-            onChange={updateExpansion}
-            delay={1000}
-          />
+        <Chips
+          heading="Type"
+          showHeaderControls
+          options={typeFilterOptions.map((type) => ({
+            value: type,
+            label: type,
+          }))}
+          selections={typeOptions}
+          onChange={updateType}
+        />
 
-          <Chips
-            heading="Type"
-            showHeaderControls
-            options={typeFilterOptions.map((type) => ({
-              value: type,
-              label: type,
-            }))}
-            selections={typeOptions}
-            onChange={updateType}
-          />
-
-          <Chips
-            heading="Rarity"
-            showHeaderControls
-            options={rarityFilterOptions.map((rarity) => ({
-              value: rarity,
-              label: rarity,
-            }))}
-            selections={rarityOptions}
-            onChange={updateRarity}
-          />
-        </BottomSheetScrollView>
-      </View>
+        <Chips
+          heading="Rarity"
+          showHeaderControls
+          options={rarityFilterOptions.map((rarity) => ({
+            value: rarity,
+            label: rarity,
+          }))}
+          selections={rarityOptions}
+          onChange={updateRarity}
+        />
+      </BottomSheetScrollView>
     </BottomSheet>
   );
 }
 
 const styles = StyleSheet.create({
   background: {},
-  container: {
-    flex: 1,
-  },
   input: {
     borderRadius: 8,
     borderWidth: 0,
