@@ -1,4 +1,5 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import React, { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { CardListAspects } from '@components/CardListAspects';
@@ -14,7 +15,7 @@ export type CardListItemProps = {
 
 export const ITEM_HEIGHT = 64;
 
-export const CardListItem = ({
+const CardListItem = ({
   card,
   index,
   onPress: handlePress,
@@ -66,7 +67,7 @@ export const CardListItem = ({
               >
                 {card.attributes.subtitle ? (
                   <>
-                    <Text style={{ fontStyle: 'italic' }}>
+                    <Text style={styles.cardSubtitle}>
                       {card.attributes.subtitle}
                     </Text>
                     {' · '}
@@ -148,4 +149,10 @@ const styles = StyleSheet.create({
   cardInfo: {
     fontSize: 13,
   },
+  cardSubtitle: {
+    fontStyle: 'italic',
+  },
 });
+
+const MemoizedCardListItem = memo(CardListItem);
+export { MemoizedCardListItem as CardListItem };

@@ -13,7 +13,7 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
       headerRight: ({ tintColor }) => {
         return (
           <Pressable
-            style={{ padding: 8, marginRight: -8 }}
+            style={styles.headerButton}
             onPress={() => {
               navigation.push('StackInfoScreen');
             }}
@@ -23,7 +23,7 @@ export function CardListScreen({ navigation }: CardListScreenProps) {
                 name="question-circle"
                 size={20}
                 color={tintColor}
-                style={{ opacity: pressed ? 0.5 : 1 }}
+                style={pressed ? styles.headerIconPressed : styles.headerIcon}
               />
             )}
           </Pressable>
@@ -68,5 +68,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: '100%',
+  },
+  headerButton: {
+    padding: 8,
+    marginRight: -8,
+  },
+  headerIcon: {
+    opacity: 1,
+  },
+  headerIconPressed: {
+    opacity: 0.5,
   },
 });

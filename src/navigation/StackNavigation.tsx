@@ -1,6 +1,6 @@
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Platform, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 
 import type { StackParamList } from '@navigation/types';
 import { CardDetailScreen } from '@screens/CardDetailScreen';
@@ -8,6 +8,36 @@ import { CardListScreen } from '@screens/CardListScreen';
 import { InfoScreen } from '@screens/InfoScreen';
 
 const Stack = createNativeStackNavigator<StackParamList>();
+
+const styles = StyleSheet.create({
+  headerContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 16,
+  },
+  headerIcon: {
+    transform: [{ scaleX: -1 }],
+  },
+  headerTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+  },
+  cardDetailTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    lineHeight: 16,
+    textAlign: Platform.OS === 'android' ? 'auto' : 'center',
+    textTransform: 'uppercase',
+  },
+  cardDetailCaption: {
+    fontSize: 13,
+    lineHeight: 15,
+    opacity: 0.6,
+    textAlign: Platform.OS === 'android' ? 'auto' : 'center',
+  },
+});
 
 export const StackNavigator = () => {
   return (
@@ -20,33 +50,15 @@ export const StackNavigator = () => {
             title: 'Unlimited Power',
             headerTitle: ({ tintColor }) => {
               return (
-                <View
-                  style={{
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    gap: 16,
-                  }}
-                >
-                  <View
-                    style={{
-                      transform: [{ scaleX: -1 }],
-                    }}
-                  >
+                <View style={styles.headerContainer}>
+                  <View style={styles.headerIcon}>
                     <FontAwesome6
                       name="bolt-lightning"
                       size={16}
                       color={tintColor}
                     />
                   </View>
-                  <Text
-                    style={{
-                      color: tintColor,
-                      fontSize: 16,
-                      fontWeight: '700',
-                      textAlign: 'center',
-                      textTransform: 'uppercase',
-                    }}
-                  >
+                  <Text style={[styles.headerTitle, { color: tintColor }]}>
                     Unlimited Power
                   </Text>
                   <View>
@@ -69,28 +81,12 @@ export const StackNavigator = () => {
             headerTitle: ({ tintColor }) => {
               return (
                 <View>
-                  <Text
-                    style={{
-                      color: tintColor,
-                      fontSize: 16,
-                      fontWeight: '700',
-                      lineHeight: 16,
-                      textAlign: Platform.OS === 'android' ? 'auto' : 'center',
-                      textTransform: 'uppercase',
-                    }}
-                  >
+                  <Text style={[styles.cardDetailTitle, { color: tintColor }]}>
                     {route.params.title ?? ''}
                   </Text>
                   {route.params.caption ? (
                     <Text
-                      style={{
-                        color: tintColor,
-                        fontSize: 13,
-                        lineHeight: 15,
-                        opacity: 0.6,
-                        textAlign:
-                          Platform.OS === 'android' ? 'auto' : 'center',
-                      }}
+                      style={[styles.cardDetailCaption, { color: tintColor }]}
                     >
                       {route.params.caption}
                     </Text>

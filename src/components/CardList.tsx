@@ -1,4 +1,4 @@
-import { FlashList, useMappingHelper } from '@shopify/flash-list';
+import { FlashList } from '@shopify/flash-list';
 import { useCallback, useMemo } from 'react';
 import {
   ActivityIndicator,
@@ -64,8 +64,6 @@ export function CardList({
 
   const { numFiltersApplied, reset: resetFilters } = useFilters();
 
-  const { getMappingKey } = useMappingHelper();
-
   const insets = useSafeAreaInsets();
 
   const renderScrollComponent = useMemo(() => {
@@ -115,16 +113,6 @@ export function CardList({
     );
   }
 
-  if (isPaused) {
-    return (
-      <Error
-        message="Make sure you have a network connection and try again."
-        labelPrimary="Retry"
-        onPrimary={() => refetch()}
-      />
-    );
-  }
-
   if (!cards.length) {
     return (
       <Error
@@ -154,13 +142,9 @@ export function CardList({
         <FlashList
           data={cards}
           renderItem={({ item: card, index }) => (
-            <CardListItem
-              key={getMappingKey(card.id, index)}
-              card={card}
-              index={index}
-              onPress={handlePressItem}
-            />
+            <CardListItem card={card} index={index} onPress={handlePressItem} />
           )}
+          keyExtractor={(item) => item.id.toString()}
           onEndReached={loadNextPage}
           onEndReachedThreshold={1.5}
           onScrollBeginDrag={handleScrollBeginDrag}
