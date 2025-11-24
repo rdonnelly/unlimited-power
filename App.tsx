@@ -17,9 +17,10 @@ import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { type AppStateStatus, Platform } from 'react-native';
+import { type AppStateStatus, Platform, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import { ErrorBoundary } from '@components/ErrorBoundary';
 import { useAppState } from '@hooks/useAppState';
 import { useOnlineManager } from '@hooks/useOnlineManager';
 import { useTheme } from '@hooks/useTheme';
@@ -40,6 +41,12 @@ const queryClient = new QueryClient({
     queries: {
       gcTime: 1000 * 60 * 60 * 24, // 24 hours
     },
+  },
+});
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
   },
 });
 
@@ -104,21 +111,26 @@ export default function App() {
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <PersistQueryClientProvider
-        client={queryClient}
-        persistOptions={{
-          persister: asyncStoragePersister,
-          buster: __DEV__
-            ? (Math.random() + 1).toString(36).substring(7)
-            : undefined,
-        }}
+    <ErrorBoundary>
+      <GestureHandlerRootView
+        style={styles.container}
+        onLayout={onLayoutRootView}
       >
-        <NavigationContainer theme={navigationTheme} ref={navigationRef}>
-          <StackNavigator />
-        </NavigationContainer>
-      </PersistQueryClientProvider>
-      <StatusBar style="auto" />
-    </GestureHandlerRootView>
+        <PersistQueryClientProvider
+          client={queryClient}
+          persistOptions={{
+            persister: asyncStoragePersister,
+            buster: __DEV__
+              ? (Math.random() + 1).toString(36).substring(7)
+              : undefined,
+          }}
+        >
+          <NavigationContainer theme={navigationTheme} ref={navigationRef}>
+            <StackNavigator />
+          </NavigationContainer>
+        </PersistQueryClientProvider>
+        <StatusBar style="auto" />
+      </GestureHandlerRootView>
+    </ErrorBoundary>
   );
 }

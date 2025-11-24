@@ -58,10 +58,10 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
       <View style={[styles.cell, { width: windowWidth }]}>
         <ScrollView
           style={styles.scrollContainer}
-          contentContainerStyle={{
-            alignItems: 'center',
-            paddingBottom: Math.max(32, insets.bottom),
-          }}
+          contentContainerStyle={[
+            styles.scrollContent,
+            { paddingBottom: Math.max(32, insets.bottom) },
+          ]}
         >
           <CardDetail id={card.id} />
         </ScrollView>
@@ -138,5 +138,8 @@ const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
     width: '100%',
+  },
+  scrollContent: {
+    alignItems: 'center',
   },
 });
