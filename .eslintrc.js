@@ -13,6 +13,8 @@ module.exports = {
     'simple-import-sort/imports': 'error',
     'react-native/no-unused-styles': 'warn',
     'react-native/no-inline-styles': 'warn',
+    'react/jsx-no-leaked-render': 'error',
+    'react/jsx-no-bind': 'error',
   },
   overrides: [
     {
