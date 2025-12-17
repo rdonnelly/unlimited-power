@@ -59,11 +59,11 @@ export function CardDetailImages({
               single
             />
           </View>
-          {isFetchingPrintings && (
+          {isFetchingPrintings ? (
             <View style={styles.variantLoading}>
               <ActivityIndicator color={theme.tintSubdued} />
             </View>
-          )}
+          ) : null}
         </View>
         <View style={styles.images}>
           {cardImages.map((cardImageProps, i) => (

@@ -1,5 +1,7 @@
 import * as z from 'zod';
 
+// https://admin.starwarsunlimited.com/api/card-expansions
+
 const VALUES = [
   'SOR', // 2, Spark of Rebellion
   'SHD', // 8, Shadows of the Galaxy
@@ -8,7 +10,7 @@ const VALUES = [
   'LOF', // 53, Legends of the Force
   'IBH', // 68, Intro Battle: Hoth
   'SEC', // 73, Secrets of Power
-  'LAW', // 78, A Lawless Time
+  'LAW', // 93, A Lawless Time
 
   'C24', // 13, 2024 Convention Exclusive
   'J24', // 28, 2024 Judge Program
@@ -44,7 +46,7 @@ export const ExpansionCodes: Record<Expansion, number> = {
   LOF: 53,
   IBH: 68,
   SEC: 73,
-  LAW: 78,
+  LAW: 93,
 
   C24: 13,
   J24: 28,
