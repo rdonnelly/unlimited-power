@@ -9,6 +9,8 @@ export function useCardImages(
 ): CardDetailImageProps[] {
   const { width: windowWidth } = useWindowDimensions();
 
+  const imageWidth = Math.min(windowWidth - 64, 512);
+
   if (!selectedVariantCardAttributes && !standardVariantCardAttributes) {
     return [];
   }
@@ -25,12 +27,12 @@ export function useCardImages(
 
   if (artFrontAttributes) {
     const frontWidth = artFrontAttributes.width;
-    ratios.push(Math.min(windowWidth - 64, frontWidth) / frontWidth);
+    ratios.push(Math.min(imageWidth, frontWidth) / frontWidth);
   }
 
   if (artBackAttributes) {
     const backWidth = artBackAttributes.width;
-    ratios.push(Math.min(windowWidth - 64, backWidth) / backWidth);
+    ratios.push(Math.min(imageWidth, backWidth) / backWidth);
   }
 
   const ratio = Math.min(...ratios);
