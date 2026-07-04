@@ -2,9 +2,9 @@ import { create } from 'zustand';
 
 import { RarityCodes } from '@data/Rarity';
 
-export const rarityFilterOptions = [
-  ...Object.keys(RarityCodes),
-] as (keyof typeof RarityCodes)[];
+export const rarityFilterOptions = Object.keys(
+  RarityCodes,
+) as (keyof typeof RarityCodes)[];
 
 type State = {
   rarities: (typeof rarityFilterOptions)[number][];

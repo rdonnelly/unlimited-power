@@ -90,7 +90,7 @@ export function Chips<T>({
   );
 
   const handlePressAll = () => {
-    selectedOptionsRef.current = [...options.map((option) => option.value)];
+    selectedOptionsRef.current = options.map((option) => option.value);
 
     setSelectedOptions(selectedOptionsRef.current);
     handleChangeDebounced();

@@ -2,9 +2,9 @@ import { create } from 'zustand';
 
 import { TypeCodes } from '@data/Type';
 
-export const typeFilterOptions = [
-  ...Object.keys(TypeCodes),
-] as (keyof typeof TypeCodes)[];
+export const typeFilterOptions = Object.keys(
+  TypeCodes,
+) as (keyof typeof TypeCodes)[];
 
 type State = {
   types: (typeof typeFilterOptions)[number][];

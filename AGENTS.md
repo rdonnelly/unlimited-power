@@ -7,10 +7,14 @@ React Native (Expo SDK 57, new architecture) app for the Star Wars Unlimited car
 ```bash
 npm run dev          # start Expo dev client (requires a pre-built dev client)
 npm run check:ts     # typecheck (tsc)
-npm run check:lint   # eslint
+npm run check:lint   # lint (oxlint)
+npm run check:format # verify formatting (oxfmt --check)
+npm run format       # format the codebase (oxfmt)
 ```
 
 Package manager is **npm**. Node version is pinned in [.nvmrc](.nvmrc).
+
+Linting is handled by [Oxlint](https://oxc.rs/docs/guide/usage/linter) (config in [.oxlintrc.json](.oxlintrc.json)) and formatting by [Oxfmt](https://oxc.rs/docs/guide/usage/formatter) (config in [.oxfmtrc.json](.oxfmtrc.json)) — not ESLint/Prettier. Run `npx oxlint --fix` to auto-fix. Some ESLint rules from the old `eslint-config-universe` setup have no Oxlint equivalent yet and were dropped: `simple-import-sort` (import ordering), `react-native/no-inline-styles` + `no-unused-styles`, and `react/jsx-no-bind` + `jsx-no-leaked-render`.
 
 ## Path aliases (required)
 

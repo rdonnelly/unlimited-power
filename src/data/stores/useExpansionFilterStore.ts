@@ -2,9 +2,9 @@ import { create } from 'zustand';
 
 import { ExpansionCodes } from '@data/Expansion';
 
-export const expansionFilterOptions = [
-  ...Object.keys(ExpansionCodes),
-] as (keyof typeof ExpansionCodes)[];
+export const expansionFilterOptions = Object.keys(
+  ExpansionCodes,
+) as (keyof typeof ExpansionCodes)[];
 
 type State = {
   expansions: (typeof expansionFilterOptions)[number][];
