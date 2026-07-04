@@ -1,6 +1,6 @@
 # Unlimited Power
 
-React Native (Expo SDK 55, new architecture) app for the Star Wars Unlimited card game: a searchable/filterable card list backed by the `admin.starwarsunlimited.com` API.
+React Native (Expo SDK 57, new architecture) app for the Star Wars Unlimited card game: a searchable/filterable card list backed by the `admin.starwarsunlimited.com` API.
 
 ## Commands
 
