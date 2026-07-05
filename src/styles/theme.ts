@@ -81,3 +81,5 @@ export const DARK_THEME = {
   chipSelectedTint: colors.purple100,
   chipSelectedBorder: colors.purple700,
 } as const;
+
+export type Theme = typeof LIGHT_THEME | typeof DARK_THEME;

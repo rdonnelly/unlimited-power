@@ -115,16 +115,6 @@ export function CardList({
     );
   }
 
-  if (isPaused) {
-    return (
-      <Error
-        message="Make sure you have a network connection and try again."
-        labelPrimary="Retry"
-        onPrimary={() => refetch()}
-      />
-    );
-  }
-
   if (!cards.length) {
     return (
       <Error

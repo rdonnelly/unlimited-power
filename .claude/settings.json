@@ -1,0 +1,6 @@
+{
+  "enabledPlugins": {
+    "react-native-best-practices@callstack-agent-skills": true,
+    "upgrading-react-native@callstack-agent-skills": true
+  }
+}

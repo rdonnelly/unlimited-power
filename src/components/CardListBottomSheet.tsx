@@ -59,11 +59,7 @@ export function CardListBottomSheet({
 
   const handleChangeText = useCallback(
     (searchString: string) => {
-      if (searchString) {
-        setSearchStringDebounced(searchString);
-      } else {
-        setSearchStringDebounced(searchString);
-      }
+      setSearchStringDebounced(searchString);
     },
     [setSearchStringDebounced],
   );

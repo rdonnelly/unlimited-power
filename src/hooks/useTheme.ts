@@ -1,13 +1,9 @@
 import { StyleSheet, useColorScheme } from 'react-native';
 
-import { DARK_THEME, LIGHT_THEME } from '@styles/theme';
+import { DARK_THEME, LIGHT_THEME, type Theme } from '@styles/theme';
 
-export function useTheme() {
-  const colorScheme = useColorScheme();
-
-  const theme = colorScheme === 'dark' ? DARK_THEME : LIGHT_THEME;
-
-  const styles = StyleSheet.create({
+function createThemeStyles(theme: Theme) {
+  return StyleSheet.create({
     // BACKGROUND
     background0: {
       backgroundColor: theme.background0,
@@ -84,9 +80,18 @@ export function useTheme() {
       borderColor: theme.chipSelectedBorder,
     },
   });
+}
+
+const LIGHT_STYLES = createThemeStyles(LIGHT_THEME);
+const DARK_STYLES = createThemeStyles(DARK_THEME);
+
+export function useTheme() {
+  const colorScheme = useColorScheme();
+
+  const isDark = colorScheme === 'dark';
 
   return {
-    theme,
-    themeStyles: styles,
+    theme: isDark ? DARK_THEME : LIGHT_THEME,
+    themeStyles: isDark ? DARK_STYLES : LIGHT_STYLES,
   };
 }
