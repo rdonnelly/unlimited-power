@@ -36,11 +36,11 @@ function CardDetailLinks({ cardAttributes }: CardDetailLinksProps) {
         size="small"
         onPress={() =>
           openURL(
-            `https://sw-unlimited-db.com/cards/${cardAttributes.expansion.data?.attributes.code.toLowerCase()}/${[cardAttributes.title.toLowerCase().replaceAll(' ', '-'), ...(cardAttributes.subtitle ? [cardAttributes.subtitle.toLowerCase().replaceAll(' ', '-')] : [])].join('-')}`,
+            `https://swuforge.com/cards/${cardAttributes.expansion.data?.attributes.code}/${String(cardAttributes.cardNumber)}/`,
           )
         }
       >
-        Open on SW-Unlimited-db.com
+        Open on SWU Forge
       </LinkButton>
     </View>
   );
