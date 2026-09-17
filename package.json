@@ -21,58 +21,58 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "@bugsnag/expo": "^55.0.0",
-    "@expo/html-elements": "^55.0.3",
+    "@bugsnag/expo": "^57.0.0",
+    "@expo/html-elements": "^57.0.0",
     "@expo/vector-icons": "^15.1.1",
     "@gorhom/bottom-sheet": "^5.2.8",
-    "@lodev09/react-native-true-sheet": "^3.9.9",
+    "@lodev09/react-native-true-sheet": "^3.11.14",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-community/netinfo": "12.0.1",
-    "@react-navigation/native": "^7.2.1",
-    "@react-navigation/native-stack": "^7.14.9",
+    "@react-navigation/native": "^7.4.1",
+    "@react-navigation/native-stack": "^7.19.1",
     "@shopify/flash-list": "^2.3.1",
-    "@tanstack/query-async-storage-persister": "^5.95.2",
-    "@tanstack/react-query": "^5.95.2",
-    "@tanstack/react-query-persist-client": "^5.95.2",
+    "@tanstack/query-async-storage-persister": "^5.103.1",
+    "@tanstack/react-query": "^5.103.1",
+    "@tanstack/react-query-persist-client": "^5.103.1",
     "babel-plugin-module-resolver": "^5.0.0",
-    "expo": "^57.0.0",
-    "expo-application": "~57.0.0",
-    "expo-asset": "~57.0.3",
-    "expo-constants": "~57.0.3",
-    "expo-crypto": "~57.0.0",
-    "expo-dev-client": "~57.0.5",
-    "expo-device": "~57.0.0",
-    "expo-file-system": "~57.0.0",
-    "expo-font": "~57.0.0",
-    "expo-haptics": "~57.0.0",
-    "expo-image": "~57.0.0",
-    "expo-linking": "~57.0.1",
-    "expo-sharing": "~57.0.2",
-    "expo-splash-screen": "~57.0.2",
-    "expo-status-bar": "~57.0.0",
-    "expo-web-browser": "~57.0.0",
+    "expo": "~57.0.23",
+    "expo-application": "~57.0.3",
+    "expo-asset": "~57.0.17",
+    "expo-constants": "~57.0.18",
+    "expo-crypto": "~57.0.3",
+    "expo-dev-client": "~57.0.19",
+    "expo-device": "~57.0.2",
+    "expo-file-system": "~57.0.7",
+    "expo-font": "~57.0.4",
+    "expo-haptics": "~57.0.3",
+    "expo-image": "~57.0.5",
+    "expo-linking": "~57.0.10",
+    "expo-sharing": "~57.0.20",
+    "expo-splash-screen": "~57.0.9",
+    "expo-status-bar": "~57.0.1",
+    "expo-web-browser": "~57.0.3",
     "lodash": "^4.17.23",
-    "qs": "^6.15.0",
+    "qs": "^6.16.0",
     "react": "19.2.3",
-    "react-native": "0.86.0",
+    "react-native": "0.86.3",
     "react-native-gesture-handler": "~2.32.0",
-    "react-native-reanimated": "~4.5.0",
+    "react-native-reanimated": "~4.5.5",
     "react-native-render-html": "^6.3.4",
     "react-native-safe-area-context": "~5.7.0",
-    "react-native-screens": "~4.25.2",
-    "react-native-worklets": "~0.10.0",
-    "zod": "^4.3.6",
-    "zustand": "^5.0.12"
+    "react-native-screens": "~4.26.0",
+    "react-native-worklets": "~0.10.4",
+    "zod": "^4.6.5",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
     "@total-typescript/ts-reset": "^0.6.1",
-    "@types/lodash": "^4.17.24",
+    "@types/lodash": "^4.17.25",
     "@types/qs": "^6.15.0",
-    "@types/react": "~19.2.10",
-    "babel-preset-expo": "~57.0.0",
-    "oxfmt": "^0.57.0",
-    "oxlint": "^1.72.0",
+    "@types/react": "~19.2.18",
+    "babel-preset-expo": "~57.0.12",
+    "oxfmt": "^0.68.0",
+    "oxlint": "^1.83.0",
     "patch-package": "^8.0.1",
     "typescript": "~6.0.3"
   },
@@ -85,31 +85,6 @@
         "react-native-screens",
         "react-native-worklets"
       ]
-    }
-  },
-  "comments": {
-    "overrides": "@bugsnag/expo tracks the Expo SDK major and has no SDK 56+ release; these relax its (and its plugins') expo-* / netinfo peer pins to the app's own versions. Bump these to match dependencies on each SDK upgrade."
-  },
-  "overrides": {
-    "@bugsnag/expo": {
-      "expo": "^57.0.0",
-      "expo-constants": "~57.0.3"
-    },
-    "@bugsnag/plugin-expo-app": {
-      "expo-constants": "~57.0.3",
-      "expo-application": "~57.0.0"
-    },
-    "@bugsnag/plugin-expo-device": {
-      "expo-constants": "~57.0.3",
-      "expo-device": "~57.0.0"
-    },
-    "@bugsnag/delivery-expo": {
-      "expo-crypto": "~57.0.0",
-      "expo-file-system": "~57.0.0",
-      "@react-native-community/netinfo": "12.0.1"
-    },
-    "@bugsnag/plugin-expo-connectivity-breadcrumbs": {
-      "@react-native-community/netinfo": "12.0.1"
     }
   },
   "private": true
