@@ -12,6 +12,8 @@ const VALUES = [
   'SEC', // 73, Secrets of Power
   'LAW', // 93, A Lawless Time
   'ASH', // 108, Ashes of the Empire
+  'HMW', // 128, Homeworlds
+
   'TS26', // 103, 2026 Twin Suns
 
   'C24', // 13, 2024 Convention Exclusive
@@ -32,12 +34,14 @@ export const ExpansionRank: Record<Expansion, number> = {
   SEC: 7,
   LAW: 8,
   ASH: 9,
-  TS26: 10,
+  HMW: 10,
 
-  C24: 11,
-  P25: 12,
-  C25: 13,
-  P26: 14,
+  TS26: 11,
+
+  C24: 12,
+  P25: 13,
+  C25: 14,
+  P26: 15,
 } as const;
 
 export const ExpansionCodes: Record<Expansion, number> = {
@@ -50,6 +54,8 @@ export const ExpansionCodes: Record<Expansion, number> = {
   SEC: 73,
   LAW: 93,
   ASH: 108,
+  HMW: 128,
+
   TS26: 103,
 
   C24: 13,
@@ -68,6 +74,8 @@ export const ExpansionNames: Record<Expansion, string> = {
   SEC: 'Secrets of Power',
   LAW: 'A Lawless Time',
   ASH: 'Ashes of the Empire',
+  HMW: 'Homeworlds',
+
   TS26: '2026 Twin Suns',
 
   C24: '2024 Convention Exclusive',
