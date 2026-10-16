@@ -20,3 +20,4 @@ All build/submit scripts wrap `eas-cli`; profiles are defined in [eas.json](../e
 
 - Go one major at a time. Per SDK: `npx expo install expo@^<N>.0.0 --fix`, then manually bump the libs in `expo.install.exclude` (reanimated, worklets, gesture-handler, screens, flash-list) to that SDK's `bundledNativeModules.json` targets.
 - Verify each step: `npm run check:ts`, `npm run check:lint`, `npm run check:format`, `npx expo-doctor@latest`, confirm the render-html patch still applies, and `npx expo export --platform ios` for an end-to-end bundle check.
+- `@bugsnag/expo` often lags behind new SDKs. Until it publishes a compatible release, `overrides` in package.json force its `expo` peer and its transitive `expo-*` native modules to the app's versions (this avoids duplicate native modules). Remove the overrides once Bugsnag supports the SDK.

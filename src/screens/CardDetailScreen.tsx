@@ -8,7 +8,7 @@ import {
   StyleSheet,
   useWindowDimensions,
   View,
-  type ViewToken,
+  type ListViewToken,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -84,7 +84,7 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
   });
 
   const handleViewableItemsChanged = useCallback(
-    ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+    ({ viewableItems }: { viewableItems: ListViewToken[] }) => {
       if (viewableItems[0]?.index != null) {
         navigation.setParams({
           id: cards[viewableItems[0]?.index]?.id,
