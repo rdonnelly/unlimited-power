@@ -2,9 +2,9 @@
 
 ## Add a new filter
 
-1. Create a Zustand store in [src/data/stores/](../src/data/stores/), exporting its options and selector.
-2. Add the captured value to [useCardsQueryKey.ts](../src/data/hooks/useCardsQueryKey.ts) and the type, normalization, None handling, and request/matching helpers in [CardFilters.ts](../src/data/CardFilters.ts). Do not read live store state after a fetch.
-3. Add controlled chips to [CardListBottomSheet.tsx](../src/components/CardListBottomSheet.tsx), include the group in [useFilters.ts](../src/hooks/useFilters.ts), and reset it in [resetAllFilters.ts](../src/data/stores/resetAllFilters.ts).
+1. Add the option list, a `CardFilters` field, and a `FILTER_GROUPS` entry in [CardFilters.ts](../src/data/CardFilters.ts). The sheet's chips, the active-filter count, Reset, and normalization all derive from `FILTER_GROUPS` and `DEFAULT_FILTERS`.
+2. Add the request condition in `buildCardFilters` (and local matching, if the API can't filter it) in the same file. Do not read live store state after a fetch.
+3. Add the field to `selectFilters` in [useFilterStore.ts](../src/data/stores/useFilterStore.ts) so it's part of the query key.
 4. Extend [browsing.test.cjs](../tests/browsing.test.cjs) for query identity, selection semantics, reset, and pagination. Run `npm test`.
 
 ## Add a new screen

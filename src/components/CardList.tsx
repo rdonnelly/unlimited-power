@@ -8,7 +8,8 @@ import { CardListItem } from '@components/CardListItem';
 import { Error } from '@components/Error';
 import { QueryNotice } from '@components/QueryNotice';
 import { useCards } from '@data/hooks/useCards';
-import { useFilters } from '@hooks/useFilters';
+import { countActiveFilters } from '@data/CardFilters';
+import { useFilterStore } from '@data/stores/useFilterStore';
 import { useTheme } from '@hooks/useTheme';
 import { useIsOnline } from '@hooks/useIsOnline';
 
@@ -56,7 +57,8 @@ export function CardList({
     }
   }, [hasNextPage, isFetching, isPaused, isError, fetchNextPage]);
 
-  const { numFiltersApplied, reset: resetFilters } = useFilters();
+  const numFiltersApplied = useFilterStore(countActiveFilters);
+  const resetFilters = useFilterStore((state) => state.reset);
 
   const insets = useSafeAreaInsets();
 

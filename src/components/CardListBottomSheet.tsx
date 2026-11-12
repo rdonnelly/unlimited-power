@@ -11,28 +11,16 @@ import {
 import { CardSearch } from '@components/CardSearch';
 
 import { Button } from '@components/Button';
-import { resetAllFilters } from '@data/stores/resetAllFilters';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useShallow } from 'zustand/shallow';
 
 import { Chips } from '@components/Chips';
-import { ExpansionNames } from '@data/Expansion';
 import {
-  aspectFilterOptions,
-  useAspectFilterStore,
-} from '@data/stores/useAspectFilterStore';
-import {
-  expansionFilterOptions,
-  useExpansionFilterStore,
-} from '@data/stores/useExpansionFilterStore';
-import {
-  rarityFilterOptions,
-  useRarityFilterStore,
-} from '@data/stores/useRarityFilterStore';
-import {
-  typeFilterOptions,
-  useTypeFilterStore,
-} from '@data/stores/useTypeFilterStore';
+  FILTER_GROUPS,
+  type FilterGroup,
+  type FilterGroupKey,
+  type FilterGroupValue,
+} from '@data/CardFilters';
+import { useFilterStore } from '@data/stores/useFilterStore';
 import { useTheme } from '@hooks/useTheme';
 
 type CardListBottomSheetProps = {
@@ -61,21 +49,7 @@ export function CardListBottomSheet({
     void bottomSheetRef.current?.resize(0).catch(console.warn);
   };
 
-  const [aspectOptions, updateAspect] = useAspectFilterStore(
-    useShallow((state) => [state.aspects, state.update]),
-  );
-
-  const [expansionOptions, updateExpansion] = useExpansionFilterStore(
-    useShallow((state) => [state.expansions, state.update]),
-  );
-
-  const [rarityOptions, updateRarity] = useRarityFilterStore(
-    useShallow((state) => [state.rarities, state.update]),
-  );
-
-  const [typeOptions, updateType] = useTypeFilterStore(
-    useShallow((state) => [state.types, state.update]),
-  );
+  const reset = useFilterStore((state) => state.reset);
 
   return (
     <TrueSheet
@@ -136,7 +110,7 @@ export function CardListBottomSheet({
           >
             Filters
           </Text>
-          <Button size="small" onPress={resetAllFilters}>
+          <Button size="small" onPress={reset}>
             Reset
           </Button>
           <Button
@@ -147,51 +121,26 @@ export function CardListBottomSheet({
             Done
           </Button>
         </View>
-        <Chips
-          heading="Aspects"
-          showHeaderControls
-          options={aspectFilterOptions.map((aspect) => ({
-            value: aspect,
-            label: aspect,
-          }))}
-          selections={aspectOptions}
-          onChange={updateAspect}
-        />
-
-        <Chips
-          heading="Sets"
-          showHeaderControls
-          options={expansionFilterOptions.map((expansion) => ({
-            value: expansion,
-            label: ExpansionNames[expansion],
-          }))}
-          selections={expansionOptions}
-          onChange={updateExpansion}
-        />
-
-        <Chips
-          heading="Type"
-          showHeaderControls
-          options={typeFilterOptions.map((type) => ({
-            value: type,
-            label: type,
-          }))}
-          selections={typeOptions}
-          onChange={updateType}
-        />
-
-        <Chips
-          heading="Rarity"
-          showHeaderControls
-          options={rarityFilterOptions.map((rarity) => ({
-            value: rarity,
-            label: rarity,
-          }))}
-          selections={rarityOptions}
-          onChange={updateRarity}
-        />
+        {FILTER_GROUPS.map((group) => (
+          <FilterGroupChips key={group.key} group={group} />
+        ))}
       </ScrollView>
     </TrueSheet>
+  );
+}
+
+function FilterGroupChips({ group }: { group: FilterGroup }) {
+  const selections = useFilterStore((state) => state[group.key]);
+  const setGroup = useFilterStore((state) => state.setGroup);
+
+  return (
+    <Chips<FilterGroupValue<FilterGroupKey>>
+      heading={group.heading}
+      showHeaderControls
+      options={[...group.options]}
+      selections={selections}
+      onChange={(values) => setGroup(group.key, values)}
+    />
   );
 }
 

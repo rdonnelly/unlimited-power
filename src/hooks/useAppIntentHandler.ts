@@ -9,9 +9,7 @@ import { cardSearchSheet } from '@data/cardSearchSheet';
 import { parseAppIntent } from '@data/appIntentParams';
 
 import { ExpansionEnum, ExpansionNames } from '@data/Expansion';
-import { resetAllFilters } from '@data/stores/resetAllFilters';
-import { useExpansionFilterStore } from '@data/stores/useExpansionFilterStore';
-import { useSearchFilterStore } from '@data/stores/useSearchFilterStore';
+import { useFilterStore } from '@data/stores/useFilterStore';
 
 // Intents are declared in Swift in app-intents/. Each one dispatches to JS by
 // name with the params below.
@@ -30,15 +28,13 @@ function handleInvocation(
   switch (invocation.name) {
     case 'searchCards': {
       const { query } = invocation.params;
-      resetAllFilters();
-      useSearchFilterStore.getState().update(query.trim() || undefined);
+      useFilterStore.getState().apply({ search: query });
       showCardList(navigationRef);
       break;
     }
     case 'showExpansion': {
       const { expansion } = invocation.params;
-      resetAllFilters();
-      useExpansionFilterStore.getState().update([expansion]);
+      useFilterStore.getState().apply({ expansions: [expansion] });
       showCardList(navigationRef);
       break;
     }

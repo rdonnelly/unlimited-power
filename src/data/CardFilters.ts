@@ -1,12 +1,19 @@
-import { AspectCodes } from '@data/Aspect';
+import { AspectCodes, Aspects } from '@data/Aspect';
 import type { Card } from '@data/Card';
-import { ExpansionCodes } from '@data/Expansion';
+import { ExpansionCodes, ExpansionNames } from '@data/Expansion';
 import { RarityCodes } from '@data/Rarity';
-import { aspectFilterOptions } from '@data/stores/useAspectFilterStore';
-import { expansionFilterOptions } from '@data/stores/useExpansionFilterStore';
-import { rarityFilterOptions } from '@data/stores/useRarityFilterStore';
-import { typeFilterOptions } from '@data/stores/useTypeFilterStore';
 import { TypeCodes } from '@data/Type';
+
+export const aspectFilterOptions = [...Aspects, 'Neutral'] as const;
+export const expansionFilterOptions = Object.keys(
+  ExpansionCodes,
+) as (keyof typeof ExpansionCodes)[];
+export const rarityFilterOptions = Object.keys(
+  RarityCodes,
+) as (keyof typeof RarityCodes)[];
+export const typeFilterOptions = Object.keys(
+  TypeCodes,
+) as (keyof typeof TypeCodes)[];
 
 export type CardFilters = {
   search: string;
@@ -16,20 +23,72 @@ export type CardFilters = {
   types: (typeof typeFilterOptions)[number][];
 };
 
-export function normalizeCardFilters(filters: CardFilters): CardFilters {
+export type FilterGroupKey = Exclude<keyof CardFilters, 'search'>;
+export type FilterGroupValue<K extends FilterGroupKey> = CardFilters[K][number];
+
+export type FilterGroup<K extends FilterGroupKey = FilterGroupKey> = {
+  key: K;
+  heading: string;
+  options: readonly { value: FilterGroupValue<K>; label: string }[];
+};
+
+function group<K extends FilterGroupKey>(
+  key: K,
+  heading: string,
+  values: readonly FilterGroupValue<K>[],
+  label: (value: FilterGroupValue<K>) => string = String,
+): FilterGroup<K> {
   return {
-    search: filters.search.trim(),
-    aspects: aspectFilterOptions.filter((value) =>
-      filters.aspects.includes(value),
-    ),
-    expansions: expansionFilterOptions.filter((value) =>
-      filters.expansions.includes(value),
-    ),
-    rarities: rarityFilterOptions.filter((value) =>
-      filters.rarities.includes(value),
-    ),
-    types: typeFilterOptions.filter((value) => filters.types.includes(value)),
+    key,
+    heading,
+    options: values.map((value) => ({ value, label: label(value) })),
   };
+}
+
+// Single source of truth for the filter groups, in display order.
+export const FILTER_GROUPS: readonly FilterGroup[] = [
+  group('aspects', 'Aspects', aspectFilterOptions),
+  group(
+    'expansions',
+    'Sets',
+    expansionFilterOptions,
+    (value) => ExpansionNames[value],
+  ),
+  group('types', 'Type', typeFilterOptions),
+  group('rarities', 'Rarity', rarityFilterOptions),
+];
+
+export const DEFAULT_FILTERS: CardFilters = {
+  search: '',
+  aspects: [...aspectFilterOptions],
+  expansions: [...expansionFilterOptions],
+  rarities: [...rarityFilterOptions],
+  types: [...typeFilterOptions],
+};
+
+export function isGroupActive(filters: CardFilters, key: FilterGroupKey) {
+  const selected: readonly string[] = filters[key];
+  const options = FILTER_GROUPS.find((g) => g.key === key)?.options ?? [];
+  return !options.every((option) => selected.includes(option.value));
+}
+
+export function countActiveFilters(filters: CardFilters) {
+  return (
+    +(filters.search !== '') +
+    FILTER_GROUPS.filter((g) => isGroupActive(filters, g.key)).length
+  );
+}
+
+export function normalizeCardFilters(filters: CardFilters): CardFilters {
+  const normalized = { ...filters, search: filters.search.trim() };
+  for (const { key, options } of FILTER_GROUPS) {
+    const selected: readonly string[] = filters[key];
+    // Canonical option order; unknown values are dropped.
+    (normalized[key] as string[]) = options
+      .map((option) => option.value)
+      .filter((value) => selected.includes(value));
+  }
+  return normalized;
 }
 
 export function hasNoSelections(filters: CardFilters) {

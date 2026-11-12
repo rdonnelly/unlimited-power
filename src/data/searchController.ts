@@ -1,24 +1,28 @@
 import debounce from 'lodash/debounce';
-import { useSearchFilterStore } from '@data/stores/useSearchFilterStore';
+import { useFilterStore } from '@data/stores/useFilterStore';
 
 export function createSearchController(onDraft: (text: string) => void) {
   let committing = false;
   const commit = debounce((text: string) => {
     committing = true;
     try {
-      useSearchFilterStore.getState().update(text.trim() || undefined);
+      useFilterStore.getState().setSearch(text);
     } finally {
       committing = false;
     }
   }, 350);
-  const unsubscribe = useSearchFilterStore.subscribe((state) => {
-    // Same-value resets must also cancel a pending edit.
-    if (!committing) {
+  const unsubscribe = useFilterStore.subscribe((state, prev) => {
+    // Only external search changes cancel a pending edit. Chip changes don't,
+    // and same-value resets still do (via searchEpoch).
+    const external =
+      state.searchEpoch !== prev.searchEpoch ||
+      (state.search !== prev.search && !committing);
+    if (external) {
       commit.cancel();
-      onDraft(state.searchString ?? '');
+      onDraft(state.search);
     }
   });
-  onDraft(useSearchFilterStore.getState().searchString ?? '');
+  onDraft(useFilterStore.getState().search);
   return {
     change(text: string) {
       onDraft(text);

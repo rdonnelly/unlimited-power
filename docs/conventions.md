@@ -8,7 +8,7 @@
 
 ## Data & store patterns
 
-- **Filter stores** use a toggle pattern with `selectAll` / `selectNone` helpers. See [useAspectFilterStore.ts](../src/data/stores/useAspectFilterStore.ts).
+- **Filters** live in one store with `setGroup` / `reset` / `apply`; groups are defined once in `FILTER_GROUPS`. See [useFilterStore.ts](../src/data/stores/useFilterStore.ts).
 
 ## Component patterns
 

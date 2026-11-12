@@ -2,12 +2,7 @@ const assert = require('node:assert/strict');
 const Module = require('node:module');
 const test = require('node:test');
 const React = require('react');
-const {
-  useSearchFilterStore,
-} = require('../src/data/stores/useSearchFilterStore.ts');
-const {
-  useExpansionFilterStore,
-} = require('../src/data/stores/useExpansionFilterStore.ts');
+const { useFilterStore } = require('../src/data/stores/useFilterStore.ts');
 
 let processPending;
 let onForeground;
@@ -117,13 +112,13 @@ test('intent delivery validates, dismisses filters, and retries acknowledgments 
   await processPending([
     { id: 'search', name: 'searchCards', params: { query: '  Luke  ' } },
   ]);
-  assert.equal(useSearchFilterStore.getState().searchString, 'Luke');
+  assert.equal(useFilterStore.getState().search, 'Luke');
   assert.equal(restored, 2);
   await processPending([
     { id: 'set', name: 'showExpansion', params: { expansion: 'SOR' } },
   ]);
-  assert.deepEqual(useExpansionFilterStore.getState().expansions, ['SOR']);
-  assert.equal(useSearchFilterStore.getState().searchString, undefined);
+  assert.deepEqual(useFilterStore.getState().expansions, ['SOR']);
+  assert.equal(useFilterStore.getState().search, '');
   assert.equal(typeof onForeground, 'function');
   assert.equal(restored, 3);
 

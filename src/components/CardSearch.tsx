@@ -2,14 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { createSearchController } from '@data/searchController';
 import { StyleSheet, TextInput, View } from 'react-native';
 
-import { useSearchFilterStore } from '@data/stores/useSearchFilterStore';
+import { useFilterStore } from '@data/stores/useFilterStore';
 import { useTheme } from '@hooks/useTheme';
 
 export function CardSearch({ onSubmit }: { onSubmit?: () => void }) {
   const { theme, themeStyles } = useTheme();
-  const [draft, setDraft] = useState(
-    () => useSearchFilterStore.getState().searchString ?? '',
-  );
+  const [draft, setDraft] = useState(() => useFilterStore.getState().search);
   const controller = useRef<ReturnType<typeof createSearchController> | null>(
     null,
   );

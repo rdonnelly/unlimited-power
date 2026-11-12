@@ -8,15 +8,16 @@ const {
   hasNoSelections,
   matchesAspects,
   buildCardFilters,
-} = require('@data/CardFilters');
-const { aspectFilterOptions } = require('@data/stores/useAspectFilterStore');
-const {
+  countActiveFilters,
+  DEFAULT_FILTERS,
+  FILTER_GROUPS,
+  aspectFilterOptions,
   expansionFilterOptions,
-} = require('@data/stores/useExpansionFilterStore');
-const { rarityFilterOptions } = require('@data/stores/useRarityFilterStore');
-const { typeFilterOptions } = require('@data/stores/useTypeFilterStore');
-const { useSearchFilterStore } = require('@data/stores/useSearchFilterStore');
-const { resetAllFilters } = require('@data/stores/resetAllFilters');
+  rarityFilterOptions,
+  typeFilterOptions,
+} = require('@data/CardFilters');
+const { useFilterStore } = require('@data/stores/useFilterStore');
+const resetAllFilters = () => useFilterStore.getState().reset();
 const { createSearchController } = require('@data/searchController');
 const { fetchCards } = require('@data/fetchCards');
 const {
@@ -191,24 +192,88 @@ test('search drafts cannot return after Reset, intent updates, or unmount', asyn
     resetAllFilters();
     await wait(400);
     assert.equal(draft, '');
-    assert.equal(useSearchFilterStore.getState().searchString, undefined);
+    assert.equal(useFilterStore.getState().search, '');
     controller.change('another edit');
-    useSearchFilterStore.getState().update('intent search');
+    useFilterStore.getState().apply({ search: 'intent search' });
     await wait(400);
     assert.equal(draft, 'intent search');
-    assert.equal(useSearchFilterStore.getState().searchString, 'intent search');
+    assert.equal(useFilterStore.getState().search, 'intent search');
     controller.change('  Luke  ');
     controller.submit();
     assert.equal(draft, '  Luke  ');
-    assert.equal(useSearchFilterStore.getState().searchString, 'Luke');
+    assert.equal(useFilterStore.getState().search, 'Luke');
     controller.change('');
-    assert.equal(useSearchFilterStore.getState().searchString, undefined);
+    assert.equal(useFilterStore.getState().search, '');
     controller.change('unmounted');
   } finally {
     controller.dispose();
   }
   await wait(400);
-  assert.equal(useSearchFilterStore.getState().searchString, undefined);
+  assert.equal(useFilterStore.getState().search, '');
+});
+
+test('chip changes keep a pending search edit', async () => {
+  resetAllFilters();
+  let draft = '';
+  const controller = createSearchController((value) => {
+    draft = value;
+  });
+  try {
+    controller.change('Vader');
+    useFilterStore.getState().setGroup('rarities', ['Rare']);
+    await wait(400);
+    assert.equal(draft, 'Vader');
+    assert.equal(useFilterStore.getState().search, 'Vader');
+    assert.deepEqual(useFilterStore.getState().rarities, ['Rare']);
+  } finally {
+    controller.dispose();
+    resetAllFilters();
+  }
+});
+
+test('filter store normalizes groups and applies filters in one change', () => {
+  resetAllFilters();
+  const store = useFilterStore.getState();
+  const reversed = [...expansionFilterOptions].reverse();
+  store.setGroup('expansions', [...reversed, 'NOT_A_SET']);
+  assert.deepEqual(useFilterStore.getState().expansions, [
+    ...expansionFilterOptions,
+  ]);
+
+  let changes = 0;
+  const unsubscribe = useFilterStore.subscribe(() => changes++);
+  try {
+    store.setGroup('types', ['Leader']);
+    changes = 0;
+    store.apply({ search: '  Luke ', expansions: ['SOR'] });
+    assert.equal(changes, 1);
+  } finally {
+    unsubscribe();
+  }
+  const state = useFilterStore.getState();
+  assert.equal(state.search, 'Luke');
+  assert.deepEqual(state.expansions, ['SOR']);
+  assert.deepEqual(state.types, [...typeFilterOptions]);
+  resetAllFilters();
+});
+
+test('active filter count covers search and every group', () => {
+  assert.equal(countActiveFilters(DEFAULT_FILTERS), 0);
+  assert.equal(
+    countActiveFilters({ ...DEFAULT_FILTERS, search: 'x', aspects: [] }),
+    2,
+  );
+  assert.deepEqual(
+    FILTER_GROUPS.map((group) => group.key),
+    ['aspects', 'expansions', 'types', 'rarities'],
+  );
+  for (const group of FILTER_GROUPS) {
+    assert.equal(
+      countActiveFilters({ ...DEFAULT_FILTERS, [group.key]: [] }),
+      1,
+      group.key,
+    );
+  }
 });
 
 test('variants are sorted without mutating cached data; art and dimensions fall back together', () => {
