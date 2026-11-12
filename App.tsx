@@ -2,7 +2,6 @@ import 'expo-dev-client';
 
 import Bugsnag from '@bugsnag/expo';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigationContainerRef } from '@react-navigation/native';
 import {
   DarkTheme,
@@ -10,9 +9,11 @@ import {
   NavigationContainer,
   type Theme,
 } from '@react-navigation/native';
-import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
-import { focusManager, QueryClient } from '@tanstack/react-query';
-import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import {
+  focusManager,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -20,6 +21,12 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { type AppStateStatus, Platform } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+import {
+  QUERY_CACHE_TIME,
+  QUERY_STALE_TIME,
+  shouldRetryQuery,
+} from '@data/queryHelpers';
+import { useAppIntentHandler } from '@hooks/useAppIntentHandler';
 import { useAppState } from '@hooks/useAppState';
 import { useOnlineManager } from '@hooks/useOnlineManager';
 import { useTheme } from '@hooks/useTheme';
@@ -31,14 +38,12 @@ if (!__DEV__) {
   Bugsnag.start();
 }
 
-const asyncStoragePersister = createAsyncStoragePersister({
-  storage: AsyncStorage,
-});
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      gcTime: 1000 * 60 * 60 * 24, // 24 hours
+      gcTime: QUERY_CACHE_TIME,
+      staleTime: QUERY_STALE_TIME,
+      retry: shouldRetryQuery,
     },
   },
 });
@@ -48,6 +53,16 @@ function onAppStateChange(status: AppStateStatus) {
   if (Platform.OS !== 'web') {
     focusManager.setFocused(status === 'active');
   }
+}
+
+function AppIntentHandler({
+  navigationRef,
+}: {
+  navigationRef: Parameters<typeof useAppIntentHandler>[0];
+}) {
+  useAppIntentHandler(navigationRef);
+
+  return null;
 }
 
 export default function App() {
@@ -77,6 +92,7 @@ export default function App() {
   }, [theme]);
 
   const [appIsReady, setAppIsReady] = useState(false);
+  const [navigationIsReady, setNavigationIsReady] = useState(false);
 
   useEffect(() => {
     async function prepare() {
@@ -105,19 +121,18 @@ export default function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <PersistQueryClientProvider
-        client={queryClient}
-        persistOptions={{
-          persister: asyncStoragePersister,
-          buster: __DEV__
-            ? (Math.random() + 1).toString(36).substring(7)
-            : undefined,
-        }}
-      >
-        <NavigationContainer theme={navigationTheme} ref={navigationRef}>
+      <QueryClientProvider client={queryClient}>
+        <NavigationContainer
+          theme={navigationTheme}
+          ref={navigationRef}
+          onReady={() => setNavigationIsReady(true)}
+        >
           <StackNavigator />
         </NavigationContainer>
-      </PersistQueryClientProvider>
+        {navigationIsReady ? (
+          <AppIntentHandler navigationRef={navigationRef} />
+        ) : null}
+      </QueryClientProvider>
       <StatusBar style="auto" />
     </GestureHandlerRootView>
   );

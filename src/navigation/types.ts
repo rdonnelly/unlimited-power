@@ -7,6 +7,8 @@ export type StackParamList = {
     title: string;
     caption?: string;
     index: number;
+    // Show only this card instead of paging through the card list results
+    standalone?: boolean;
   };
   StackInfoScreen: undefined;
 };

@@ -39,7 +39,8 @@
       "expo-web-browser",
       "expo-image",
       "expo-sharing",
-      "expo-status-bar"
+      "expo-status-bar",
+      "expo-app-intents"
     ],
     "extra": {
       "eas": {
@@ -47,6 +48,11 @@
       },
       "bugsnag": {
         "apiKey": "4fcfa114f0ed4f08c3360f4eb32adb05"
+      }
+    },
+    "experiments": {
+      "inlineModules": {
+        "watchedDirectories": ["app-intents"]
       }
     }
   }

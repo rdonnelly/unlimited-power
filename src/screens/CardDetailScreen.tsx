@@ -1,3 +1,4 @@
+import * as AppIntents from 'expo-app-intents';
 import throttle from 'lodash/throttle';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
@@ -21,40 +22,57 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
   const { width: windowWidth } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
-  const { data, hasNextPage, fetchNextPage } = useCards();
+  const { data, hasNextPage, fetchNextPage, isFetching, isPaused, isError } =
+    useCards(!route.params.standalone);
 
   const cards = useMemo(() => {
     return data?.pages.flatMap((page) => page.data) ?? [];
   }, [data]);
 
   const loadNextPage = () => {
-    if (hasNextPage) {
-      fetchNextPage();
+    if (
+      !route.params.standalone &&
+      hasNextPage &&
+      !isFetching &&
+      !isPaused &&
+      !isError
+    ) {
+      void fetchNextPage({ cancelRefetch: false });
     }
   };
 
   const flatListRef = useRef<FlatList>(null);
 
   useEffect(() => {
-    const subscription = Dimensions.addEventListener(
-      'change',
-      throttle(
-        ({ window }: { window: ScaledSize }) => {
-          flatListRef?.current?.scrollToOffset({
-            offset: window.width * route.params.index,
-            animated: false,
-          });
-        },
-        50,
-        { leading: false, trailing: true },
-      ),
+    const onResize = throttle(
+      ({ window }: { window: ScaledSize }) => {
+        flatListRef.current?.scrollToOffset({
+          offset: window.width * route.params.index,
+          animated: false,
+        });
+      },
+      50,
+      { leading: false, trailing: true },
     );
-
-    return () => subscription?.remove();
+    const subscription = Dimensions.addEventListener('change', onResize);
+    return () => {
+      subscription.remove();
+      onResize.cancel();
+    };
   }, [route.params.index]);
 
-  const renderItem = useCallback(
-    ({ item: card }: { item: Card }) => (
+  // Lets iOS suggest opening recently viewed cards (see app-intents/)
+  useEffect(() => {
+    if (AppIntents.isAvailable()) {
+      AppIntents.donateIntentAsync('openCard', {
+        id: route.params.id,
+        title: route.params.title,
+      }).catch((e) => console.warn(e));
+    }
+  }, [route.params.id, route.params.title]);
+
+  const renderCell = useCallback(
+    (id: number) => (
       <View style={[styles.cell, { width: windowWidth }]}>
         <ScrollView
           style={styles.scrollContainer}
@@ -63,11 +81,16 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
             paddingBottom: Math.max(32, insets.bottom),
           }}
         >
-          <CardDetail id={card.id} />
+          <CardDetail id={id} />
         </ScrollView>
       </View>
     ),
     [insets.bottom, windowWidth],
+  );
+
+  const renderItem = useCallback(
+    ({ item: card }: { item: Card }) => renderCell(card.id),
+    [renderCell],
   );
 
   const getItemLayout = useCallback(
@@ -97,6 +120,10 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
     },
     [cards, navigation],
   );
+
+  if (route.params.standalone) {
+    return <View style={styles.container}>{renderCell(route.params.id)}</View>;
+  }
 
   return (
     <View style={styles.container}>
