@@ -2,24 +2,29 @@
 
 ## Data layer
 
-- **TanStack Query** for server state, persisted to AsyncStorage (24h cache). Config in [App.tsx](../App.tsx#L36).
-- **Zustand** for client state — filters only. See [src/data/stores/](../src/data/stores/).
+- **TanStack Query** keeps server state in memory only. Results are fresh for one hour; inactive queries are garbage-collected after one hour. Returning to recently viewed cards or filters reuses loaded data without another request. Config: [App.tsx](../App.tsx), [queryHelpers.ts](../src/data/queryHelpers.ts).
+- **Offline reuse during the current session**, not an offline catalog: loaded results remain visible during refresh failures or disconnection. A fresh app launch, unvisited cards, uncached filter combinations, and missing images need a connection. Card-data snapshots are not saved across launches; Expo Image independently retains viewed art on disk, subject to OS eviction. Pull to refresh the list; detail and image errors retain retry controls.
+- **Zustand** for client state — filters only. See [src/data/stores/](../src/data/stores/). Search is controlled and debounced; Reset and incoming App Intents cancel pending edits.
 - **Zod** for schema validation. See [src/data/Card.ts](../src/data/Card.ts).
-- **API fetching pattern**: build the query with `qs.stringify()`, then filter client-side by aspects. See [useCards.ts](../src/data/hooks/useCards.ts#L47).
-- **Infinite scroll**: `useInfiniteQuery` with `PAGE_SIZE = 50`.
+- **API fetching pattern**: normalized immutable filters define both query identity and request behavior. Build server filters with `qs.stringify()`, then check aspects locally against that captured snapshot. None means no results; Neutral must be explicitly selected. See [CardFilters.ts](../src/data/CardFilters.ts), [fetchCards.ts](../src/data/fetchCards.ts).
+- **Infinite scroll**: `useInfiniteQuery` with `PAGE_SIZE = 50`. Empty client-filtered pages advance until matches or server exhaustion. Requests support cancellation, guarded pagination, and at most two retries for transient failures; permanent HTTP errors do not retry.
 - **Card models**: base attributes plus relational data (aspects, expansion, type). See [Card.ts](../src/data/Card.ts) for the schema.
 
 ## UI stack
 
 - **React Navigation** native stack with custom header rendering. See [StackNavigation.tsx](../src/navigation/StackNavigation.tsx).
   - Define screen params in [src/navigation/types.ts](../src/navigation/types.ts) and use typed props (`CardListScreenProps`, `CardDetailScreenProps`).
-- **@gorhom/bottom-sheet** for filter UI. See [CardListBottomSheet.tsx](../src/components/CardListBottomSheet.tsx).
-- **@shopify/flash-list** for list virtualization (required for the large card dataset).
+- **react-native-true-sheet** for persistent search and filters on the card list. The non-dimming, non-dismissible sheet peeks at its measured search-header height, with a native drag handle; drag upward for scrollable live filters and Reset. Done, search submission, and Android back from an expanded detent collapse it rather than removing it. The list reserves space for the peek. Navigation hides the sheet on details/About and restores it on return. [cardSearchSheet.ts](../src/data/cardSearchSheet.ts) serializes native transitions, including App Intent navigation and same-screen search restoration. See [CardListBottomSheet.tsx](../src/components/CardListBottomSheet.tsx), [CardListScreen.tsx](../src/screens/CardListScreen.tsx). TrueSheet v4 optionally peers on `standard-navigation@>=0.0.9`, while `@react-navigation/native` 7.x pins `^0.0.8`; a `package.json` override bumps React Navigation's copy to 0.0.9 (no code changes between them). Drop it once React Navigation updates.
+- **@shopify/flash-list v2** for the main list, with stable card-ID keys. The horizontal detail pager independently uses React Native FlatList. Retain these existing engines unless app-specific release-mode measurements justify a change; no FlashList-versus-Legend List performance claim is implied.
+- **Expo Image** disk caching for viewed art. Variant sorting never mutates cached data, and missing variant art falls back together with its dimensions. Touch and hold card art to share; the image also exposes a Share image accessibility action. Long press gently scales the image to 1.05 on touch-down and restores it on release or cancellation, respecting reduced motion. Its feedback scale is separate from pinch zoom so cancelling a press cannot reset an active pinch. Sharing still starts only after long-press recognition and runs on the JS thread, while pinch and two-finger pan retain animated zoom. Sharing awaits the asynchronous copy of an existing image-cache file (or downloads it) before opening the native share sheet, then cleans up its own temporary exports without deleting Expo's cache. There are no dedicated share or refresh-card buttons.
 - **Reanimated v4 + Worklets** for animations, using the `scheduleOnRN` / `scheduleOnUI` pattern. See [PressableScale.tsx](../src/components/PressableScale.tsx).
 
 ## App lifecycle & integrations
 
-- **Splash screen**: manually controlled via `expo-splash-screen` — hide after font loading completes. See [App.tsx](../App.tsx#L91).
-- **App-state focus**: focus manager syncs React Query with app state. See [App.tsx](../App.tsx#L44).
+App Intent payloads are validated by [appIntentParams.ts](../src/data/appIntentParams.ts). Unknown or malformed invocations are discarded deliberately. Recoverable processing failures stay pending; acknowledgment failures retry without repeating navigation during the same app session. Pending work retries when the app returns to the foreground. Catalog publication requires at least one app launch.
+
+- **Splash screen**: manually controlled via `expo-splash-screen` — hide after font loading completes. See [App.tsx](../App.tsx).
+- **App-state focus**: focus manager syncs React Query with app state. See [App.tsx](../App.tsx).
 - **Online manager**: network-aware refetching. See [useOnlineManager.ts](../src/hooks/useOnlineManager.ts).
-- **Bugsnag**: enabled in production only (`if (!__DEV__)`, [App.tsx](../App.tsx#L29)); API key in [app.json](../app.json) at `extra.bugsnag.apiKey`.
+- **Bugsnag**: enabled in production only (`if (!__DEV__)`, [App.tsx](../App.tsx)); API key in [app.json](../app.json) at `extra.bugsnag.apiKey`.
+- **App Intents (iOS only)**: Siri, Shortcuts and Spotlight via `expo-app-intents`. Intents are Swift structs in [app-intents/](../app-intents/), compiled into the app as Expo inline modules, and their phrases live in [AppShortcuts.swift](../app-intents/AppShortcuts.swift). Each intent's `perform()` dispatches by name (`searchCards`, `showExpansion`, `openCard`) to [useAppIntentHandler.ts](../src/hooks/useAppIntentHandler.ts). That hook updates the filter stores or navigates, and only mounts once the navigation container is ready, so invocations from a cold launch are handled. It also publishes the `expansion` entity catalog from [Expansion.ts](../src/data/Expansion.ts), so a new expansion needs no Swift changes. [CardDetailScreen.tsx](../src/screens/CardDetailScreen.tsx) donates `openCard` for each viewed card, and an `openCard` invocation opens the screen with `standalone: true` (a single card instead of the list pager). On Android these calls do nothing, because `isAvailable()` returns `false`.
