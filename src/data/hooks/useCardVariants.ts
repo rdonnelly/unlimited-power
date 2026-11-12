@@ -1,58 +1,44 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import { useCardPrintings } from '@data/hooks/useCardPrintings';
-import { type Variant, VariantRank } from '@data/Variant';
+import { getCardVariants } from '@data/cardVariants';
 
 export function useCardVariants(cardId: number, variantName: string) {
-  const { data: printingsData, isFetching: isFetchingPrintings } =
-    useCardPrintings(cardId);
+  const {
+    data: printingsData,
+    isFetching: isFetchingPrintings,
+    isPaused: printingsPaused,
+    isError: printingsError,
+    refetch: refetchPrintings,
+  } = useCardPrintings(cardId);
 
-  const [variantKey, setVariantKey] = useState<string>(variantName);
+  const [selection, setSelection] = useState<{
+    cardId: number;
+    key: string;
+  } | null>(null);
+  const variants = useMemo(
+    () => getCardVariants(printingsData),
+    [printingsData],
+  );
+  const requestedKey =
+    selection?.cardId === cardId ? selection.key : variantName;
+  const variantKey = variants[requestedKey] ? requestedKey : 'Standard';
 
-  const variants = useMemo(() => {
-    const v: Record<string, number> = {};
-
-    if (printingsData?.original) {
-      v.Standard = printingsData?.original.id;
-    }
-
-    if (!isFetchingPrintings && printingsData?.printings) {
-      printingsData.printings
-        .sort((a, b) => {
-          const variantNameA = a.variantTypes?.[0]?.name as Variant;
-          const variantRankA = variantNameA ? VariantRank[variantNameA] : 9999;
-          const variantNameB = b.variantTypes?.[0]?.name as Variant;
-          const variantRankB = variantNameB ? VariantRank[variantNameB] : 9999;
-
-          if (variantRankA > variantRankB) {
-            return 1;
-          }
-          if (variantRankB > variantRankA) {
-            return -1;
-          }
-          return 0;
-        })
-        .forEach((printing) => {
-          const variantName = printing.variantTypes?.[0]?.name;
-          if (variantName && !variantName.includes('Foil')) {
-            v[variantName] = printing.id;
-          }
-        });
-    }
-
-    return v;
-  }, [printingsData?.original, printingsData?.printings, isFetchingPrintings]);
-
-  const handleVariantSelection = useCallback((selection: string[]) => {
-    const selectedVariantKey = selection.at(0);
-
-    selectedVariantKey && setVariantKey(selectedVariantKey);
-  }, []);
+  const handleVariantSelection = useCallback(
+    (values: string[]) => {
+      const key = values.at(0);
+      if (key) setSelection({ cardId, key });
+    },
+    [cardId],
+  );
 
   return {
     variants,
     variantKey,
     handleVariantSelection,
     isFetchingPrintings,
+    printingsPaused,
+    printingsError,
+    refetchPrintings,
   };
 }

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { resetAllFilters } from '@data/stores/resetAllFilters';
 import { useShallow } from 'zustand/shallow';
 
 import {
@@ -23,32 +23,27 @@ import {
 } from '@data/stores/useTypeFilterStore';
 
 export function useFilters() {
-  const { isActive: isSearchActive, reset: resetSearch } = useSearchFilterStore(
+  const { isActive: isSearchActive } = useSearchFilterStore(
     useShallow(isSearchActiveSelector),
   );
 
-  const { isActive: isAspectActive, reset: resetAspect } = useAspectFilterStore(
+  const { isActive: isAspectActive } = useAspectFilterStore(
     useShallow(isAspectActiveSelector),
   );
 
-  const { isActive: isExpansionActive, reset: resetExpansion } =
-    useExpansionFilterStore(useShallow(isExpansionActiveSelector));
+  const { isActive: isExpansionActive } = useExpansionFilterStore(
+    useShallow(isExpansionActiveSelector),
+  );
 
-  const { isActive: isRarityActive, reset: resetRarity } = useRarityFilterStore(
+  const { isActive: isRarityActive } = useRarityFilterStore(
     useShallow(isRarityActiveSelector),
   );
 
-  const { isActive: isTypeActive, reset: resetType } = useTypeFilterStore(
+  const { isActive: isTypeActive } = useTypeFilterStore(
     useShallow(isTypeActiveSelector),
   );
 
-  const reset = useCallback(() => {
-    resetSearch();
-    resetAspect();
-    resetExpansion();
-    resetRarity();
-    resetType();
-  }, [resetSearch, resetAspect, resetExpansion, resetRarity, resetType]);
+  const reset = resetAllFilters;
 
   return {
     numFiltersApplied:

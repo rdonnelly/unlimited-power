@@ -1,20 +1,18 @@
-import {
-  type InfiniteData,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { type CardPrintingsResponse } from '@data/CardResponse';
-import type { CardsResponse } from '@data/CardsResponse';
-import { useCardsQueryKey } from '@data/hooks/useCardsQueryKey';
+import { getCachedCard } from '@data/getCachedCard';
 
-const fetchCardPrintings = async (id: number) => {
+import { HttpError } from '@data/queryHelpers';
+
+const fetchCardPrintings = async (id: number, signal?: AbortSignal) => {
   const response = await fetch(
     `https://admin.starwarsunlimited.com/api/card/printings/${id}`,
+    { signal },
   );
 
   if (!response.ok) {
-    throw new Error('Network response was not ok');
+    throw new HttpError(response.status);
   }
 
   const body = (await response.json()) as CardPrintingsResponse;
@@ -23,30 +21,16 @@ const fetchCardPrintings = async (id: number) => {
 };
 
 export function useCardPrintings(cardId: number) {
-  const cardsQueryKey = useCardsQueryKey();
-
   const queryClient = useQueryClient();
-  return useQuery({
+  const card = getCachedCard(queryClient, cardId);
+  const cachedPrintings = card
+    ? { original: { ...card.attributes, id: card.id, variantTypes: null } }
+    : undefined;
+  const query = useQuery<CardPrintingsResponse['data']>({
     queryKey: ['card-printing', cardId],
-    queryFn: () => fetchCardPrintings(cardId),
-    enabled: !!cardId,
-    placeholderData: () => {
-      const data =
-        queryClient.getQueryData<InfiniteData<CardsResponse>>(cardsQueryKey);
-
-      const card = data?.pages
-        .map((page) => page.data.find((card) => card.id === cardId))
-        .find(Boolean);
-
-      return card?.attributes
-        ? {
-            original: {
-              ...card.attributes,
-              id: card.id,
-              variantTypes: null,
-            },
-          }
-        : undefined;
-    },
+    queryFn: ({ signal }) => fetchCardPrintings(cardId, signal),
+    enabled: Number.isInteger(cardId) && cardId > 0,
+    placeholderData: cachedPrintings,
   });
+  return { ...query, data: query.data ?? cachedPrintings };
 }

@@ -28,6 +28,14 @@ export const CardListItem = ({
         themeStyles.background50,
         themeStyles.borderSubdued,
       ]}
+      accessibilityRole="button"
+      accessibilityLabel={[
+        card.attributes.title,
+        card.attributes.subtitle,
+        card.attributes.type.data?.attributes.name,
+      ]
+        .filter(Boolean)
+        .join(', ')}
       onPress={() =>
         handlePress(
           card.id,
@@ -110,7 +118,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     borderBottomWidth: StyleSheet.hairlineWidth,
     flex: 1,
-    height: ITEM_HEIGHT,
+    minHeight: ITEM_HEIGHT,
     justifyContent: 'center',
     paddingTop: StyleSheet.hairlineWidth,
     width: '100%',

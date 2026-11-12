@@ -1,43 +1,41 @@
-import { FlashList, useMappingHelper } from '@shopify/flash-list';
+import { FlashList } from '@shopify/flash-list';
 import { useCallback, useMemo } from 'react';
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '@components/Button';
 import { CardListItem } from '@components/CardListItem';
 import { Error } from '@components/Error';
+import { QueryNotice } from '@components/QueryNotice';
 import { useCards } from '@data/hooks/useCards';
 import { useFilters } from '@hooks/useFilters';
 import { useTheme } from '@hooks/useTheme';
+import { useIsOnline } from '@hooks/useIsOnline';
 
 type CardListProps = {
+  bottomInset?: number;
   onPressItem: (
     id: number,
     index: number,
     title: string,
     caption?: string,
   ) => void;
-  onScrollBeginDrag?: () => void;
 };
 
 export function CardList({
   onPressItem: handlePressItem,
-  onScrollBeginDrag,
+  bottomInset = 0,
 }: CardListProps) {
   const { theme, themeStyles } = useTheme();
+  const isOnline = useIsOnline();
 
   const {
     data,
     isLoading,
     isFetching,
     isError,
-    isFetched,
+    isFetchingNextPage,
+    isFetchNextPageError,
     isPaused,
     hasNextPage,
     fetchNextPage,
@@ -53,38 +51,21 @@ export function CardList({
   }, [cards.length]);
 
   const loadNextPage = useCallback(() => {
-    if (hasNextPage) {
-      fetchNextPage();
+    if (hasNextPage && !isFetching && !isPaused && !isError) {
+      void fetchNextPage({ cancelRefetch: false });
     }
-  }, [hasNextPage, fetchNextPage]);
-
-  const handleScrollBeginDrag = useCallback(() => {
-    onScrollBeginDrag?.();
-  }, [onScrollBeginDrag]);
+  }, [hasNextPage, isFetching, isPaused, isError, fetchNextPage]);
 
   const { numFiltersApplied, reset: resetFilters } = useFilters();
 
-  const { getMappingKey } = useMappingHelper();
-
   const insets = useSafeAreaInsets();
 
-  const renderScrollComponent = useMemo(() => {
-    // eslint-disable-next-line react/display-name
-    return (props: any) => {
-      return (
-        <ScrollView
-          automaticallyAdjustsScrollIndicatorInsets={false}
-          scrollIndicatorInsets={{
-            top: 0,
-            bottom: 72 + Math.max(16, insets.bottom),
-          }}
-          {...props}
-        />
-      );
-    };
-  }, [insets.bottom]);
+  const retry = () => {
+    if (isFetchNextPageError) void fetchNextPage({ cancelRefetch: false });
+    else void refetch({ cancelRefetch: false });
+  };
 
-  if (isError) {
+  if (isError && !data) {
     return (
       <Error
         labelPrimary="Retry"
@@ -95,7 +76,7 @@ export function CardList({
     );
   }
 
-  if (isPaused) {
+  if (isPaused && !data) {
     return (
       <Error
         message="Make sure you have a network connection and try again."
@@ -105,7 +86,7 @@ export function CardList({
     );
   }
 
-  if (isLoading || (isFetching && !isFetched) || data === undefined) {
+  if (data === undefined) {
     return (
       <View style={[styles.container, themeStyles.background0]}>
         <View style={styles.activity}>
@@ -119,7 +100,13 @@ export function CardList({
     return (
       <Error
         heading="Karabast!"
-        message="No cards found matching search and filter criteria."
+        message={
+          !isOnline || isPaused
+            ? 'Offline. No loaded cards match these filters. Connect or reset filters to try again.'
+            : isError
+              ? 'Cached results are empty and could not be updated. Try again or reset filters.'
+              : 'No cards found matching search and filter criteria.'
+        }
         labelPrimary="Retry"
         onPrimary={() => refetch()}
         labelSecondary="Reset Filters"
@@ -130,6 +117,17 @@ export function CardList({
 
   return (
     <View style={styles.container}>
+      {!isOnline || isPaused || isError ? (
+        <QueryNotice
+          message={
+            !isOnline || isPaused
+              ? 'Offline. Showing loaded cards.'
+              : 'Cards could not be updated. Showing loaded results.'
+          }
+          onRetry={retry}
+          busy={isFetching}
+        />
+      ) : null}
       {numFiltersApplied ? (
         <View style={[styles.filterBanner, themeStyles.background200]}>
           <Text style={[styles.filterText, themeStyles.colorSubdued]}>
@@ -143,22 +141,34 @@ export function CardList({
       <View style={[styles.listContainer, themeStyles.background0]}>
         <FlashList
           data={cards}
+          keyExtractor={(card) => String(card.id)}
+          refreshing={isFetching && !isFetchingNextPage && !isLoading}
+          onRefresh={() => {
+            void refetch({ cancelRefetch: false });
+          }}
+          keyboardDismissMode="on-drag"
+          contentContainerStyle={{
+            paddingBottom: bottomInset + Math.max(16, insets.bottom),
+          }}
+          scrollIndicatorInsets={{ bottom: bottomInset + insets.bottom }}
           renderItem={({ item: card, index }) => (
-            <CardListItem
-              key={getMappingKey(card.id, index)}
-              card={card}
-              index={index}
-              onPress={handlePressItem}
-            />
+            <CardListItem card={card} index={index} onPress={handlePressItem} />
           )}
           onEndReached={loadNextPage}
           onEndReachedThreshold={1.5}
-          onScrollBeginDrag={handleScrollBeginDrag}
-          renderScrollComponent={renderScrollComponent}
           ListFooterComponent={
             <View style={[styles.listFooter, themeStyles.background0]}>
-              {isLoading || isFetching || hasNextPage || cardCount == null ? (
+              {isFetching ? (
                 <ActivityIndicator color={theme.tintSubdued} />
+              ) : hasNextPage ? (
+                <Button
+                  onPress={() => {
+                    void fetchNextPage({ cancelRefetch: false });
+                  }}
+                  size="small"
+                >
+                  Load more cards
+                </Button>
               ) : (
                 <Text style={[styles.listFooterText, themeStyles.colorSubdued]}>
                   {cardCount} Cards Found
@@ -201,7 +211,7 @@ const styles = StyleSheet.create({
   listFooter: {
     alignItems: 'center',
     paddingTop: 24,
-    paddingBottom: 128,
+    paddingBottom: 24,
   },
   listFooterText: {
     fontWeight: '700',

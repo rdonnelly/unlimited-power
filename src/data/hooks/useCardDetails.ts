@@ -1,20 +1,18 @@
-import {
-  type InfiniteData,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { type CardResponse } from '@data/CardResponse';
-import type { CardsResponse } from '@data/CardsResponse';
-import { useCardsQueryKey } from '@data/hooks/useCardsQueryKey';
+import { getCachedCard } from '@data/getCachedCard';
 
-const fetchCardDetails = async (id: number) => {
+import { HttpError } from '@data/queryHelpers';
+
+const fetchCardDetails = async (id: number, signal?: AbortSignal) => {
   const response = await fetch(
     `https://admin.starwarsunlimited.com/api/card/details/${id}`,
+    { signal },
   );
 
   if (!response.ok) {
-    throw new Error('Network response was not ok');
+    throw new HttpError(response.status);
   }
 
   const body = (await response.json()) as CardResponse;
@@ -23,22 +21,13 @@ const fetchCardDetails = async (id: number) => {
 };
 
 export function useCardDetails(cardId: number) {
-  const cardsQueryKey = useCardsQueryKey();
-
   const queryClient = useQueryClient();
-  return useQuery({
+  const cachedCard = getCachedCard(queryClient, cardId);
+  const query = useQuery<CardResponse['data']>({
     queryKey: ['card', cardId],
-    queryFn: () => fetchCardDetails(cardId),
-    enabled: !!cardId,
-    placeholderData: () => {
-      const data =
-        queryClient.getQueryData<InfiniteData<CardsResponse>>(cardsQueryKey);
-
-      const card = data?.pages
-        .map((page) => page.data.find((card) => card.id === cardId))
-        .find(Boolean);
-
-      return card;
-    },
+    queryFn: ({ signal }) => fetchCardDetails(cardId, signal),
+    enabled: Number.isInteger(cardId) && cardId > 0,
+    placeholderData: cachedCard,
   });
+  return { ...query, data: query.data ?? cachedCard };
 }
