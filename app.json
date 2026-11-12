@@ -2,6 +2,7 @@
   "expo": {
     "name": "Unlimited Power",
     "slug": "unlimited-power",
+    "scheme": "unlimitedpower",
     "version": "1.10.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

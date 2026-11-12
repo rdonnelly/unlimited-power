@@ -9,7 +9,7 @@ import { cardSearchSheet } from '@data/cardSearchSheet';
 import { parseAppIntent } from '@data/appIntentParams';
 
 import { ExpansionEnum, ExpansionNames } from '@data/Expansion';
-import { useFilterStore } from '@data/stores/useFilterStore';
+import type { CardFilters } from '@data/CardFilters';
 
 // Intents are declared in Swift in app-intents/. Each one dispatches to JS by
 // name with the params below.
@@ -17,8 +17,15 @@ import { useFilterStore } from '@data/stores/useFilterStore';
 type NavigationRef =
   NavigationContainerRefWithCurrent<ReactNavigation.RootParamList>;
 
-function showCardList(navigationRef: NavigationRef) {
-  navigationRef.dispatch(StackActions.popTo('StackCardListScreen'));
+// Same entry point as unlimitedpower://cards links: the list screen applies
+// the filters on arrival (see CardListScreen).
+function showCardList(
+  navigationRef: NavigationRef,
+  filters: Partial<CardFilters>,
+) {
+  navigationRef.dispatch(
+    StackActions.popTo('StackCardListScreen', { filters }),
+  );
 }
 
 function handleInvocation(
@@ -28,14 +35,12 @@ function handleInvocation(
   switch (invocation.name) {
     case 'searchCards': {
       const { query } = invocation.params;
-      useFilterStore.getState().apply({ search: query });
-      showCardList(navigationRef);
+      showCardList(navigationRef, { search: query });
       break;
     }
     case 'showExpansion': {
       const { expansion } = invocation.params;
-      useFilterStore.getState().apply({ expansions: [expansion] });
-      showCardList(navigationRef);
+      showCardList(navigationRef, { expansions: [expansion] });
       break;
     }
     case 'openCard': {

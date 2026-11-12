@@ -15,6 +15,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { CardDetail } from '@components/CardDetail';
 import type { Card } from '@data/Card';
+import { useCardDetails } from '@data/hooks/useCardDetails';
 import { useCards } from '@data/hooks/useCards';
 import type { CardDetailScreenProps } from '@navigation/types';
 
@@ -61,9 +62,22 @@ export function CardDetailScreen({ navigation, route }: CardDetailScreenProps) {
     };
   }, [route.params.index]);
 
+  // Deep links only carry the card ID; fill in the header once it loads.
+  // Shares the query that CardDetail already runs for this card.
+  const linkedCard = useCardDetails(route.params.title ? 0 : route.params.id);
+  const linkedAttributes = linkedCard.data?.attributes;
+  useEffect(() => {
+    if (!route.params.title && linkedAttributes) {
+      navigation.setParams({
+        title: linkedAttributes.title,
+        caption: linkedAttributes.subtitle ?? undefined,
+      });
+    }
+  }, [linkedAttributes, navigation, route.params.title]);
+
   // Lets iOS suggest opening recently viewed cards (see app-intents/)
   useEffect(() => {
-    if (AppIntents.isAvailable()) {
+    if (route.params.title && AppIntents.isAvailable()) {
       AppIntents.donateIntentAsync('openCard', {
         id: route.params.id,
         title: route.params.title,

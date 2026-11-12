@@ -2,7 +2,6 @@ const assert = require('node:assert/strict');
 const Module = require('node:module');
 const test = require('node:test');
 const React = require('react');
-const { useFilterStore } = require('../src/data/stores/useFilterStore.ts');
 
 let processPending;
 let onForeground;
@@ -39,7 +38,7 @@ const mocks = {
   },
   '@react-navigation/native': {
     StackActions: {
-      popTo: (name) => ({ type: 'popTo', name }),
+      popTo: (name, params) => ({ type: 'popTo', name, params }),
       push: (name, params) => ({ type: 'push', name, params }),
     },
   },
@@ -112,13 +111,20 @@ test('intent delivery validates, dismisses filters, and retries acknowledgments 
   await processPending([
     { id: 'search', name: 'searchCards', params: { query: '  Luke  ' } },
   ]);
-  assert.equal(useFilterStore.getState().search, 'Luke');
+  assert.deepEqual(actions.at(-1), {
+    type: 'popTo',
+    name: 'StackCardListScreen',
+    params: { filters: { search: 'Luke' } },
+  });
   assert.equal(restored, 2);
   await processPending([
     { id: 'set', name: 'showExpansion', params: { expansion: 'SOR' } },
   ]);
-  assert.deepEqual(useFilterStore.getState().expansions, ['SOR']);
-  assert.equal(useFilterStore.getState().search, '');
+  assert.deepEqual(actions.at(-1), {
+    type: 'popTo',
+    name: 'StackCardListScreen',
+    params: { filters: { expansions: ['SOR'] } },
+  });
   assert.equal(typeof onForeground, 'function');
   assert.equal(restored, 3);
 

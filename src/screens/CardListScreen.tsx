@@ -4,12 +4,22 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Keyboard, Pressable, StyleSheet, View } from 'react-native';
 import { cardSearchSheet } from '@data/cardSearchSheet';
+import { useFilterStore } from '@data/stores/useFilterStore';
 
 import { CardList } from '@components/CardList';
 import { CardListBottomSheet } from '@components/CardListBottomSheet';
 import type { CardListScreenProps } from '@navigation/types';
 
-export function CardListScreen({ navigation }: CardListScreenProps) {
+export function CardListScreen({ navigation, route }: CardListScreenProps) {
+  // Deep links and App Intents arrive as params. The store stays the source
+  // of truth, so apply them once and clear them.
+  const linkedFilters = route.params?.filters;
+  useEffect(() => {
+    if (!linkedFilters) return;
+    useFilterStore.getState().apply(linkedFilters);
+    navigation.setParams({ filters: undefined });
+  }, [linkedFilters, navigation]);
+
   const navigating = useRef(false);
   const navigate = useCallback(
     (action: () => void) => {

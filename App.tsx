@@ -27,6 +27,7 @@ import {
   shouldRetryQuery,
 } from '@data/queryHelpers';
 import { useAppIntentHandler } from '@hooks/useAppIntentHandler';
+import { linking } from '@navigation/linking';
 import { useAppState } from '@hooks/useAppState';
 import { useOnlineManager } from '@hooks/useOnlineManager';
 import { useTheme } from '@hooks/useTheme';
@@ -125,6 +126,7 @@ export default function App() {
         <NavigationContainer
           theme={navigationTheme}
           ref={navigationRef}
+          linking={linking}
           onReady={() => setNavigationIsReady(true)}
         >
           <StackNavigator />

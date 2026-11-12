@@ -31,6 +31,7 @@ Before shipping browsing changes, validate on iOS and Android:
 - Change filters live, use None/All/Reset, and reset while search is debouncing.
 - Disconnect after loading cards: loaded content should remain visible. A fresh offline launch should show an actionable connection message, not restore saved card data. Reconnect and retry pagination/detail/image failures without losing usable content.
 - Switch card variants, physically touch and hold card art to open native sharing, cancel and repeat, and exercise the image's Share image accessibility action. Check pinch/two-finger pan, horizontal detail paging, and standalone cards. Error retries must remain available without dedicated share/refresh-card buttons.
+- Deep links, cold and warm, including with the sheet expanded and with an invalid id: `xcrun simctl openurl booted "unlimitedpower://cards?sets=SOR&aspects=Vigilance"`, `xcrun simctl openurl booted "unlimitedpower://card/<id>"`, and on Android `adb shell am start -a android.intent.action.VIEW -d "unlimitedpower://card/<id>"`. Changing `scheme` requires a dev-client rebuild.
 - On iOS, test Siri/Shortcuts cold and warm entry after the first catalog-publishing launch; malformed/stale card IDs should fail safely. Android must remain usable without App Intents.
 
 Keep FlashList unless a reproducible problem warrants comparison. For performance decisions, use release builds, identical data and devices, rapid scrolling, blank-cell observations, memory, filtering, and large text. Development-client smoke tests are not performance benchmarks.
