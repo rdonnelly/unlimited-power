@@ -5,8 +5,10 @@ import { CardDetailImages } from '@components/CardDetailImages';
 import { CardDetailLinks } from '@components/CardDetailLinks';
 import { CardDetailRulesClarifications } from '@components/CardDetailRulesClarifications';
 import { Error } from '@components/Error';
+import { QueryNotice } from '@components/QueryNotice';
 import { useCardDetails } from '@data/hooks/useCardDetails';
 import { useTheme } from '@hooks/useTheme';
+import { useIsOnline } from '@hooks/useIsOnline';
 
 type CardDetailProps = {
   id: number;
@@ -14,7 +16,8 @@ type CardDetailProps = {
 
 function CardDetail({ id }: CardDetailProps) {
   const { theme } = useTheme();
-  const { data, isLoading, isError, refetch } = useCardDetails(id);
+  const isOnline = useIsOnline();
+  const { data, isFetching, isPaused, isError, refetch } = useCardDetails(id);
 
   const variantName = useMemo(() => {
     return (
@@ -22,11 +25,21 @@ function CardDetail({ id }: CardDetailProps) {
     );
   }, [data]);
 
-  if (isError) {
-    return <Error labelPrimary="Retry" onPrimary={() => refetch()} />;
+  if (!data && (isError || isPaused)) {
+    return (
+      <Error
+        message={
+          isPaused
+            ? 'This card is not loaded. Connect to load it.'
+            : 'This card could not be loaded.'
+        }
+        labelPrimary="Retry"
+        onPrimary={() => refetch()}
+      />
+    );
   }
 
-  if (isLoading || data == null) {
+  if (data == null) {
     return (
       <View style={styles.container}>
         <View style={styles.activity}>
@@ -38,6 +51,19 @@ function CardDetail({ id }: CardDetailProps) {
 
   return (
     <View style={styles.container}>
+      {!isOnline || isPaused || isError ? (
+        <QueryNotice
+          message={
+            !isOnline || isPaused
+              ? 'Offline. Showing loaded card details.'
+              : 'Details could not be updated.'
+          }
+          onRetry={() => {
+            void refetch({ cancelRefetch: false });
+          }}
+          busy={isFetching}
+        />
+      ) : null}
       <View style={styles.content}>
         <CardDetailImages cardId={id} variantName={variantName} />
       </View>

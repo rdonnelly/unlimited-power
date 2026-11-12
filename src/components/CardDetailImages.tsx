@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { QueryNotice } from '@components/QueryNotice';
 
 import { CardDetailImage } from '@components/CardDetailImage';
 import { Chips } from '@components/Chips';
@@ -21,12 +22,23 @@ export function CardDetailImages({
 
   const { data: standardVariantCard } = useCardDetails(cardId);
 
-  const { variants, variantKey, handleVariantSelection, isFetchingPrintings } =
-    useCardVariants(cardId, variantName);
+  const {
+    variants,
+    variantKey,
+    handleVariantSelection,
+    isFetchingPrintings,
+    printingsPaused,
+    printingsError,
+    refetchPrintings,
+  } = useCardVariants(cardId, variantName);
 
-  const { data: selectedVariantCard } = useCardDetails(
-    variants[variantKey] || cardId,
-  );
+  const {
+    data: selectedVariantCard,
+    isError: variantError,
+    isPaused: variantPaused,
+    isFetching: variantFetching,
+    refetch: refetchVariant,
+  } = useCardDetails(variants[variantKey] || cardId);
 
   const variantSelections = useMemo(() => {
     return [variantKey];
@@ -65,11 +77,33 @@ export function CardDetailImages({
             </View>
           ) : null}
         </View>
+        {printingsError || printingsPaused ? (
+          <QueryNotice
+            message="Some variants may be unavailable until you reconnect."
+            busy={isFetchingPrintings}
+            onRetry={() => {
+              void refetchPrintings({ cancelRefetch: false });
+            }}
+          />
+        ) : null}
+        {variantError || variantPaused ? (
+          <QueryNotice
+            message="Selected variant could not be loaded. Showing available art."
+            busy={variantFetching}
+            onRetry={() => {
+              void refetchVariant({ cancelRefetch: false });
+            }}
+          />
+        ) : null}
         <View style={styles.images}>
+          {!cardImages.length ? (
+            <Text style={themeStyles.color}>No card image available.</Text>
+          ) : null}
           {cardImages.map((cardImageProps, i) => (
             <CardDetailImage
               {...cardImageProps}
-              key={`card-detail-image-${cardId}-${variantName}-${i}`}
+              key={`${cardId}-${cardImageProps.art?.data?.attributes.url}-${i}`}
+              accessibilityLabel={`${standardVariantCard?.attributes.title ?? 'Card'}, image ${i + 1}`}
             />
           ))}
         </View>
