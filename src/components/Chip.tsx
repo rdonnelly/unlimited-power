@@ -25,6 +25,9 @@ export function Chip<T>({
   return (
     <PressableScale
       style={styles.container}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityState={{ selected: isSelected }}
       onPress={() => {
         Haptics.selectionAsync();
         handlePress && handlePress(value, isSelected);

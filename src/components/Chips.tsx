@@ -1,5 +1,3 @@
-import debounce from 'lodash/debounce';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Chip } from '@components/Chip';
@@ -13,7 +11,6 @@ type ChipsProps<T> = {
   selections: T[];
   onChange: (options: T[]) => void;
   single?: boolean;
-  delay?: number;
 };
 
 export function Chips<T>({
@@ -23,85 +20,25 @@ export function Chips<T>({
   selections,
   onChange: handleChange,
   single = false,
-  delay = 0,
 }: ChipsProps<T>) {
   const { themeStyles } = useTheme();
 
-  const selectedOptionsRef = useRef(selections);
-  const [selectedOptions, setSelectedOptions] = useState(selections);
-
-  useEffect(() => {
-    // listen for external filter resets
-    const hasDifference = !selections.every((selection) =>
-      selectedOptionsRef.current.includes(selection),
-    );
-
-    if (hasDifference) {
-      selectedOptionsRef.current = [...selections];
-      setSelectedOptions([...selections]);
+  const handlePressChip = (option: T, isSelected: boolean) => {
+    if (single) {
+      handleChange([option]);
+    } else {
+      handleChange(
+        isSelected
+          ? selections.filter((value) => value !== option)
+          : [...selections, option],
+      );
     }
-  }, [selections]);
-
-  const handleChangeDebounced = useMemo(
-    () =>
-      debounce(() => {
-        handleChange(selectedOptionsRef.current);
-      }, delay),
-    [handleChange, delay],
-  );
-
-  const handlePressChip = useCallback(
-    (option: T, isSelected: boolean) => {
-      if (isSelected) {
-        if (!single) {
-          selectedOptionsRef.current = [...selectedOptionsRef.current].filter(
-            (a) => {
-              return a !== option;
-            },
-          );
-        }
-      } else {
-        if (single) {
-          selectedOptionsRef.current = [option];
-        }
-
-        selectedOptionsRef.current = [
-          ...selectedOptionsRef.current,
-          option,
-        ].filter((a, i, self) => {
-          return self.indexOf(a) === i;
-        });
-      }
-
-      setSelectedOptions(selectedOptionsRef.current);
-      handleChangeDebounced();
-    },
-    [single, handleChangeDebounced],
-  );
-
-  const handleLongPressChip = useCallback(
-    (option: T) => {
-      selectedOptionsRef.current = [option];
-
-      setSelectedOptions(selectedOptionsRef.current);
-      handleChangeDebounced();
-    },
-    [handleChangeDebounced],
-  );
-
-  const handlePressAll = () => {
-    selectedOptionsRef.current = options.map((option) => option.value);
-
-    setSelectedOptions(selectedOptionsRef.current);
-    handleChangeDebounced();
   };
 
-  const handlePressNone = () => {
-    selectedOptionsRef.current = [];
-
-    setSelectedOptions(selectedOptionsRef.current);
-    handleChangeDebounced();
-  };
+  const handleLongPressChip = (option: T) => handleChange([option]);
+  const handlePressAll = () =>
+    handleChange(options.map((option) => option.value));
+  const handlePressNone = () => handleChange([]);
 
   return (
     <View style={styles.container}>
@@ -109,7 +46,11 @@ export function Chips<T>({
         <Text style={[styles.headingText, themeStyles.color]}>{heading}</Text>
         {showHeaderControls ? (
           <View style={styles.headingControls}>
-            <PressableScale onPress={() => handlePressAll && handlePressAll()}>
+            <PressableScale
+              accessibilityRole="button"
+              accessibilityLabel={`Select all ${heading.toLowerCase()}`}
+              onPress={handlePressAll}
+            >
               {({ pressed }) => (
                 <View
                   style={[
@@ -124,7 +65,9 @@ export function Chips<T>({
               )}
             </PressableScale>
             <PressableScale
-              onPress={() => handlePressNone && handlePressNone()}
+              accessibilityRole="button"
+              accessibilityLabel={`Clear ${heading.toLowerCase()}`}
+              onPress={handlePressNone}
             >
               {({ pressed }) => (
                 <View
@@ -147,7 +90,7 @@ export function Chips<T>({
           <Chip
             label={option.label}
             value={option.value}
-            isSelected={selectedOptions.includes(option.value)}
+            isSelected={selections.includes(option.value)}
             onPress={handlePressChip}
             onLongPress={handleLongPressChip}
             key={`chip-${option.value}`}

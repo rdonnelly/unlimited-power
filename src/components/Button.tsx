@@ -9,6 +9,8 @@ export type ButtonProps = {
   variant?: 'bold';
   onPress?: () => void;
   onLongPress?: () => void;
+  disabled?: boolean;
+  accessibilityLabel?: string;
 };
 
 export function Button({
@@ -17,12 +19,18 @@ export function Button({
   onPress: handlePress,
   onLongPress: handleLongPress,
   children,
+  disabled = false,
+  accessibilityLabel,
 }: PropsWithChildren<ButtonProps>) {
   const { themeStyles } = useTheme();
 
   return (
     <PressableScale
       style={styles.container}
+      disabled={disabled}
+      accessibilityRole="button"
+      accessibilityLabel={accessibilityLabel}
+      accessibilityState={{ disabled }}
       onPress={() => handlePress && handlePress()}
       onLongPress={() => handleLongPress && handleLongPress()}
     >

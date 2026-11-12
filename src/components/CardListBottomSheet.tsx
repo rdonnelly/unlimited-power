@@ -1,11 +1,17 @@
-import BottomSheet, {
-  BottomSheetScrollView,
-  BottomSheetTextInput,
-} from '@gorhom/bottom-sheet';
-import type { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
-import debounce from 'lodash/debounce';
-import { useCallback, useMemo } from 'react';
-import { StyleSheet } from 'react-native';
+import { TrueSheet } from '@lodev09/react-native-true-sheet';
+import { type RefObject, useRef } from 'react';
+import {
+  Keyboard,
+  ScrollView,
+  type ScrollViewInstance,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import { CardSearch } from '@components/CardSearch';
+
+import { Button } from '@components/Button';
+import { resetAllFilters } from '@data/stores/resetAllFilters';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useShallow } from 'zustand/shallow';
 
@@ -23,7 +29,6 @@ import {
   rarityFilterOptions,
   useRarityFilterStore,
 } from '@data/stores/useRarityFilterStore';
-import { useSearchFilterStore } from '@data/stores/useSearchFilterStore';
 import {
   typeFilterOptions,
   useTypeFilterStore,
@@ -31,42 +36,30 @@ import {
 import { useTheme } from '@hooks/useTheme';
 
 type CardListBottomSheetProps = {
-  bottomSheetRef: React.RefObject<BottomSheetMethods | null>;
+  bottomSheetRef: RefObject<TrueSheet | null>;
+  onDismiss: () => void;
+  onPeekHeightChange: (height: number) => void;
 };
 
 export function CardListBottomSheet({
   bottomSheetRef,
+  onDismiss,
+  onPeekHeightChange,
 }: CardListBottomSheetProps) {
   const { theme, themeStyles } = useTheme();
   const insets = useSafeAreaInsets();
+  const detentIndex = useRef(0);
+  const scrollRef = useRef<ScrollViewInstance>(null);
 
-  const snapPoints = useMemo(
-    () => [72 + Math.max(16, insets.bottom), '70%'],
-    [insets.bottom],
-  );
+  // The sheet adds the bottom safe-area inset below the header at the peek
+  // detent, so subtract it from the header's own bottom padding to keep the
+  // search field vertically centered (the top padding also clears the grabber).
+  const headerPadding = Math.max(HEADER_MIN_PADDING, insets.bottom);
 
-  const [searchString, updateSearchString] = useSearchFilterStore(
-    useShallow((state) => [state.searchString, state.update]),
-  );
-
-  const setSearchStringDebounced = useMemo(
-    () =>
-      debounce((searchString) => {
-        updateSearchString(searchString);
-      }, 500),
-    [updateSearchString],
-  );
-
-  const handleChangeText = useCallback(
-    (searchString: string) => {
-      setSearchStringDebounced(searchString);
-    },
-    [setSearchStringDebounced],
-  );
-
-  const handleSubmitEditing = useCallback(() => {
-    bottomSheetRef.current?.collapse();
-  }, [bottomSheetRef]);
+  const collapse = () => {
+    Keyboard.dismiss();
+    void bottomSheetRef.current?.resize(0).catch(console.warn);
+  };
 
   const [aspectOptions, updateAspect] = useAspectFilterStore(
     useShallow((state) => [state.aspects, state.update]),
@@ -85,48 +78,75 @@ export function CardListBottomSheet({
   );
 
   return (
-    <BottomSheet
+    <TrueSheet
       ref={bottomSheetRef}
-      snapPoints={snapPoints}
-      index={0}
-      backgroundStyle={[styles.background, themeStyles.background200]}
-      handleIndicatorStyle={{ backgroundColor: theme.textSubdued }}
-      keyboardBehavior="interactive"
-      keyboardBlurBehavior="none"
-      android_keyboardInputMode="adjustResize"
-      enableDynamicSizing={false}
+      detents={['peek', 0.7, 1]}
+      dismissible={false}
+      dimmed={false}
+      style={styles.sheet}
+      scrollableRef={scrollRef}
+      backgroundColor={theme.background200}
+      accessibilityOptions={{
+        paneTitle: 'Search and filters',
+        grabberLabel: 'Search and filters',
+        grabberHint: 'Drag up to show filters or down to show only search',
+      }}
+      onDidPresent={() => {
+        detentIndex.current = 0;
+      }}
+      onDetentChange={(event) => {
+        detentIndex.current = event.nativeEvent.index;
+      }}
+      onBackPress={() => {
+        if (detentIndex.current === 0) return false;
+        collapse();
+        return true;
+      }}
+      onDidDismiss={onDismiss}
+      header={
+        <View
+          style={{
+            paddingHorizontal: 16,
+            paddingTop: headerPadding,
+            paddingBottom: headerPadding - insets.bottom,
+          }}
+          onLayout={(event) =>
+            onPeekHeightChange(event.nativeEvent.layout.height)
+          }
+        >
+          <CardSearch onSubmit={collapse} />
+        </View>
+      }
     >
-      <BottomSheetTextInput
-        style={[
-          styles.input,
-          themeStyles.background300,
-          themeStyles.color,
-          { marginBottom: Math.max(24, insets.bottom) },
-        ]}
-        autoCapitalize="none"
-        autoCorrect={false}
-        clearButtonMode="always"
-        placeholder="Search by Title, Trait, or Keyword"
-        placeholderTextColor={theme.textSubdued}
-        returnKeyType="search"
-        onChangeText={handleChangeText}
-        onSubmitEditing={handleSubmitEditing}
-        defaultValue={searchString ?? ''}
-      />
-
-      <BottomSheetScrollView
+      <ScrollView
+        ref={scrollRef}
+        nestedScrollEnabled
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
         style={styles.scrollContainer}
         contentContainerStyle={[
           styles.scrollContainerContent,
           themeStyles.borderSubdued,
-          { paddingBottom: Math.max(24, insets.bottom) + 16 },
         ]}
-        automaticallyAdjustsScrollIndicatorInsets={false}
-        scrollIndicatorInsets={{
-          top: 0,
-          bottom: Math.max(24, insets.bottom) + 16,
-        }}
       >
+        <View style={styles.controls}>
+          <Text
+            accessibilityRole="header"
+            style={[styles.title, themeStyles.color]}
+          >
+            Filters
+          </Text>
+          <Button size="small" onPress={resetAllFilters}>
+            Reset
+          </Button>
+          <Button
+            size="small"
+            accessibilityLabel="Collapse filters"
+            onPress={collapse}
+          >
+            Done
+          </Button>
+        </View>
         <Chips
           heading="Aspects"
           showHeaderControls
@@ -136,7 +156,6 @@ export function CardListBottomSheet({
           }))}
           selections={aspectOptions}
           onChange={updateAspect}
-          delay={1000}
         />
 
         <Chips
@@ -148,7 +167,6 @@ export function CardListBottomSheet({
           }))}
           selections={expansionOptions}
           onChange={updateExpansion}
-          delay={1000}
         />
 
         <Chips
@@ -172,27 +190,25 @@ export function CardListBottomSheet({
           selections={rarityOptions}
           onChange={updateRarity}
         />
-      </BottomSheetScrollView>
-    </BottomSheet>
+      </ScrollView>
+    </TrueSheet>
   );
 }
 
+// Clears the native grabber above the search field.
+const HEADER_MIN_PADDING = 24;
+
 const styles = StyleSheet.create({
-  background: {},
-  input: {
-    borderRadius: 8,
-    borderWidth: 0,
-    fontSize: 16,
-    height: 48,
-    lineHeight: 20,
-    marginHorizontal: 16,
-    padding: 12,
-  },
-  scrollContainer: {},
+  sheet: { flex: 1 },
+  controls: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  title: { flex: 1, fontSize: 22, fontWeight: '700' },
+  scrollContainer: { flex: 1 },
   scrollContainerContent: {
     borderTopWidth: StyleSheet.hairlineWidth,
     gap: 16,
-    paddingTop: 32,
+    paddingTop: 16,
+    // TrueSheet adds the bottom safe-area inset natively (scrollableOptions).
+    paddingBottom: 24,
     marginHorizontal: 16,
   },
 });
