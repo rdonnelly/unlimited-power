@@ -10,6 +10,7 @@
     "check:lint": "oxlint",
     "check:format": "oxfmt --check",
     "check:ts": "tsc",
+    "test": "node --require ./tests/register.cjs --test tests/*.test.cjs",
     "format": "oxfmt",
     "build:android:dev": "npx eas-cli@latest build --platform android --profile development",
     "build:android:dev:local": "npx eas-cli@latest build --platform android --profile development --local",
